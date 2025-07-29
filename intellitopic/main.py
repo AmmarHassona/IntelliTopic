@@ -20,6 +20,10 @@ from urllib.parse import quote_plus
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
 import numpy as np
+import PyPDF2
+from docx import Document
+from PIL import Image
+import pytesseract
 
 # Load environment variables
 load_dotenv()
