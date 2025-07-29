@@ -104,10 +104,33 @@
 
         .form-group label {
             display: block;
-            font-weight: 600;
             margin-bottom: 8px;
             color: #e2e8f0;
+            font-weight: 500;
             font-size: 0.95rem;
+        }
+
+        .difficulty-description {
+            color: #94a3b8;
+            font-size: 0.85rem;
+            margin-top: 5px;
+            font-style: italic;
+        }
+
+        .difficulty-easy {
+            color: #10b981;
+        }
+
+        .difficulty-medium {
+            color: #f59e0b;
+        }
+
+        .difficulty-hard {
+            color: #ef4444;
+        }
+
+        .difficulty-mixed {
+            color: #8b5cf6;
         }
 
         .form-control {
@@ -1132,11 +1155,27 @@
                 </div>
 
                 <div class="form-group">
-                    <label for="mode"><i class="fas fa-cogs"></i> Mode</label>
-                    <select name="mode" id="mode" class="form-control" required>
-      <option value="research" {% if mode == "research" %}selected{% endif %}>Research (Thesis Topics)</option>
-  <option value="non-research" id="non-research-option" {% if mode == "non-research" %}selected{% endif %}>Non-Research (Course Project Ideas)</option>
+                    <label for="mode">Mode</label>
+                    <select name="mode" id="mode" class="form-control" required onchange="updateFormAccess()">
+                        <option value="research" {% if mode == "research" %}selected{% endif %}>Thesis Topics</option>
+                        <option value="non-research" id="non-research-option" {% if mode == "non-research" %}selected{% endif %}>Course Project Ideas</option>
                     </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="difficulty">Desired Difficulty Level</label>
+                    <select name="difficulty" id="difficulty" class="form-control" required>
+                        <option value="easy" {% if difficulty == "easy" %}selected{% endif %}>Easy - Suitable for beginners, basic concepts</option>
+                        <option value="medium" {% if difficulty == "medium" %}selected{% endif %}>Medium - Moderate complexity, some advanced concepts</option>
+                        <option value="hard" {% if difficulty == "hard" %}selected{% endif %}>Hard - Advanced concepts, complex implementation</option>
+                        <option value="mixed" {% if difficulty == "mixed" %}selected{% endif %}>Mixed - Variety of difficulty levels</option>
+                    </select>
+                    <div class="difficulty-description">
+                        <span class="difficulty-easy">Easy</span>: Basic concepts, straightforward implementation.
+                        <span class="difficulty-medium">Medium</span>: Moderate complexity, requires some advanced concepts.
+                        <span class="difficulty-hard">Hard</span>: Advanced concepts, complex implementation.
+                        <span class="difficulty-mixed">Mixed</span>: Combination of different difficulty levels.
+                    </div>
                 </div>
 
                 <div class="form-group">
@@ -1208,7 +1247,7 @@
                         Find Topics from Professors
                     </a>
                 </div>
-                    </form>
+  </form>
                 </div>
             </div>
 
@@ -1284,7 +1323,7 @@
                 {% else %}
                     <i class="fas fa-star"></i>
                     <h2>Generated Ideas</h2>
-                {% endif %}
+  {% endif %}
             </div>
             
             {% if uploaded_files %}
@@ -1797,53 +1836,50 @@
         });
 
         // Enrich topic functionality
-        function enrichTopic(topicId, type, title) {
-            const content = document.getElementById(topicId);
-            const topicContent = content.innerHTML;
-            
-            // Get current role and mode from the form
+        async function enrichTopic(topicId, type, title) {
+            const topicContent = document.getElementById(topicId).innerHTML;
             const role = document.getElementById('role').value;
             const mode = document.getElementById('mode').value;
+            const difficulty = document.getElementById('difficulty').value;
             const userId = document.getElementById('user_id').value;
+            const courseDescription = document.getElementById('course_description').value;
             const inputText = document.getElementById('input_text').value;
-            const courseDescription = document.getElementById('course_description') ? document.getElementById('course_description').value : '';
-            const courseDetails = document.getElementById('course_details') ? document.getElementById('course_details').value : '';
-            
-            // Create a form to submit the enrichment request
-            const form = document.createElement('form');
-            form.method = 'POST';
-            form.action = '/enrich-topic';
-            form.style.display = 'none';
-            
-            // Add form fields
-            const fields = {
-                'topic_title': title,
-                'topic_content': topicContent,
-                'role': role,
-                'mode': mode,
-                'user_id': userId,
-                'input_text': inputText,
-                'course_description': courseDescription,
-                'course_details': courseDetails
-            };
-            
-            for (const [name, value] of Object.entries(fields)) {
-                const input = document.createElement('input');
-                input.type = 'hidden';
-                input.name = name;
-                input.value = value;
-                form.appendChild(input);
+            const courseDetails = document.getElementById('course_details').value;
+
+            const enrichBtn = event.target.closest('.enrich-button');
+            const originalText = enrichBtn.innerHTML;
+            enrichBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Enriching...';
+            enrichBtn.disabled = true;
+
+            try {
+                const formData = new FormData();
+                formData.append('topic_title', title);
+                formData.append('topic_content', topicContent);
+                formData.append('role', role);
+                formData.append('mode', mode);
+                formData.append('difficulty', difficulty);
+                formData.append('user_id', userId);
+                formData.append('course_description', courseDescription);
+                formData.append('input_text', inputText);
+                formData.append('course_details', courseDetails);
+
+                const response = await fetch('/enrich-topic', {
+                    method: 'POST',
+                    body: formData
+                });
+
+                if (response.ok) {
+                    const result = await response.text();
+                    document.body.innerHTML = result;
+                } else {
+                    alert('Error enriching topic. Please try again.');
+                }
+            } catch (error) {
+                alert(`Error enriching topic: ${error.message}`);
+            } finally {
+                enrichBtn.innerHTML = originalText;
+                enrichBtn.disabled = false;
             }
-            
-            // Show loading state
-            const button = event.target.closest('.enrich-button');
-            const originalText = button.innerHTML;
-            button.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Enriching...';
-            button.disabled = true;
-            
-            // Submit the form
-            document.body.appendChild(form);
-            form.submit();
         }
 
         // Save topic functionality

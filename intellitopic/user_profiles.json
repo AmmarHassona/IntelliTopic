@@ -3,7 +3,18 @@
     "role": "professor",
     "created_at": "2025-07-29T12:57:46.677794",
     "extracted_info": {
-      "documents": [],
+      "documents": [
+        {
+          "filename": "P3_Course.pdf",
+          "uploaded_at": "2025-07-29T23:42:05.063155",
+          "size": 0
+        },
+        {
+          "filename": "P3_Course.pdf",
+          "uploaded_at": "2025-07-29T23:48:38.849055",
+          "size": 0
+        }
+      ],
       "google_scholar": [
         {
           "url": "https://scholar.google.com/citations?user=fcbh--sAAAAJ&hl=en",
@@ -171,20 +182,55 @@
           "input": "i am a computer science lecturer teaching computer architecture, programming and oop (c++), discrete math, research methodology",
           "mode": "non-research",
           "timestamp": "2025-07-29T16:08:37.528333"
+        },
+        {
+          "input": "i am a computer science lecturer teaching computer architecture, programming and oop (c++), discrete math, research methodology",
+          "mode": "non-research",
+          "timestamp": "2025-07-29T23:42:20.569597"
+        },
+        {
+          "input": "i am a computer science lecturer teaching computer architecture, programming and oop (c++), discrete math, research methodology",
+          "mode": "non-research",
+          "timestamp": "2025-07-29T23:48:42.600702"
+        },
+        {
+          "input": "i am a computer science lecturer teaching computer architecture, programming and oop (c++), discrete math, research methodology",
+          "mode": "non-research",
+          "timestamp": "2025-07-29T23:49:22.784096"
+        },
+        {
+          "input": "i am a computer science lecturer teaching computer architecture, programming and oop (c++), discrete math, research methodology",
+          "mode": "non-research",
+          "timestamp": "2025-07-29T23:49:59.896399"
+        },
+        {
+          "input": "i am a computer science lecturer teaching computer architecture, programming and oop (c++), discrete math, research methodology",
+          "mode": "non-research",
+          "timestamp": "2025-07-29T23:50:31.292477"
+        },
+        {
+          "input": "i am a computer science lecturer teaching computer architecture, programming and oop (c++), discrete math, research methodology",
+          "mode": "research",
+          "timestamp": "2025-07-30T00:24:23.593788"
+        },
+        {
+          "input": "i am a computer science lecturer teaching computer architecture, programming and oop (c++), discrete math, research methodology",
+          "mode": "research",
+          "timestamp": "2025-07-30T00:24:49.798250"
         }
       ]
     },
     "preferences": {},
     "statistics": {
-      "topics_generated": 20,
-      "documents_processed": 0,
+      "topics_generated": 27,
+      "documents_processed": 2,
       "scholar_profiles_analyzed": 1
     },
     "saved_topics": [
       {
         "id": "topic_1753797388706",
-        "content": "<br>                                <div class=\"topic-section\"><br><div class=\"section-title\">Scope Rating</div> Medium<br><div class=\"section-title\">Uniqueness Score</div> 8<br><div class=\"section-title\">Brief Overview</div> This thesis focuses on the development of blockchain-based secure programming environments tailored for teaching object-oriented programming (OOP) concepts to students.</div><div class=\"topic-section\"><div class=\"section-title\">Research Problem</div> The research aims to address the growing concerns about cybersecurity in programming education by exploring how blockchain technology can be utilized to create secure coding environments for OOP learners.</div><div class=\"topic-section\"><div class=\"section-title\">Research Gap</div> Existing literature lacks studies on the application of blockchain in educational settings, specifically in the context of OOP programming environments, highlighting the need for research in this innovative area.</div><div class=\"topic-section\"><div class=\"section-title\">Significance &amp; Impact</div> By introducing blockchain-based security measures into OOP education, this research has the potential to enhance student data protection, prevent plagiarism, and foster a more secure learning environment for programming students.</div><div class=\"topic-section\"><div class=\"section-title\">Key Research Questions</div><br><ul class=\"section-content\"><ul class=\"section-content\"><ul class=\"section-content\"><li>How can blockchain technology be integrated into programming IDEs to enhance security and privacy for OOP learners?</li></ul></ul></ul><br><ul class=\"section-content\"><ul class=\"section-content\"><ul class=\"section-content\"><li>What are the potential benefits and challenges of using blockchain in programming education?</li></ul></ul></ul><br><ul class=\"section-content\"><ul class=\"section-content\"><ul class=\"section-content\"><li>How does the implementation of blockchain-based security measures impact student learning outcomes and coding practices in OOP?</li></ul></ul></ul></div><div class=\"topic-section\"><div class=\"section-title\">Methodology</div> The research will involve designing and implementing a blockchain-based programming environment, conducting usability tests with student participants, analyzing user feedback, and evaluating the impact of blockchain security features on student performance and behavior.</div><div class=\"topic-section\"><div class=\"section-title\">Expected Outcomes</div> This research is expected to demonstrate the feasibility and benefits of using blockchain technology to enhance security in OOP education, providing valuable insights for educators and software developers looking to improve the safety of programming learning environments.</div><div class=\"topic-section\"><div class=\"section-title\">Prerequisites</div> Proficiency in blockchain technology, programming skills, and a strong background in object-oriented programming concepts.</div><div class=\"topic-section\"><div class=\"section-title\">Innovation Factor</div> This topic introduces a novel approach by applying blockchain technology to enhance security in OOP education, offering a unique solution to address the cybersecurity challenges faced by programming learners in educational settings.</div><div class=\"topic-section\"></div><br>                            ",
-        "title": "<br>                                <div class=\"topic-section\"><br><div class=\"section-title\">Scope Rating</div> Medium<br><div class=\"section-title\">Uniqueness Score</div> 8<br><div class=\"section-title\">Brief Overview</div> This thesis focuses on the development of blockchain-based secure programming environments tailored for teaching object-oriented programming (OOP) concepts to students.</div><div class=\"topic-section\"><div class=\"section-title\">Research Problem</div> The research aims to address the growing concerns about cybersecurity in programming education by exploring how blockchain technology can be utilized to create secure coding environments for OOP learners.</div><div class=\"topic-section\"><div class=\"section-title\">Research Gap</div> Existing literature lacks studies on the application of blockchain in educational settings, specifically in the context of OOP programming environments, highlighting the need for research in this innovative area.</div><div class=\"topic-section\"><div class=\"section-title\">Significance &amp; Impact</div> By introducing blockchain-based security measures into OOP education, this research has the potential to enhance student data protection, prevent plagiarism, and foster a more secure learning environment for programming students.</div><div class=\"topic-section\"><div class=\"section-title\">Key Research Questions</div><br><ul class=\"section-content\"><ul class=\"section-content\"><ul class=\"section-content\"><li>How can blockchain technology be integrated into programming IDEs to enhance security and privacy for OOP learners?</li></ul></ul></ul><br><ul class=\"section-content\"><ul class=\"section-content\"><ul class=\"section-content\"><li>What are the potential benefits and challenges of using blockchain in programming education?</li></ul></ul></ul><br><ul class=\"section-content\"><ul class=\"section-content\"><ul class=\"section-content\"><li>How does the implementation of blockchain-based security measures impact student learning outcomes and coding practices in OOP?</li></ul></ul></ul></div><div class=\"topic-section\"><div class=\"section-title\">Methodology</div> The research will involve designing and implementing a blockchain-based programming environment, conducting usability tests with student participants, analyzing user feedback, and evaluating the impact of blockchain security features on student performance and behavior.</div><div class=\"topic-section\"><div class=\"section-title\">Expected Outcomes</div> This research is expected to demonstrate the feasibility and benefits of using blockchain technology to enhance security in OOP education, providing valuable insights for educators and software developers looking to improve the safety of programming learning environments.</div><div class=\"topic-section\"><div class=\"section-title\">Prerequisites</div> Proficiency in blockchain technology, programming skills, and a strong background in object-oriented programming concepts.</div><div class=\"topic-section\"><div class=\"section-title\">Innovation Factor</div> This topic introduces a novel approach by applying blockchain technology to enhance security in OOP education, offering a unique solution to address the cybersecurity challenges faced by programming learners in educational settings.</div><div class=\"topic-section\"></div><br>",
+        "content": "Scope Rating MediumUniqueness Score 8Brief Overview This thesis focuses on the development of blockchain-based secure programming environments tailored for teaching object-oriented programming (OOP) concepts to students.Research Problem The research aims to address the growing concerns about cybersecurity in programming education by exploring how blockchain technology can be utilized to create secure coding environments for OOP learners.Research Gap Existing literature lacks studies on the application of blockchain in educational settings, specifically in the context of OOP programming environments, highlighting the need for research in this innovative area.Significance & Impact By introducing blockchain-based security measures into OOP education, this research has the potential to enhance student data protection, prevent plagiarism, and foster a more secure learning environment for programming students.Key Research QuestionsHow can blockchain technology be integrated into programming IDEs to enhance security and privacy for OOP learners?What are the potential benefits and challenges of using blockchain in programming education?How does the implementation of blockchain-based security measures impact student learning outcomes and coding practices in OOP?Methodology The research will involve designing and implementing a blockchain-based programming environment, conducting usability tests with student participants, analyzing user feedback, and evaluating the impact of blockchain security features on student performance and behavior.Expected Outcomes This research is expected to demonstrate the feasibility and benefits of using blockchain technology to enhance security in OOP education, providing valuable insights for educators and software developers looking to improve the safety of programming learning environments.Prerequisites Proficiency in blockchain technology, programming skills, and a strong background in object-oriented programming concepts.Innovation Factor This topic introduces a novel approach by applying blockchain technology to enhance security in OOP education, offering a unique solution to address the cybersecurity challenges faced by programming learners in educational settings.",
+        "title": "This thesis focuses on the development of blockchain-based secure programming environments tailored for teaching object-oriented programming (OOP) concepts to students.",
         "keywords": [
           "class",
           "section",
@@ -204,8 +250,8 @@
       },
       {
         "id": "topic_1753797499265",
-        "content": "<br>                                <div class=\"topic-section\"><br><div class=\"section-title\">Scope Rating</div> Hard<br><div class=\"section-title\">Uniqueness Score</div> 10<br><div class=\"section-title\">Brief Overview</div> This topic explores the integration of gamification and augmented reality technologies to enhance the teaching and learning of discrete mathematics concepts, offering a novel and immersive educational experience for students.</div><div class=\"topic-section\"><div class=\"section-title\">Research Problem</div> The research aims to investigate how gamified augmented reality applications can be utilized to make abstract discrete mathematics concepts more tangible, engaging, and accessible to students, thereby improving their understanding and retention of key principles.</div><div class=\"topic-section\"><div class=\"section-title\">Research Gap</div> Discrete mathematics is often perceived as a challenging subject due to its abstract nature, leading to difficulties in comprehension and motivation among students. By leveraging gamification and augmented reality, this research addresses the gap in providing innovative and interactive learning experiences in this domain.</div><div class=\"topic-section\"><div class=\"section-title\">Significance &amp; Impact</div> By combining gamification elements with augmented reality technology in<br>            </div><br>                            ",
-        "title": "<br>                                <div class=\"topic-section\"><br><div class=\"section-title\">Scope Rating</div> Hard<br><div class=\"section-title\">Uniqueness Score</div> 10<br><div class=\"section-title\">Brief Overview</div> This topic explores the integration of gamification and augmented reality technologies to enhance the teaching and learning of discrete mathematics concepts, offering a novel and immersive educational experience for students.</div><div class=\"topic-section\"><div class=\"section-title\">Research Problem</div> The research aims to investigate how gamified augmented reality applications can be utilized to make abstract discrete mathematics concepts more tangible, engaging, and accessible to students, thereby improving their understanding and retention of key principles.</div><div class=\"topic-section\"><div class=\"section-title\">Research Gap</div> Discrete mathematics is often perceived as a challenging subject due to its abstract nature, leading to difficulties in comprehension and motivation among students. By leveraging gamification and augmented reality, this research addresses the gap in providing innovative and interactive learning experiences in this domain.</div><div class=\"topic-section\"><div class=\"section-title\">Significance &amp; Impact</div> By combining gamification elements with augmented reality technology in<br>            </div><br>",
+        "content": "Scope Rating HardUniqueness Score 10Brief Overview This topic explores the integration of gamification and augmented reality technologies to enhance the teaching and learning of discrete mathematics concepts, offering a novel and immersive educational experience for students.Research Problem The research aims to investigate how gamified augmented reality applications can be utilized to make abstract discrete mathematics concepts more tangible, engaging, and accessible to students, thereby improving their understanding and retention of key principles.Research Gap Discrete mathematics is often perceived as a challenging subject due to its abstract nature, leading to difficulties in comprehension and motivation among students. By leveraging gamification and augmented reality, this research addresses the gap in providing innovative and interactive learning experiences in this domain.Significance & Impact By combining gamification elements with augmented reality technology in",
+        "title": "This topic explores the integration of gamification and augmented reality technologies to enhance the teaching and learning of discrete mathematics concepts, offering a novel and immersive educational experience for students.",
         "keywords": [
           "class",
           "section",
@@ -225,8 +271,8 @@
       },
       {
         "id": "topic_1753798025198",
-        "content": "<br>                                <div class=\"topic-section\"><br><div class=\"section-title\">Scope Rating</div> Medium<br><div class=\"section-title\">Uniqueness Score</div> 8<br><div class=\"section-title\">Brief Overview</div> This research explores the use of interactive storytelling techniques to gamify the learning of data structures, where students engage with narratives and characters to understand complex concepts in a fun and immersive way.</div><div class=\"topic-section\"><div class=\"section-title\">Research Problem</div> Data structure concepts can be abstract and difficult for students to grasp. By incorporating gamification elements and interactive storytelling, this research aims to make learning data structures more engaging and enjoyable.</div><div class=\"topic-section\"><div class=\"section-title\">Research Gap</div> While gamification has been used in education, the integration of interactive storytelling specifically for teaching data structures is a relatively unexplored area. This research seeks to bridge the gap between entertainment and education to enhance student learning experiences.</div><div class=\"topic-section\"><div class=\"section-title\">Significance &amp; Impact</div> This research has the potential to transform the way data structures are taught by combining storytelling and gameplay elements to create a more immersive and effective learning environment. By making complex concepts more accessible and engaging, students may<br>            </div><br>                            ",
-        "title": "<br>                                <div class=\"topic-section\"><br><div class=\"section-title\">Scope Rating</div> Medium<br><div class=\"section-title\">Uniqueness Score</div> 8<br><div class=\"section-title\">Brief Overview</div> This research explores the use of interactive storytelling techniques to gamify the learning of data structures, where students engage with narratives and characters to understand complex concepts in a fun and immersive way.</div><div class=\"topic-section\"><div class=\"section-title\">Research Problem</div> Data structure concepts can be abstract and difficult for students to grasp. By incorporating gamification elements and interactive storytelling, this research aims to make learning data structures more engaging and enjoyable.</div><div class=\"topic-section\"><div class=\"section-title\">Research Gap</div> While gamification has been used in education, the integration of interactive storytelling specifically for teaching data structures is a relatively unexplored area. This research seeks to bridge the gap between entertainment and education to enhance student learning experiences.</div><div class=\"topic-section\"><div class=\"section-title\">Significance &amp; Impact</div> This research has the potential to transform the way data structures are taught by combining storytelling and gameplay elements to create a more immersive and effective learning environment. By making complex concepts more accessible and engaging, students may<br>            </div><br>",
+        "content": "Scope Rating MediumUniqueness Score 8Brief Overview This research explores the use of interactive storytelling techniques to gamify the learning of data structures, where students engage with narratives and characters to understand complex concepts in a fun and immersive way.Research Problem Data structure concepts can be abstract and difficult for students to grasp. By incorporating gamification elements and interactive storytelling, this research aims to make learning data structures more engaging and enjoyable.Research Gap While gamification has been used in education, the integration of interactive storytelling specifically for teaching data structures is a relatively unexplored area. This research seeks to bridge the gap between entertainment and education to enhance student learning experiences.Significance & Impact This research has the potential to transform the way data structures are taught by combining storytelling and gameplay elements to create a more immersive and effective learning environment. By making complex concepts more accessible and engaging, students may",
+        "title": "This research explores the use of interactive storytelling techniques to gamify the learning of data structures, where students engage with narratives and characters to understand complex concepts in a fun and immersive way.",
         "keywords": [
           "class",
           "section",
@@ -242,6 +288,27 @@
         "scope": "Medium",
         "uniqueness": 8,
         "created_at": "2025-07-29T16:07:05.198974",
+        "mode": "research"
+      },
+      {
+        "id": "topic_1753827919936",
+        "content": "                                Scope Rating EasyUniqueness Score 10Brief Overview This thesis focuses on developing explainable artificial intelligence models for educational assessment systems to provide transparent insights into how student performance is evaluated.Research Problem The research aims to design AI models that not only predict student performance accurately but also provide interpretable explanations for the assessment outcomes, enabling educators and students to understand the reasoning behind the results.Research Gap Existing AI models used in educational assessment lack transparency and interpretability, making it challenging for stakeholders to trust and understand the decision-making process. By introducing explainable AI, this research addresses the need for transparency in educational evaluations.Significance & Impact This research can enhance the credibility and effectiveness of educational assessment systems by incorporating explainable AI models that offer insights into how student performance is evaluated. It can empower educators to make informed decisions and students to improve their learning strategies.Key Research Questions-                                        ",
+        "title": "Research Gap Existing AI models used in educational assessment lack transparency and interpretability, making it challenging for stakeholders to trust and understand the decision-making process.",
+        "keywords": [
+          "research",
+          "models",
+          "educational",
+          "assessment",
+          "explainable",
+          "student",
+          "performance",
+          "systems",
+          "provide",
+          "insights"
+        ],
+        "scope": "Medium",
+        "uniqueness": 8,
+        "created_at": "2025-07-30T00:25:19.936309",
         "mode": "research"
       }
     ]

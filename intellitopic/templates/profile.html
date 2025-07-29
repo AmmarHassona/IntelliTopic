@@ -340,6 +340,201 @@
             opacity: 0.7;
         }
 
+        /* New styles for saved topics grid */
+        .saved-topics-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 30px;
+            margin-top: 20px;
+        }
+
+        .topic-card {
+            background: rgba(30, 41, 59, 0.9);
+            border: 1px solid rgba(148, 163, 184, 0.2);
+            border-radius: 16px;
+            padding: 30px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .topic-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.4);
+        }
+
+        .topic-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid rgba(148, 163, 184, 0.2);
+        }
+
+        .topic-title {
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: #f1f5f9;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .topic-actions {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .expand-icon {
+            transition: transform 0.3s ease;
+        }
+
+        .topic-card.expanded .expand-icon {
+            transform: rotate(180deg);
+        }
+
+        .topic-meta {
+            display: flex;
+            gap: 15px;
+            margin-top: 15px;
+            flex-wrap: wrap;
+        }
+
+        .meta-item {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            font-size: 0.9rem;
+            opacity: 0.8;
+        }
+
+        .keywords {
+            margin-top: 20px;
+            padding-top: 15px;
+            border-top: 1px solid rgba(148, 163, 184, 0.1);
+        }
+
+        .keywords h5 {
+            font-size: 1rem;
+            font-weight: 600;
+            color: #cbd5e1;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .keyword-tags {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .keyword-tag {
+            background: rgba(59, 130, 246, 0.2);
+            color: #60a5fa;
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 0.8rem;
+            border: 1px solid rgba(59, 130, 246, 0.3);
+        }
+
+        .topic-content {
+            display: none;
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 1px solid rgba(148, 163, 184, 0.2);
+        }
+
+        .topic-content-inner {
+            color: #cbd5e1;
+            line-height: 1.6;
+        }
+
+        .topic-content-inner h3,
+        .topic-content-inner h4 {
+            color: #f1f5f9;
+            margin: 15px 0 10px 0;
+        }
+
+        .topic-content-inner ul {
+            margin: 10px 0;
+            padding-left: 20px;
+        }
+
+        .topic-content-inner li {
+            margin-bottom: 5px;
+        }
+
+        .topic-content-inner p {
+            margin-bottom: 12px;
+            line-height: 1.6;
+        }
+
+        .topic-content-inner .topic-section {
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid rgba(148, 163, 184, 0.1);
+        }
+
+        .topic-content-inner .topic-section:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+        }
+
+        .topic-content-inner .section-title {
+            font-weight: 600;
+            color: #f1f5f9;
+            margin-bottom: 10px;
+            font-size: 1.1rem;
+        }
+
+        .topic-content-inner .section-content {
+            margin: 10px 0;
+            padding-left: 20px;
+        }
+
+        .scope-easy {
+            color: #10b981;
+        }
+
+        .scope-medium {
+            color: #f59e0b;
+        }
+
+        .scope-hard {
+            color: #ef4444;
+        }
+
+        .topic-type-research {
+            color: #3b82f6;
+        }
+
+        .topic-type-non-research {
+            color: #10b981;
+        }
+
+        .expand-button {
+            background: rgba(59, 130, 246, 0.2);
+            border: 1px solid rgba(59, 130, 246, 0.3);
+            color: #60a5fa;
+            padding: 8px 16px;
+            border-radius: 6px;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .expand-button:hover {
+            background: rgba(59, 130, 246, 0.3);
+            transform: translateY(-1px);
+        }
+
         @media (max-width: 768px) {
             .container {
                 padding: 15px;
@@ -566,43 +761,62 @@
                     </div>
                     <div>
                         <div class="card-title">Saved Topics</div>
-                        <div class="card-subtitle">Your saved thesis topics</div>
+                        <div class="card-subtitle">Your saved thesis topics and course projects</div>
                     </div>
                 </div>
                 
                 {% if profile.saved_topics %}
-                    <div class="extracted-content">
+                    <div class="saved-topics-grid">
                         {% for topic in profile.saved_topics %}
-                            <div class="content-item">
-                                <div class="content-header">
-                                    <div class="content-title">
+                            <div class="topic-card">
+                                <div class="topic-header" onclick="toggleTopic('saved-topic-{{ loop.index }}')">
+                                    <div class="topic-title">
                                         <i class="fas fa-lightbulb"></i> {{ topic.title }}
                                     </div>
-                                    <div class="content-date">{{ topic.created_at[:10] if topic.created_at else 'N/A' }}</div>
+                                    <div class="topic-actions">
+                                        <button class="expand-button" onclick="event.stopPropagation(); toggleTopic('saved-topic-{{ loop.index }}')">
+                                            <i class="fas fa-info-circle"></i>
+                                            <span>View Details</span>
+                                            <i class="fas fa-chevron-down expand-icon" id="icon-saved-topic-{{ loop.index }}"></i>
+                                        </button>
+                                    </div>
                                 </div>
-                                <div class="content-meta">
-                                    <span class="meta-badge scope-{{ topic.scope.lower() }}">
-                                        <i class="fas fa-layer-group"></i> {{ topic.scope }}
-                                    </span>
-                                    <span class="meta-badge uniqueness">
-                                        <i class="fas fa-star"></i> {{ topic.uniqueness }}/10
-                                    </span>
-                                    <span class="meta-badge mode">
-                                        <i class="fas fa-cog"></i> {{ topic.mode.title() }}
-                                    </span>
+                                
+                                <div class="topic-meta">
+                                    <div class="meta-item">
+                                        <i class="fas fa-layer-group"></i>
+                                        <span class="scope-{{ topic.scope.lower() }}">{{ topic.scope }}</span>
+                                    </div>
+                                    <div class="meta-item">
+                                        <i class="fas fa-star"></i>
+                                        <span>{{ topic.uniqueness }}/10</span>
+                                    </div>
+                                    <div class="meta-item">
+                                        <i class="fas fa-calendar"></i>
+                                        <span>{{ topic.created_at[:10] if topic.created_at else 'N/A' }}</span>
+                                    </div>
+                                    <div class="meta-item">
+                                        <i class="fas fa-graduation-cap"></i>
+                                        <span class="topic-type-{{ topic.mode.lower() }}">{{ topic.mode.title() }}</span>
+                                    </div>
                                 </div>
+                                
                                 {% if topic.keywords %}
-                                <div class="content-keywords">
-                                    {% for keyword in topic.keywords[:5] %}
-                                    <span class="keyword-tag">{{ keyword }}</span>
-                                    {% endfor %}
+                                <div class="keywords">
+                                    <h5><i class="fas fa-tags"></i> Keywords</h5>
+                                    <div class="keyword-tags">
+                                        {% for keyword in topic.keywords[:5] %}
+                                        <span class="keyword-tag">{{ keyword }}</span>
+                                        {% endfor %}
+                                    </div>
                                 </div>
                                 {% endif %}
-                                <button class="expand-button" onclick="toggleContent('topic-{{ loop.index }}')">
-                                    <i class="fas fa-expand-alt"></i> View Details
-                                </button>
-                                <div id="topic-{{ loop.index }}" class="full-content">
-                                    {{ topic.content if topic.content else 'No content available' }}
+                                
+                                <div class="topic-content" id="saved-topic-{{ loop.index }}" style="display: none;">
+                                    <div class="topic-content-inner">
+                                        {% set formatted_content = topic.content | format_topic_content %}
+                                        {{ formatted_content | safe }}
+                                    </div>
                                 </div>
                             </div>
                         {% endfor %}
@@ -633,6 +847,23 @@
             } else {
                 icon.className = 'fas fa-expand-alt';
                 button.innerHTML = '<i class="fas fa-expand-alt"></i> View Analysis';
+            }
+        }
+
+        function toggleTopic(elementId) {
+            const topicContent = document.getElementById(elementId);
+            const topicCard = topicContent.closest('.topic-card');
+            const expandIcon = topicCard.querySelector('.expand-icon');
+            const button = topicCard.querySelector('.expand-button span');
+
+            if (topicContent.style.display === 'none' || !topicContent.style.display) {
+                topicContent.style.display = 'block';
+                expandIcon.className = 'fas fa-chevron-up expand-icon';
+                button.textContent = 'Hide Details';
+            } else {
+                topicContent.style.display = 'none';
+                expandIcon.className = 'fas fa-chevron-down expand-icon';
+                button.textContent = 'View Details';
             }
         }
     </script>

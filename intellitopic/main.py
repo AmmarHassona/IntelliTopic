@@ -1,18 +1,16 @@
-from fastapi import FastAPI, Form, Request, UploadFile, File, HTTPException
+from fastapi import FastAPI, Request, Form, File, UploadFile, HTTPException
 from fastapi.responses import HTMLResponse
 from fastapi.templating import Jinja2Templates
-from openai import OpenAI
+from fastapi.staticfiles import StaticFiles
 import os
-import io
+import openai
+from dotenv import load_dotenv
+import pandas as pd
 import json
 import re
 from typing import List, Dict, Optional
-from dotenv import load_dotenv
-import PyPDF2
-from docx import Document
-import pandas as pd
-from PIL import Image
-import pytesseract
+import io
+import tempfile
 import httpx
 from bs4 import BeautifulSoup
 import asyncio
@@ -23,11 +21,139 @@ from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
 import numpy as np
 
+# Load environment variables
 load_dotenv()
-client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
+
+# Configure OpenAI
+client = openai.OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 
 app = FastAPI()
+
+# Templates
 templates = Jinja2Templates(directory="templates")
+
+# Auto-clean existing topics on startup
+@app.on_event("startup")
+async def startup_event():
+    """Clean existing topics and fix titles on application startup"""
+    try:
+        # Clean existing topics
+        cleaned_count = clean_existing_topics()
+        if cleaned_count > 0:
+            print(f"✅ Auto-cleaned {cleaned_count} existing topics on startup")
+        else:
+            print("✅ No topics needed cleaning on startup")
+        
+        # Fix existing topic titles
+        fixed_count = fix_existing_topic_titles()
+        if fixed_count > 0:
+            print(f"✅ Auto-fixed {fixed_count} existing topic titles on startup")
+        else:
+            print("✅ No topic titles needed fixing on startup")
+            
+    except Exception as e:
+        print(f"⚠️ Error during startup cleanup: {e}")
+
+# Custom Jinja2 filter to format topic content
+def format_topic_content(content):
+    """Format plain text topic content into HTML"""
+    if not content:
+        return "No content available"
+    
+    # First, clean any remaining HTML if present
+    clean_content = re.sub(r'<[^>]+>', '', content)
+    clean_content = re.sub(r'&amp;', '&', clean_content)
+    clean_content = re.sub(r'&lt;', '<', clean_content)
+    clean_content = re.sub(r'&gt;', '>', clean_content)
+    
+    # Remove extra whitespace and normalize
+    clean_content = re.sub(r'\s+', ' ', clean_content).strip()
+    
+    # Define section patterns to look for
+    section_patterns = [
+        r'Scope Rating.*?\[(Easy|Medium|Hard)\]',
+        r'Uniqueness Score.*?\[(\d+)\]',
+        r'Brief Overview.*?\[(.+?)\]',
+        r'Research Problem.*?\[(.+?)\]',
+        r'Research Gap.*?\[(.+?)\]',
+        r'Significance.*?\[(.+?)\]',
+        r'Key Research Questions.*?\[(.+?)\]',
+        r'Methodology.*?\[(.+?)\]',
+        r'Expected Outcomes.*?\[(.+?)\]',
+        r'Prerequisites.*?\[(.+?)\]',
+        r'Innovation Factor.*?\[(.+?)\]',
+        r'Project Description.*?\[(.+?)\]',
+        r'Learning Outcomes.*?\[(.+?)\]',
+        r'Project Components.*?\[(.+?)\]',
+        r'Implementation Methods.*?\[(.+?)\]',
+        r'Assessment Criteria.*?\[(.+?)\]',
+        r'Target Students.*?\[(.+?)\]'
+    ]
+    
+    # Extract sections
+    sections = []
+    remaining_content = clean_content
+    
+    for pattern in section_patterns:
+        match = re.search(pattern, remaining_content, re.DOTALL | re.IGNORECASE)
+        if match:
+            # Find the section title
+            section_start = match.start()
+            section_end = match.end()
+            
+            # Extract the section title from the pattern
+            if 'Scope Rating' in pattern:
+                title = 'Scope Rating'
+                value = match.group(1)
+                content_text = f'<span class="scope-{value.lower()}">{value}</span>'
+            elif 'Uniqueness Score' in pattern:
+                title = 'Uniqueness Score'
+                value = match.group(1)
+                content_text = f'{value}/10'
+            else:
+                # Extract title from the pattern
+                title = pattern.split('.*?')[0].replace('.*?', '').strip()
+                value = match.group(1)
+                content_text = value
+            
+            sections.append({
+                'title': title,
+                'content': content_text
+            })
+            
+            # Remove this section from remaining content
+            remaining_content = remaining_content[:section_start] + remaining_content[section_end:]
+    
+    # Format sections into HTML
+    formatted_html = ""
+    for section in sections:
+        formatted_html += f'<div class="topic-section">'
+        formatted_html += f'<div class="section-title">{section["title"]}</div>'
+        formatted_html += f'<div class="section-content">{section["content"]}</div>'
+        formatted_html += '</div>'
+    
+    # If no sections were found, format as a simple paragraph
+    if not formatted_html:
+        # Split by common delimiters and format
+        parts = re.split(r'(Scope Rating|Uniqueness Score|Brief Overview|Research Problem|Research Gap|Significance|Key Research Questions|Methodology|Expected Outcomes|Prerequisites|Innovation Factor)', clean_content)
+        
+        if len(parts) > 1:
+            for i in range(1, len(parts), 2):
+                if i < len(parts) - 1:
+                    title = parts[i].strip()
+                    content = parts[i + 1].strip()
+                    if content:
+                        formatted_html += f'<div class="topic-section">'
+                        formatted_html += f'<div class="section-title">{title}</div>'
+                        formatted_html += f'<div class="section-content"><p>{content}</p></div>'
+                        formatted_html += '</div>'
+        else:
+            formatted_html = f'<div class="topic-section"><div class="section-content"><p>{clean_content}</p></div></div>'
+    
+    return formatted_html
+
+# Add the filter to templates
+templates.env.filters["format_topic_content"] = format_topic_content
 
 # User profiles storage (in production, use a proper database)
 USER_PROFILES_FILE = "user_profiles.json"
@@ -413,28 +539,72 @@ def save_professor_topic(user_id: str, topic_content: str, mode: str) -> bool:
 def extract_topic_info(topic_content: str, mode: str) -> Dict:
     """Extract structured information from topic content"""
     try:
+        # Clean the HTML content to extract plain text
+        import re
+        
+        # Remove HTML tags to get clean text
+        clean_content = re.sub(r'<[^>]+>', '', topic_content)
+        clean_content = re.sub(r'&amp;', '&', clean_content)
+        clean_content = re.sub(r'&lt;', '<', clean_content)
+        clean_content = re.sub(r'&gt;', '>', clean_content)
+        
         # Extract title from the first line or use a default
-        lines = topic_content.split('\n')
+        lines = clean_content.split('\n')
         title = "Untitled Topic"
         
-        # Look for title in the content
+        # Look for title in the content - find the first meaningful line
         for line in lines:
-            if line.strip() and not line.startswith('**'):
-                title = line.strip()
-                break
+            line = line.strip()
+            if line and not line.startswith('**') and not line.startswith('Scope') and not line.startswith('Uniqueness'):
+                # Try to extract title from "Topic X: Title" or "Course Project X: Title" format
+                title_match = re.search(r'(?:Topic|Course Project)\s+\d+:\s*(.+)', line)
+                if title_match:
+                    title = title_match.group(1).strip()
+                    break
+                elif len(line) > 10 and not line.startswith('**'):  # Use first substantial line as title
+                    title = line
+                    break
+        
+        # If we still have "Untitled Topic", try to extract from the brief overview
+        if title == "Untitled Topic":
+            overview_match = re.search(r'Brief Overview.*?\[(.+?)\]', clean_content, re.DOTALL)
+            if overview_match:
+                overview_text = overview_match.group(1).strip()
+                # Take first sentence as title
+                title = overview_text.split('.')[0] + '.'
+        
+        # If still no title, try to find any meaningful first line
+        if title == "Untitled Topic":
+            for line in lines:
+                line = line.strip()
+                if line and len(line) > 20 and not line.startswith('**') and not line.startswith('Scope') and not line.startswith('Uniqueness'):
+                    title = line[:100] + '...' if len(line) > 100 else line
+                    break
+        
+        # If still no title, try to extract from the content more aggressively
+        if title == "Untitled Topic":
+            # Look for any sentence that might be a title
+            sentences = re.split(r'[.!?]', clean_content)
+            for sentence in sentences:
+                sentence = sentence.strip()
+                if sentence and len(sentence) > 30 and len(sentence) < 200:
+                    # Check if it looks like a title (not metadata)
+                    if not any(keyword in sentence.lower() for keyword in ['scope rating', 'uniqueness score', 'research problem', 'methodology']):
+                        title = sentence + '.'
+                        break
         
         # Extract keywords using OpenAI
-        keywords = extract_keywords_from_content(topic_content)
+        keywords = extract_keywords_from_content(clean_content)
         
         # Extract scope and uniqueness if present
         scope = "Medium"
         uniqueness = 8
         
-        scope_match = re.search(r'Scope Rating.*?\[(Easy|Medium|Hard)\]', topic_content)
+        scope_match = re.search(r'Scope Rating.*?\[(Easy|Medium|Hard)\]', clean_content)
         if scope_match:
             scope = scope_match.group(1)
         
-        uniqueness_match = re.search(r'Uniqueness Score.*?\[(\d+)\]', topic_content)
+        uniqueness_match = re.search(r'Uniqueness Score.*?\[(\d+)\]', clean_content)
         if uniqueness_match:
             uniqueness = int(uniqueness_match.group(1))
         
@@ -444,7 +614,7 @@ def extract_topic_info(topic_content: str, mode: str) -> Dict:
         
         return {
             "id": unique_id,
-            "content": topic_content,
+            "content": clean_content,  # Store clean text content
             "title": title,
             "keywords": keywords,
             "scope": scope,
@@ -500,12 +670,15 @@ def find_similar_topics(student_input: str, max_suggestions: int = 5) -> List[Di
             if profile.get("role") == "professor" and "saved_topics" in profile:
                 print(f"DEBUG: Professor {user_id} has {len(profile['saved_topics'])} saved topics")
                 for topic in profile["saved_topics"]:
-                    # Include both research and non-research topics
+                    # Include both research and course project topics
+                    topic_type = topic.get("mode", "research")
+                    print(f"DEBUG: Found {topic_type} topic: {topic.get('title', 'No title')}")
                     professor_topics.append({
                         "topic": topic,
                         "professor_id": user_id,
                         "professor_name": profile.get("name", f"Professor {user_id}"),
-                        "expertise": profile.get("extracted_info", {}).get("expertise", "General")
+                        "expertise": profile.get("extracted_info", {}).get("expertise", "General"),
+                        "topic_type": topic_type
                     })
         
         print(f"DEBUG: Total professor topics found: {len(professor_topics)}")
@@ -567,6 +740,113 @@ def find_similar_topics(student_input: str, max_suggestions: int = 5) -> List[Di
         import traceback
         traceback.print_exc()
         return []
+
+def clean_existing_topics():
+    """Clean up existing saved topics that contain HTML content"""
+    try:
+        profiles = load_user_profiles()
+        cleaned_count = 0
+        
+        for user_id, profile in profiles.items():
+            if profile.get("role") == "professor" and "saved_topics" in profile:
+                for topic in profile["saved_topics"]:
+                    if topic.get("content") and "<" in topic.get("content", ""):
+                        # Clean the content
+                        clean_content = re.sub(r'<[^>]+>', '', topic["content"])
+                        clean_content = re.sub(r'&amp;', '&', clean_content)
+                        clean_content = re.sub(r'&lt;', '<', clean_content)
+                        clean_content = re.sub(r'&gt;', '>', clean_content)
+                        clean_content = re.sub(r'\s+', ' ', clean_content).strip()
+                        
+                        # Extract clean title
+                        title = "Untitled Topic"
+                        lines = clean_content.split('\n')
+                        for line in lines:
+                            line = line.strip()
+                            if line and not line.startswith('**') and not line.startswith('Scope') and not line.startswith('Uniqueness'):
+                                title_match = re.search(r'(?:Topic|Course Project)\s+\d+:\s*(.+)', line)
+                                if title_match:
+                                    title = title_match.group(1).strip()
+                                    break
+                                elif len(line) > 10 and not line.startswith('**'):
+                                    title = line
+                                    break
+                        
+                        # Update the topic
+                        topic["content"] = clean_content
+                        topic["title"] = title
+                        cleaned_count += 1
+        
+        if cleaned_count > 0:
+            save_user_profiles(profiles)
+            print(f"Cleaned {cleaned_count} existing topics")
+        
+        return cleaned_count
+    except Exception as e:
+        print(f"Error cleaning existing topics: {e}")
+        return 0
+
+def fix_existing_topic_titles():
+    """Fix existing saved topics by extracting proper titles from their content"""
+    try:
+        profiles = load_user_profiles()
+        fixed_count = 0
+        
+        for user_id, profile in profiles.items():
+            if profile.get("role") == "professor" and "saved_topics" in profile:
+                for topic in profile["saved_topics"]:
+                    if topic.get("title") == "Untitled Topic" and topic.get("content"):
+                        # Extract title from content using the same logic as extract_topic_info
+                        clean_content = topic["content"]
+                        
+                        # Try to extract title from the content
+                        title = "Untitled Topic"
+                        
+                        # Method 1: Look for "Brief Overview" section
+                        overview_match = re.search(r'Brief Overview\s*(.+?)(?=Research Problem|Research Gap|Significance|Key Research Questions|Methodology|Expected Outcomes|Prerequisites|Innovation Factor|$)', clean_content, re.DOTALL | re.IGNORECASE)
+                        if overview_match:
+                            overview_text = overview_match.group(1).strip()
+                            # Take first sentence as title
+                            first_sentence = overview_text.split('.')[0].strip()
+                            if first_sentence and len(first_sentence) > 10:
+                                title = first_sentence + '.'
+                        
+                        # Method 2: If no overview, try to find any meaningful first line
+                        if title == "Untitled Topic":
+                            lines = clean_content.split('\n')
+                            for line in lines:
+                                line = line.strip()
+                                if line and len(line) > 20 and not line.startswith('Scope') and not line.startswith('Uniqueness'):
+                                    # Skip metadata lines
+                                    if not any(keyword in line.lower() for keyword in ['scope rating', 'uniqueness score', 'research problem', 'methodology']):
+                                        title = line[:100] + '...' if len(line) > 100 else line
+                                        break
+                        
+                        # Method 3: Extract from any sentence that looks like a title
+                        if title == "Untitled Topic":
+                            sentences = re.split(r'[.!?]', clean_content)
+                            for sentence in sentences:
+                                sentence = sentence.strip()
+                                if sentence and len(sentence) > 30 and len(sentence) < 200:
+                                    # Check if it looks like a title (not metadata)
+                                    if not any(keyword in sentence.lower() for keyword in ['scope rating', 'uniqueness score', 'research problem', 'methodology']):
+                                        title = sentence + '.'
+                                        break
+                        
+                        # Update the topic title
+                        if title != "Untitled Topic":
+                            topic["title"] = title
+                            fixed_count += 1
+                            print(f"Fixed title for topic {topic.get('id', 'unknown')}: {title[:50]}...")
+        
+        if fixed_count > 0:
+            save_user_profiles(profiles)
+            print(f"Fixed {fixed_count} existing topic titles")
+        
+        return fixed_count
+    except Exception as e:
+        print(f"Error fixing existing topic titles: {e}")
+        return 0
 
 @app.get("/", response_class=HTMLResponse)
 async def form(request: Request):
@@ -664,7 +944,8 @@ async def scrape_scholar_profile(
             "input_text": "",
             "course_description": "",
             "course_details": "",
-            "mode": "research"
+            "mode": "research",
+            "difficulty": "medium"
         })
     
     # Extract research insights using AI
@@ -697,7 +978,8 @@ async def scrape_scholar_profile(
         "input_text": "",
         "course_description": "",
         "course_details": "",
-        "mode": "research"
+        "mode": "research",
+        "difficulty": "medium"
     })
 
 @app.post("/generate", response_class=HTMLResponse)
@@ -706,6 +988,7 @@ async def generate(
     user_id: str = Form(...),
     role: str = Form(...),
     mode: str = Form(...),
+    difficulty: str = Form(...),
     input_text: str = Form(...),
     course_description: str = Form(default=""),
     course_details: str = Form(default=""),
@@ -746,29 +1029,49 @@ async def generate(
         for doc_entry in profile["extracted_info"].get("documents", []):
             extracted_context += f"\nPrevious Document: {doc_entry.get('filename', 'Unknown')}\n{doc_entry.get('content', '')}\n"
     
-    # Build context from user input, file content, and extracted information
-    context = input_text
-    if file_content:
-        context += f"\n\nAdditional context from uploaded documents:\n{file_content}"
-    if extracted_context:
-        context += f"\n\nUser Profile Context:\n{extracted_context}"
-
-    # Build the document content section
-    document_section = ""
-    if file_content:
-        document_section = f"\nDocument Content:\n{file_content}\n"
-    
-    # Only include course-related information for non-research mode
-    if mode == "non-research":
+    # Build context based on mode - COMPLETELY SEPARATE for research vs course projects
+    if mode == "research":
+        # RESEARCH MODE: Include all context (background, files, Google Scholar, etc.)
+        context = input_text
+        if file_content:
+            context += f"\n\nAdditional context from uploaded documents:\n{file_content}"
+        if extracted_context:
+            context += f"\n\nUser Profile Context:\n{extracted_context}"
+        
+        # Build the document content section
+        document_section = ""
+        if file_content:
+            document_section = f"\nDocument Content:\n{file_content}\n"
+            
+    else:
+        # COURSE PROJECT MODE: ONLY include course-specific context (NO research context)
+        context = input_text  # User background/expertise
+        if file_content:
+            context += f"\n\nAdditional context from uploaded documents:\n{file_content}"
+        
+        # Add course-specific information
         if course_description:
             context += f"\n\nCourse Description:\n{course_description}"
-            document_section += f"\nCourse Description:\n{course_description}\n"
         if course_details:
             context += f"\n\nAdditional Course Details:\n{course_details}"
+        
+        # Build the document content section for course projects
+        document_section = ""
+        if file_content:
+            document_section = f"\nDocument Content:\n{file_content}\n"
+        if course_description:
+            document_section += f"\nCourse Description:\n{course_description}\n"
+        if course_details:
             document_section += f"\nAdditional Course Details:\n{course_details}\n"
 
     if mode == "research":
         prompt = f"""Generate 3 COMPLETELY NEW and innovative thesis topics for a {role} using chain-of-thought reasoning.
+
+DESIRED DIFFICULTY LEVEL: {difficulty.upper()}
+- EASY: Suitable for beginners, basic concepts, fundamental research
+- MEDIUM: Moderate complexity, some advanced concepts, intermediate research
+- HARD: Advanced concepts, complex implementation, cutting-edge research
+- MIXED: Variety of difficulty levels (1 easy, 1 medium, 1 hard)
 
 CONTEXT INFORMATION (Use for understanding background, NOT for topic generation):
 User Input: {input_text}{document_section}
@@ -776,10 +1079,11 @@ User Profile Context: {extracted_context}
 
 CHAIN-OF-THOUGHT PROCESS:
 1. First, analyze the user's background and expertise from the context
-2. Identify emerging trends, gaps, and opportunities in their field
-3. Consider interdisciplinary connections and novel applications
-4. Think about future challenges and unexplored research directions
-5. Generate topics that leverage their expertise but explore NEW territory
+2. Consider the desired difficulty level and adjust complexity accordingly
+3. Identify emerging trends, gaps, and opportunities in their field
+4. Consider interdisciplinary connections and novel applications
+5. Think about future challenges and unexplored research directions
+6. Generate topics that leverage their expertise but explore NEW territory
 
 CRITICAL REQUIREMENTS:
 - Topics MUST be completely new and not based on existing research from the context
@@ -787,12 +1091,13 @@ CRITICAL REQUIREMENTS:
 - Focus on emerging areas, interdisciplinary approaches, or novel applications
 - Each topic should represent a significant departure from current work
 - Aim for high innovation and novelty scores (8-10)
+- ADJUST SCOPE RATING based on the desired difficulty level
 
 For each thesis topic, provide the following structured format:
 
 ## Topic [Number]: [Title]
 
-**Scope Rating:** [Easy/Medium/Hard] - Rate based on complexity, time requirements, and resource needs
+**Scope Rating:** [Easy/Medium/Hard] - Rate based on complexity, time requirements, and resource needs (should match desired difficulty)
 **Uniqueness Score:** [8-10] - Rate how novel and innovative this topic is (must be 8 or higher)
 **Brief Overview:** [2-3 sentences summarizing the core concept]
 
@@ -815,20 +1120,26 @@ For each thesis topic, provide the following structured format:
 
 **Innovation Factor:** [What makes this topic truly novel and different from existing research]
 
-Remember: Use the context to understand the user's expertise and field, but generate topics that represent NEW research directions, not extensions of existing work."""
+Remember: Use the context to understand the user's expertise and field, but generate topics that represent NEW research directions, not extensions of existing work. Ensure the scope rating aligns with the desired difficulty level."""
     else:
         prompt = f"""Generate 3 COMPLETELY NEW and innovative course project ideas for a {role} using chain-of-thought reasoning.
 
+DESIRED DIFFICULTY LEVEL: {difficulty.upper()}
+- EASY: Suitable for beginners, basic concepts, fundamental skills
+- MEDIUM: Moderate complexity, some advanced concepts, intermediate skills
+- HARD: Advanced concepts, complex implementation, expert-level skills
+- MIXED: Variety of difficulty levels (1 easy, 1 medium, 1 hard)
+
 CONTEXT INFORMATION (Use for understanding background, NOT for project generation):
 User Input: {input_text}{document_section}
-User Profile Context: {extracted_context}
 
 CHAIN-OF-THOUGHT PROCESS:
-1. First, analyze the user's teaching background and research expertise from the context
-2. Identify emerging educational needs and gaps in current curricula
-3. Consider interdisciplinary approaches and novel project-based learning methodologies
-4. Think about future skills students will need and unexplored project areas
-5. Generate course projects that leverage their expertise but explore NEW educational territory
+1. First, analyze the user's teaching background and expertise from the context
+2. Consider the desired difficulty level and adjust project complexity accordingly
+3. Identify emerging educational needs and gaps in current curricula
+4. Consider interdisciplinary approaches and novel project-based learning methodologies
+5. Think about future skills students will need and unexplored project areas
+6. Generate course projects that leverage their expertise but explore NEW educational territory
 
 CRITICAL REQUIREMENTS:
 - Course projects MUST be completely new and not based on existing projects from the context
@@ -836,12 +1147,14 @@ CRITICAL REQUIREMENTS:
 - Focus on emerging subjects, interdisciplinary approaches, or novel project methodologies
 - Each project should represent a significant departure from traditional assignments
 - Aim for high innovation and novelty scores (8-10)
+- ADJUST SCOPE RATING based on the desired difficulty level
+- IGNORE any research-related context (Google Scholar, previous research papers, etc.)
 
 For each course project, provide the following structured format:
 
 ## Course Project [Number]: [Title]
 
-**Scope Rating:** [Easy/Medium/Hard] - Rate based on complexity, time requirements, and resource needs
+**Scope Rating:** [Easy/Medium/Hard] - Rate based on complexity, time requirements, and resource needs (should match desired difficulty)
 **Uniqueness Score:** [8-10] - Rate how innovative and distinctive this project concept is (must be 8 or higher)
 **Brief Overview:** [2-3 sentences summarizing the project concept]
 
@@ -863,13 +1176,9 @@ For each course project, provide the following structured format:
 
 **Target Students:** [Who would benefit most from this project]
 
-**Innovation Factor:** [What makes this project truly novel and different from existing assignments]
+**Innovation Factor:** [What makes this project truly novel and different from traditional assignments]
 
-**Resource Requirements:** [Materials, tools, and resources needed]
-
-**Timeline:** [Suggested project duration and milestones]
-
-Remember: Use the context to understand the user's expertise and teaching style, but generate course projects that represent NEW educational directions, not extensions of existing assignments."""
+Remember: Use the context to understand the user's teaching expertise and field, but generate projects that represent NEW educational directions, not extensions of existing assignments. Focus ONLY on course-specific information and ignore any research context. Ensure the scope rating aligns with the desired difficulty level."""
 
     try:
         response = client.chat.completions.create(
@@ -921,7 +1230,7 @@ Remember: Use the context to understand the user's expertise and teaching style,
 
     # Get file names for display
     file_names = [file.filename for file in files] if files and len(files) > 0 else []
-    
+
     return templates.TemplateResponse("index.html", {
         "request": request,
         "result": generated,
@@ -931,6 +1240,7 @@ Remember: Use the context to understand the user's expertise and teaching style,
         "user_id": user_id,
         "role": role,
         "mode": mode,
+        "difficulty": difficulty,
         "uploaded_files": file_names,
         "file_content": file_content if file_content else "",
         "relevant_papers": relevant_papers[:10]  # Limit to 10 papers total
@@ -943,6 +1253,7 @@ async def enrich_topic(
     topic_content: str = Form(...),
     role: str = Form(...),
     mode: str = Form(...),
+    difficulty: str = Form(default="medium"),
     user_id: str = Form(...),
     course_description: str = Form(default=""),
     input_text: str = Form(default=""),
@@ -1017,6 +1328,7 @@ Format the response with clear headings and bullet points. Focus on expanding th
         "user_id": user_id,
         "role": role,
         "mode": mode,
+        "difficulty": difficulty,
         "uploaded_files": [],
         "file_content": "",
         "enriched_topic": topic_title
@@ -1044,3 +1356,18 @@ async def debug_profiles():
             debug_info["topics_count"] += topics_count
     
     return {"debug_info": debug_info}
+
+@app.get("/clean-topics")
+async def clean_topics():
+    """Clean up existing saved topics that contain HTML content"""
+    cleaned_count = clean_existing_topics()
+    return {"message": f"Cleaned {cleaned_count} existing topics", "cleaned_count": cleaned_count}
+
+@app.get("/fix-titles")
+async def fix_titles_endpoint():
+    """Manually trigger title fixing for existing topics"""
+    try:
+        fixed_count = fix_existing_topic_titles()
+        return {"message": f"Fixed {fixed_count} topic titles", "fixed_count": fixed_count}
+    except Exception as e:
+        return {"error": str(e)}

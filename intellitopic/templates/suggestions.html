@@ -224,6 +224,70 @@
         .scope-medium { color: #f59e0b; }
         .scope-hard { color: #ef4444; }
 
+        .topic-type-research {
+            color: #3b82f6;
+            font-weight: 600;
+        }
+
+        .topic-type-non-research {
+            color: #10b981;
+            font-weight: 600;
+        }
+
+        .topic-content {
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 1px solid rgba(148, 163, 184, 0.2);
+        }
+
+        .topic-content-inner {
+            color: #cbd5e1;
+            line-height: 1.6;
+        }
+
+        .topic-content-inner h3,
+        .topic-content-inner h4 {
+            color: #f1f5f9;
+            margin: 15px 0 10px 0;
+        }
+
+        .topic-content-inner ul {
+            margin: 10px 0;
+            padding-left: 20px;
+        }
+
+        .topic-content-inner li {
+            margin-bottom: 5px;
+        }
+
+        .topic-content-inner p {
+            margin-bottom: 12px;
+            line-height: 1.6;
+        }
+
+        .topic-content-inner .topic-section {
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid rgba(148, 163, 184, 0.1);
+        }
+
+        .topic-content-inner .topic-section:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+        }
+
+        .topic-content-inner .section-title {
+            font-weight: 600;
+            color: #f1f5f9;
+            margin-bottom: 10px;
+            font-size: 1.1rem;
+        }
+
+        .topic-content-inner .section-content {
+            margin: 10px 0;
+            padding-left: 20px;
+        }
+
         .keywords {
             margin-bottom: 15px;
         }
@@ -393,6 +457,10 @@
                                 <i class="fas fa-calendar"></i>
                                 <span>{{ suggestion.topic.created_at[:10] }}</span>
                             </div>
+                            <div class="meta-item">
+                                <i class="fas fa-graduation-cap"></i>
+                                <span class="topic-type-{{ suggestion.topic_type.lower() }}">{{ suggestion.topic_type.title() }}</span>
+                            </div>
                         </div>
                         
                         {% if suggestion.topic.keywords %}
@@ -407,7 +475,7 @@
                         {% endif %}
                         
                         <div class="topic-actions">
-                            <button class="btn-secondary" onclick="viewTopicDetails('{{ suggestion.topic.id }}')">
+                            <button class="btn-secondary" onclick="toggleTopicDetails('{{ suggestion.topic.id }}')">
                                 <i class="fas fa-eye"></i>
                                 View Details
                             </button>
@@ -415,6 +483,13 @@
                                 <i class="fas fa-user"></i>
                                 Professor Profile
                             </a>
+                        </div>
+                        
+                        <div class="topic-content" id="topic-{{ suggestion.topic.id }}" style="display: none;">
+                            <div class="topic-content-inner">
+                                {% set formatted_content = suggestion.topic.content | format_topic_content %}
+                                {{ formatted_content | safe }}
+                            </div>
                         </div>
                     </div>
                     {% endfor %}
@@ -430,9 +505,13 @@
     </div>
 
     <script>
-        function viewTopicDetails(topicId) {
-            // This could open a modal or navigate to a detailed view
-            alert('Topic details feature coming soon!');
+        function toggleTopicDetails(topicId) {
+            const topicContent = document.getElementById(`topic-${topicId}`);
+            if (topicContent.style.display === 'none') {
+                topicContent.style.display = 'block';
+            } else {
+                topicContent.style.display = 'none';
+            }
         }
     </script>
 </body>
