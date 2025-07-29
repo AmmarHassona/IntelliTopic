@@ -101,14 +101,81 @@
           "input": "i am a computer science lecturer teaching computer architecture, programming and oop (c++), discrete math, research methodology\r\n",
           "mode": "research",
           "timestamp": "2025-07-29T13:31:49.552259"
+        },
+        {
+          "input": "i am a computer science lecturer teaching computer architecture, programming and oop (c++), discrete math, research methodology",
+          "mode": "non-research",
+          "timestamp": "2025-07-29T14:50:29.240493"
+        },
+        {
+          "input": "i am a computer science lecturer teaching computer architecture, programming and oop (c++), discrete math, research methodology",
+          "mode": "research",
+          "timestamp": "2025-07-29T14:51:31.570835"
+        },
+        {
+          "input": "i want to create a project in c++ that aims to teach students about data structures and oop in c++",
+          "mode": "research",
+          "timestamp": "2025-07-29T14:59:07.479549"
+        },
+        {
+          "input": "i am a computer science lecturer teaching computer architecture, programming and oop (c++), discrete math, research methodology",
+          "mode": "research",
+          "timestamp": "2025-07-29T15:00:55.942605"
+        },
+        {
+          "input": "i am a computer science lecturer teaching computer architecture, programming and oop (c++), discrete math, research methodology",
+          "mode": "non-research",
+          "timestamp": "2025-07-29T15:01:33.998233"
+        },
+        {
+          "input": "i am a computer science lecturer teaching computer architecture, programming and oop (c++), discrete math, research methodology",
+          "mode": "non-research",
+          "timestamp": "2025-07-29T15:03:35.802939"
         }
       ]
     },
     "preferences": {},
     "statistics": {
-      "topics_generated": 6,
+      "topics_generated": 12,
       "documents_processed": 0,
       "scholar_profiles_analyzed": 1
+    }
+  },
+  "2": {
+    "role": "student",
+    "created_at": "2025-07-29T15:05:23.592884",
+    "extracted_info": {
+      "documents": [
+        {
+          "filename": "Ammar Hassona CV.pdf",
+          "uploaded_at": "2025-07-29T15:10:00.738757",
+          "size": 0
+        }
+      ],
+      "google_scholar": [],
+      "user_inputs": [
+        {
+          "input": "i am a senior computer science student majoring in data science interested in llms and sports",
+          "mode": "research",
+          "timestamp": "2025-07-29T15:05:41.113367"
+        },
+        {
+          "input": "i am a senior computer science student majoring in data science interested in llms and sports",
+          "mode": "research",
+          "timestamp": "2025-07-29T15:09:46.008024"
+        },
+        {
+          "input": "i am a senior computer science student majoring in data science interested in llms and sports",
+          "mode": "research",
+          "timestamp": "2025-07-29T15:10:14.508394"
+        }
+      ]
+    },
+    "preferences": {},
+    "statistics": {
+      "topics_generated": 3,
+      "documents_processed": 1,
+      "scholar_profiles_analyzed": 0
     }
   }
 }

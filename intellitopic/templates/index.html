@@ -414,10 +414,143 @@
             margin-bottom: 8px;
         }
 
+        .relevant-papers {
+            margin-top: 30px;
+            padding-top: 30px;
+            border-top: 1px solid rgba(148, 163, 184, 0.2);
+        }
+
+        .relevant-papers h4 {
+            color: #f1f5f9;
+            font-size: 1.3rem;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .papers-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+        }
+
+        .paper-card {
+            background: rgba(15, 23, 42, 0.6);
+            border: 1px solid rgba(148, 163, 184, 0.2);
+            border-radius: 12px;
+            padding: 20px;
+            transition: all 0.3s ease;
+        }
+
+        .paper-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.3);
+            border-color: rgba(59, 130, 246, 0.3);
+        }
+
+        .paper-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 12px;
+        }
+
+        .paper-title {
+            color: #f1f5f9;
+            font-size: 1rem;
+            font-weight: 600;
+            line-height: 1.4;
+            margin: 0;
+            flex: 1;
+        }
+
+        .paper-date {
+            color: #94a3b8;
+            font-size: 0.85rem;
+            margin-left: 10px;
+            white-space: nowrap;
+        }
+
+        .paper-authors {
+            margin-bottom: 12px;
+        }
+
+        .author {
+            color: #60a5fa;
+            font-size: 0.9rem;
+        }
+
+        .more-authors {
+            color: #94a3b8;
+            font-size: 0.85rem;
+        }
+
+        .paper-summary {
+            color: #cbd5e1;
+            font-size: 0.9rem;
+            line-height: 1.5;
+            margin-bottom: 15px;
+        }
+
+        .paper-actions {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .paper-link {
+            background: rgba(59, 130, 246, 0.2);
+            border: 1px solid rgba(59, 130, 246, 0.3);
+            color: #60a5fa;
+            padding: 8px 16px;
+            border-radius: 6px;
+            text-decoration: none;
+            font-size: 0.85rem;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .paper-link:hover {
+            background: rgba(59, 130, 246, 0.3);
+            transform: translateY(-1px);
+        }
+
+        .arxiv-id {
+            color: #94a3b8;
+            font-size: 0.8rem;
+            font-family: monospace;
+        }
+
         .loading {
             display: none;
             text-align: center;
             padding: 40px;
+        }
+
+        .loading-card {
+            background: rgba(30, 41, 59, 0.9);
+            border: 1px solid rgba(148, 163, 184, 0.2);
+            border-radius: 16px;
+            padding: 40px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+            max-width: 500px;
+            margin: 0 auto;
+        }
+
+        .loading-card h3 {
+            color: #f1f5f9;
+            font-size: 1.5rem;
+            margin-bottom: 10px;
+        }
+
+        .loading-card p {
+            color: #cbd5e1;
+            margin-bottom: 30px;
+            line-height: 1.6;
         }
 
         .spinner {
@@ -428,6 +561,51 @@
             height: 40px;
             animation: spin 1s linear infinite;
             margin: 0 auto 20px;
+        }
+
+        .loading-steps {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .step {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 16px;
+            background: rgba(15, 23, 42, 0.6);
+            border-radius: 8px;
+            border: 1px solid rgba(148, 163, 184, 0.1);
+            opacity: 0.5;
+            transition: all 0.3s ease;
+        }
+
+        .step.active {
+            opacity: 1;
+            border-color: #3b82f6;
+            background: rgba(59, 130, 246, 0.1);
+        }
+
+        .step.completed {
+            opacity: 0.8;
+            border-color: #10b981;
+            background: rgba(16, 185, 129, 0.1);
+        }
+
+        .step i {
+            color: #60a5fa;
+            font-size: 1.1rem;
+            width: 20px;
+        }
+
+        .step.completed i {
+            color: #10b981;
+        }
+
+        .step span {
+            color: #e2e8f0;
+            font-weight: 500;
         }
 
         .loading-text {
@@ -925,16 +1103,16 @@
                 <div class="form-group">
                     <label for="role"><i class="fas fa-user-graduate"></i> Role</label>
                     <select name="role" id="role" class="form-control" required>
-  <option value="student">Student</option>
-  <option value="professor">Professor</option>
+      <option value="student" {% if role == "student" %}selected{% endif %}>Student</option>
+      <option value="professor" {% if role == "professor" %}selected{% endif %}>Professor</option>
                     </select>
                 </div>
 
                 <div class="form-group">
                     <label for="mode"><i class="fas fa-cogs"></i> Mode</label>
                     <select name="mode" id="mode" class="form-control" required>
-  <option value="research">Research (Thesis Topics)</option>
-  <option value="non-research" id="non-research-option">Non-Research (Course Project Ideas)</option>
+      <option value="research" {% if mode == "research" %}selected{% endif %}>Research (Thesis Topics)</option>
+  <option value="non-research" id="non-research-option" {% if mode == "non-research" %}selected{% endif %}>Non-Research (Course Project Ideas)</option>
                     </select>
                 </div>
 
@@ -949,7 +1127,7 @@
                 <!-- Course Description Section (Non-Research Mode Only) -->
                 <div class="form-group" id="course-description-section" style="display: none;">
                     <label for="course_description"><i class="fas fa-chalkboard-teacher"></i> Course Description</label>
-                    <textarea name="course_description" id="course_description" class="form-control" rows="4" placeholder="Describe the course you want to create projects for (e.g., course level, subject area, learning objectives, target students, etc.)..." required>{{ course_description or "" }}</textarea>
+                    <textarea name="course_description" id="course_description" class="form-control" rows="4" placeholder="Describe the course you want to create projects for (e.g., course level, subject area, learning objectives, target students, etc.)...">{{ course_description or "" }}</textarea>
                     <div class="form-help">
                         <p><i class="fas fa-info-circle"></i> This helps generate project ideas that align with your specific course goals</p>
                     </div>
@@ -979,7 +1157,7 @@
                 <div class="form-group" id="scholar-section" style="display: none;">
                     <label for="scholar_url"><i class="fas fa-graduation-cap"></i> Google Scholar Profile (Optional)</label>
                     <div class="scholar-container">
-                        <input type="url" name="scholar_url" id="scholar_url" class="form-control" placeholder="https://scholar.google.com/citations?user=..." pattern="https://scholar\.google\.com/.*">
+                        <input type="url" name="scholar_url" id="scholar_url" class="form-control" placeholder="https://scholar.google.com/citations?user=..." pattern="https://scholar\.google\.com/.*" value="{{ scholar_url or '' }}">
                         <div class="scholar-info">
                             <p><i class="fas fa-info-circle"></i> Add your Google Scholar profile URL to analyze your research background</p>
                             <p><i class="fas fa-shield-alt"></i> Only professors can access this feature</p>
@@ -1007,9 +1185,30 @@
             </div>
 
             <div class="results-section">
-                <div class="loading" id="loading">
-                    <div class="spinner"></div>
-                    <p class="loading-text">Generating your ideas...</p>
+                <div class="loading" id="loading" style="display: none;">
+                    <div class="loading-card">
+                        <div class="spinner"></div>
+                        <h3>Generating Your Ideas...</h3>
+                        <p>This may take a few moments. We're analyzing your background and creating innovative topics.</p>
+                        <div class="loading-steps">
+                            <div class="step active">
+                                <i class="fas fa-brain"></i>
+                                <span>Analyzing your background</span>
+                            </div>
+                            <div class="step">
+                                <i class="fas fa-lightbulb"></i>
+                                <span>Generating innovative ideas</span>
+                            </div>
+                            <div class="step">
+                                <i class="fas fa-search"></i>
+                                <span>Finding relevant papers</span>
+                            </div>
+                            <div class="step">
+                                <i class="fas fa-check"></i>
+                                <span>Finalizing results</span>
+                            </div>
+                        </div>
+                    </div>
                 </div>
 
   {% if scholar_result %}
@@ -1075,6 +1274,38 @@
                 {{ result | safe }}
             </div>
             
+            {% if relevant_papers %}
+            <div class="relevant-papers">
+                <h4><i class="fas fa-file-alt"></i> Relevant Papers</h4>
+                <div class="papers-grid">
+                    {% for paper in relevant_papers %}
+                    <div class="paper-card">
+                        <div class="paper-header">
+                            <h5 class="paper-title">{{ paper.title }}</h5>
+                            <span class="paper-date">{{ paper.published }}</span>
+                        </div>
+                        <div class="paper-authors">
+                            {% for author in paper.authors[:3] %}
+                                <span class="author">{{ author }}</span>{% if not loop.last %}, {% endif %}
+                            {% endfor %}
+                            {% if paper.authors|length > 3 %}
+                                <span class="more-authors">+{{ paper.authors|length - 3 }} more</span>
+                            {% endif %}
+                        </div>
+                        <p class="paper-summary">{{ paper.summary }}</p>
+                        <div class="paper-actions">
+                            <a href="{{ paper.url }}" target="_blank" class="paper-link">
+                                <i class="fas fa-external-link-alt"></i>
+                                View Paper
+                            </a>
+                            <span class="arxiv-id">{{ paper.arxiv_id }}</span>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+            {% endif %}
+            
             {% if file_content %}
             <div class="file-preview">
                 <h4><i class="fas fa-eye"></i> Extracted Content from Documents</h4>
@@ -1127,6 +1358,9 @@
             } else {
                 courseDescriptionSection.style.display = 'none';
                 courseDetailsSection.style.display = 'none';
+                // Clear course fields when switching to research mode
+                document.getElementById('course_description').value = '';
+                document.getElementById('course_details').value = '';
             }
         }
 
@@ -1178,18 +1412,78 @@
         }
 
         // Event listeners
-        document.getElementById('ideaForm').addEventListener('submit', function() {
-            document.getElementById('loading').style.display = 'block';
-            document.querySelector('.card').style.opacity = '0.7';
+        document.getElementById('ideaForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            // Validate form based on mode
+            const mode = document.getElementById('mode').value;
+            const courseDescriptionSection = document.getElementById('course-description-section');
+            const courseDescription = document.getElementById('course_description');
+            
+            // Check if course description is required (only for non-research mode)
+            if (mode === 'non-research' && courseDescriptionSection.style.display !== 'none') {
+                if (!courseDescription.value.trim()) {
+                    alert('Please provide a course description for non-research mode.');
+                    courseDescription.focus();
+                    return;
+                }
+            }
+            
+            // Show loading state
+            const loading = document.getElementById('loading');
+            const resultsSection = document.querySelector('.results-section');
+            
+            // Hide any existing results
+            const existingResults = resultsSection.querySelectorAll('.card');
+            existingResults.forEach(result => result.style.display = 'none');
+            
+            // Show loading
+            loading.style.display = 'block';
+            
+            // Simulate loading steps
+            const steps = loading.querySelectorAll('.step');
+            let currentStep = 0;
+            
+            const stepInterval = setInterval(() => {
+                if (currentStep < steps.length) {
+                    if (currentStep > 0) {
+                        steps[currentStep - 1].classList.remove('active');
+                        steps[currentStep - 1].classList.add('completed');
+                    }
+                    steps[currentStep].classList.add('active');
+                    currentStep++;
+                } else {
+                    clearInterval(stepInterval);
+                }
+            }, 1000);
+            
+            // Submit the form
+            this.submit();
         });
 
         document.getElementById('role').addEventListener('change', updateFormAccess);
+        document.getElementById('mode').addEventListener('change', updateFormAccess);
         document.getElementById('user_id').addEventListener('input', updateFormAccess);
         document.getElementById('analyze-scholar').addEventListener('click', analyzeScholarProfile);
 
         // Initialize form access on page load
         document.addEventListener('DOMContentLoaded', function() {
             updateFormAccess();
+            
+            // Ensure form state is properly set if we have preserved values
+            const mode = document.getElementById('mode').value;
+            const role = document.getElementById('role').value;
+            
+            // If we have a non-research mode selected, ensure course sections are visible
+            if (mode === 'non-research') {
+                document.getElementById('course-description-section').style.display = 'block';
+                document.getElementById('course-details-section').style.display = 'block';
+            }
+            
+            // If we have a professor role, ensure scholar section is visible
+            if (role === 'professor') {
+                document.getElementById('scholar-section').style.display = 'block';
+            }
         });
 
         // Add some interactive effects
@@ -1448,7 +1742,9 @@
             const role = document.getElementById('role').value;
             const mode = document.getElementById('mode').value;
             const userId = document.getElementById('user_id').value;
+            const inputText = document.getElementById('input_text').value;
             const courseDescription = document.getElementById('course_description') ? document.getElementById('course_description').value : '';
+            const courseDetails = document.getElementById('course_details') ? document.getElementById('course_details').value : '';
             
             // Create a form to submit the enrichment request
             const form = document.createElement('form');
@@ -1463,7 +1759,9 @@
                 'role': role,
                 'mode': mode,
                 'user_id': userId,
-                'course_description': courseDescription
+                'input_text': inputText,
+                'course_description': courseDescription,
+                'course_details': courseDetails
             };
             
             for (const [name, value] of Object.entries(fields)) {

@@ -16,6 +16,9 @@ import pytesseract
 import httpx
 from bs4 import BeautifulSoup
 import asyncio
+import aiohttp
+import xml.etree.ElementTree as ET
+from urllib.parse import quote_plus
 
 load_dotenv()
 client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
@@ -286,6 +289,96 @@ async def parse_uploaded_files(files: List[UploadFile]) -> str:
     
     return "\n".join(parsed_texts)
 
+async def fetch_relevant_papers(topic_title: str, max_papers: int = 5) -> List[Dict]:
+    """Fetch relevant papers from arXiv API based on topic keywords"""
+    try:
+        # Extract key terms from topic title
+        keywords = topic_title.replace(":", " ").replace("-", " ").split()
+        # Filter out common words and keep meaningful terms
+        meaningful_keywords = [kw for kw in keywords if len(kw) > 3 and kw.lower() not in ['the', 'and', 'for', 'with', 'using', 'based', 'analysis', 'study', 'research']]
+        
+        if not meaningful_keywords:
+            return []
+        
+        # Use the most relevant keywords for search
+        search_query = " ".join(meaningful_keywords[:3])
+        encoded_query = quote_plus(search_query)
+        
+        # arXiv API endpoint
+        url = f"http://export.arxiv.org/api/query?search_query=all:{encoded_query}&start=0&max_results={max_papers}&sortBy=relevance&sortOrder=descending"
+        
+        async with aiohttp.ClientSession() as session:
+            async with session.get(url) as response:
+                if response.status == 200:
+                    xml_content = await response.text()
+                    return parse_arxiv_response(xml_content)
+                else:
+                    print(f"ArXiv API error: {response.status}")
+                    return []
+    except Exception as e:
+        print(f"Error fetching papers: {e}")
+        return []
+
+def parse_arxiv_response(xml_content: str) -> List[Dict]:
+    """Parse arXiv XML response and extract paper information"""
+    try:
+        root = ET.fromstring(xml_content)
+        namespace = {'atom': 'http://www.w3.org/2005/Atom'}
+        
+        papers = []
+        entries = root.findall('.//atom:entry', namespace)
+        
+        for entry in entries:
+            title_elem = entry.find('atom:title', namespace)
+            summary_elem = entry.find('atom:summary', namespace)
+            authors = entry.findall('.//atom:name', namespace)
+            published_elem = entry.find('atom:published', namespace)
+            id_elem = entry.find('atom:id', namespace)
+            
+            if title_elem is not None:
+                title = title_elem.text.strip()
+                summary = summary_elem.text.strip() if summary_elem is not None else ""
+                author_names = [author.text for author in authors] if authors else []
+                published = published_elem.text[:10] if published_elem is not None else ""
+                paper_id = id_elem.text if id_elem is not None else ""
+                
+                papers.append({
+                    'title': title,
+                    'authors': author_names,
+                    'summary': summary[:200] + "..." if len(summary) > 200 else summary,
+                    'published': published,
+                    'url': paper_id,
+                    'arxiv_id': paper_id.split('/')[-1] if paper_id else ""
+                })
+        
+        return papers
+    except Exception as e:
+        print(f"Error parsing arXiv response: {e}")
+        return []
+
+async def extract_paper_keywords(topic_content: str) -> List[str]:
+    """Extract relevant keywords from topic content for paper search"""
+    try:
+        prompt = f"""Extract 3-5 most important technical keywords from this topic content for searching relevant academic papers. Return only the keywords separated by spaces, no explanations:
+
+Topic Content:
+{topic_content[:500]}
+
+Keywords:"""
+        
+        response = client.chat.completions.create(
+            model="gpt-3.5-turbo",
+            messages=[{"role": "user", "content": prompt}],
+            max_tokens=50,
+            temperature=0.3,
+        )
+        
+        keywords = response.choices[0].message.content.strip()
+        return [kw.strip() for kw in keywords.split() if len(kw.strip()) > 2]
+    except Exception as e:
+        print(f"Error extracting keywords: {e}")
+        return []
+
 @app.get("/", response_class=HTMLResponse)
 async def form(request: Request):
     return templates.TemplateResponse("index.html", {"request": request})
@@ -328,7 +421,11 @@ async def scrape_scholar_profile(
             "request": request,
             "error": profile_data["error"],
             "user_id": user_id,
-            "role": role
+            "role": role,
+            "input_text": "",
+            "course_description": "",
+            "course_details": "",
+            "mode": "research"
         })
     
     # Extract research insights using AI
@@ -357,7 +454,11 @@ async def scrape_scholar_profile(
         "scholar_profile": profile_data,
         "user_id": user_id,
         "role": role,
-        "scholar_url": scholar_url
+        "scholar_url": scholar_url,
+        "input_text": "",
+        "course_description": "",
+        "course_details": "",
+        "mode": "research"
     })
 
 @app.post("/generate", response_class=HTMLResponse)
@@ -408,10 +509,6 @@ async def generate(
     
     # Build context from user input, file content, and extracted information
     context = input_text
-    if course_description:
-        context += f"\n\nCourse Description:\n{course_description}"
-    if course_details:
-        context += f"\n\nAdditional Course Details:\n{course_details}"
     if file_content:
         context += f"\n\nAdditional context from uploaded documents:\n{file_content}"
     if extracted_context:
@@ -421,10 +518,15 @@ async def generate(
     document_section = ""
     if file_content:
         document_section = f"\nDocument Content:\n{file_content}\n"
-    if course_description:
-        document_section += f"\nCourse Description:\n{course_description}\n"
-    if course_details:
-        document_section += f"\nAdditional Course Details:\n{course_details}\n"
+    
+    # Only include course-related information for non-research mode
+    if mode == "non-research":
+        if course_description:
+            context += f"\n\nCourse Description:\n{course_description}"
+            document_section += f"\nCourse Description:\n{course_description}\n"
+        if course_details:
+            context += f"\n\nAdditional Course Details:\n{course_details}"
+            document_section += f"\nAdditional Course Details:\n{course_details}\n"
 
     if mode == "research":
         prompt = f"""Generate 3 COMPLETELY NEW and innovative thesis topics for a {role} using chain-of-thought reasoning.
@@ -541,6 +643,23 @@ Remember: Use the context to understand the user's expertise and teaching style,
     except Exception as e:
         generated = f"OpenAI API error: {str(e)}"
 
+    # Fetch relevant papers for each topic
+    relevant_papers = []
+    if generated and "OpenAI API error" not in generated and mode == "research":
+        try:
+            # Extract topic titles from the generated content
+            topic_sections = generated.split("## ")
+            for section in topic_sections[1:]:  # Skip the first empty section
+                lines = section.strip().split('\n')
+                if lines:
+                    topic_title = lines[0].strip()
+                    # Fetch papers for this topic
+                    papers = await fetch_relevant_papers(topic_title, max_papers=3)
+                    if papers:
+                        relevant_papers.extend(papers)
+        except Exception as e:
+            print(f"Error fetching papers: {e}")
+
     # Update user profile with new information
     update_data = {
         "statistics": {
@@ -574,7 +693,8 @@ Remember: Use the context to understand the user's expertise and teaching style,
         "role": role,
         "mode": mode,
         "uploaded_files": file_names,
-        "file_content": file_content if file_content else ""
+        "file_content": file_content if file_content else "",
+        "relevant_papers": relevant_papers[:10]  # Limit to 10 papers total
     })
 
 @app.post("/enrich-topic", response_class=HTMLResponse)
@@ -585,7 +705,9 @@ async def enrich_topic(
     role: str = Form(...),
     mode: str = Form(...),
     user_id: str = Form(...),
-    course_description: str = Form(default="")
+    course_description: str = Form(default=""),
+    input_text: str = Form(default=""),
+    course_details: str = Form(default="")
 ):
     """Enrich a specific topic with additional details"""
     
@@ -650,8 +772,9 @@ Format the response with clear headings and bullet points. Focus on expanding th
     return templates.TemplateResponse("index.html", {
         "request": request,
         "result": enriched_content,
-        "input_text": "",
+        "input_text": input_text,
         "course_description": course_description,
+        "course_details": course_details,
         "user_id": user_id,
         "role": role,
         "mode": mode,
