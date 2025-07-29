@@ -1007,6 +1007,29 @@
             color: #f59e0b;
         }
 
+        .save-button {
+            background: rgba(16, 185, 129, 0.2);
+            border: 1px solid rgba(16, 185, 129, 0.3);
+            color: #10b981;
+            padding: 12px 20px;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .save-button:hover {
+            background: rgba(16, 185, 129, 0.3);
+            transform: translateY(-1px);
+        }
+
+        .save-button i {
+            color: #10b981;
+        }
+
         /* Markdown-like formatting */
         .result-content h2 {
             color: #f1f5f9;
@@ -1179,6 +1202,11 @@
                         <i class="fas fa-user-circle"></i>
                         View Profile
                     </a>
+                    
+                    <a href="/topic-suggestions?user_id={{ user_id or 'demo' }}" class="btn btn-secondary" id="suggestions-link" style="display: none;">
+                        <i class="fas fa-lightbulb"></i>
+                        Find Topics from Professors
+                    </a>
                 </div>
                     </form>
                 </div>
@@ -1330,6 +1358,7 @@
             const courseDescriptionSection = document.getElementById('course-description-section');
             const courseDetailsSection = document.getElementById('course-details-section');
             const profileLink = document.getElementById('profile-link');
+            const suggestionsLink = document.getElementById('suggestions-link');
             const userId = document.getElementById('user_id').value;
 
             // Show/hide non-research option based on role
@@ -1340,6 +1369,8 @@
                     profileLink.style.display = 'inline-flex';
                     profileLink.href = `/profile/${userId}`;
                 }
+                // Hide suggestions link for professors (they save topics, students find them)
+                suggestionsLink.style.display = 'none';
             } else {
                 nonResearchOption.style.display = 'none';
                 if (mode.value === 'non-research') {
@@ -1349,6 +1380,11 @@
                 courseDescriptionSection.style.display = 'none';
                 courseDetailsSection.style.display = 'none';
                 profileLink.style.display = 'none';
+                // Show suggestions link for students to find topics from professors
+                if (userId) {
+                    suggestionsLink.style.display = 'inline-flex';
+                    suggestionsLink.href = `/topic-suggestions?user_id=${userId}`;
+                }
             }
 
             // Show/hide course sections based on mode
@@ -1554,9 +1590,14 @@
             const resultContent = document.querySelector('.result-content');
             if (!resultContent) return;
 
+            // Get current role and mode values
+            const role = document.getElementById('role').value;
+            const mode = document.getElementById('mode').value;
+
             // Convert markdown-style content to enhanced cards
             const content = resultContent.innerHTML;
             console.log('Content to process:', content.substring(0, 500) + '...');
+            console.log('Current role:', role, 'Current mode:', mode);
             
             // Split content by ## headers to find topics
             const sections = content.split(/## /);
@@ -1577,10 +1618,10 @@
                     // Get the content for this topic
                     const topicContent = lines.slice(1).join('\n');
                     
-                                    // Extract metadata from the content (for future use if needed)
-                const scopeMatch = topicContent.match(/\*\*Scope Rating:\*\* \[(Easy|Medium|Hard)\]/);
-                const uniquenessMatch = topicContent.match(/\*\*Uniqueness Score:\*\* \[(\d+)\]/);
-                const overviewMatch = topicContent.match(/\*\*Brief Overview:\*\* \[(.+?)\]/);
+                    // Extract metadata from the content (for future use if needed)
+                    const scopeMatch = topicContent.match(/\*\*Scope Rating:\*\* \[(Easy|Medium|Hard)\]/);
+                    const uniquenessMatch = topicContent.match(/\*\*Uniqueness Score:\*\* \[(\d+)\]/);
+                    const overviewMatch = topicContent.match(/\*\*Brief Overview:\*\* \[(.+?)\]/);
 
                     // Clean up the content for display
                     let cleanContent = topicContent
@@ -1600,17 +1641,23 @@
                         <div class="topic-card">
                             <div class="topic-header" onclick="toggleTopic('${topicId}')">
                                 <div class="topic-title">${type} ${number}: ${title}</div>
-                                                                                        <div class="topic-actions">
-                                <button class="expand-button" onclick="event.stopPropagation(); toggleTopic('${topicId}')">
-                                    <i class="fas fa-info-circle"></i>
-                                    <span>Expand Details</span>
-                                    <i class="fas fa-chevron-down expand-icon" id="icon-${topicId}"></i>
-                                </button>
-                                <button class="enrich-button" onclick="event.stopPropagation(); enrichTopic('${topicId}', '${type}', '${title}')">
-                                    <i class="fas fa-plus-circle"></i>
-                                    <span>Enrich Topic</span>
-                                </button>
-                            </div>
+                                <div class="topic-actions">
+                                    <button class="expand-button" onclick="event.stopPropagation(); toggleTopic('${topicId}')">
+                                        <i class="fas fa-info-circle"></i>
+                                        <span>Expand Details</span>
+                                        <i class="fas fa-chevron-down expand-icon" id="icon-${topicId}"></i>
+                                    </button>
+                                    <button class="enrich-button" onclick="event.stopPropagation(); enrichTopic('${topicId}', '${type}', '${title}')">
+                                        <i class="fas fa-plus-circle"></i>
+                                        <span>Enrich Topic</span>
+                                    </button>
+                                    ${role === 'professor' ? `
+                                    <button class="save-button" onclick="event.stopPropagation(); saveTopic('${topicId}', '${title}')">
+                                        <i class="fas fa-bookmark"></i>
+                                        Save Topic
+                                    </button>
+                                    ` : ''}
+                                </div>
                             </div>
                             <div class="topic-content" id="${topicId}">
                                 ${cleanContent}
@@ -1618,6 +1665,9 @@
                         </div>
                     `;
 
+                    console.log('Creating topic card for:', title);
+                    console.log('Role:', role, 'Mode:', mode);
+                    console.log('Save button should show:', role === 'professor');
                     // Replace the original section with the enhanced card
                     const originalSection = `## ${firstLine}\n${topicContent}`;
                     enhancedContent = enhancedContent.replace(originalSection, cardHTML);
@@ -1654,6 +1704,16 @@
                                         <span>Expand Details</span>
                                         <i class="fas fa-chevron-down expand-icon" id="icon-${topicId}"></i>
                                     </button>
+                                    <button class="enrich-button" onclick="event.stopPropagation(); enrichTopic('${topicId}', 'Research', '${title}')">
+                                        <i class="fas fa-plus-circle"></i>
+                                        <span>Enrich Topic</span>
+                                    </button>
+                                    ${role === 'professor' ? `
+                                    <button class="save-button" onclick="event.stopPropagation(); saveTopic('${topicId}', '${title}')">
+                                        <i class="fas fa-bookmark"></i>
+                                        Save Topic
+                                    </button>
+                                    ` : ''}
                                 </div>
                             </div>
                             <div class="topic-content" id="${topicId}">
@@ -1662,6 +1722,9 @@
                         </div>
                     `;
                     
+                    console.log('Creating simple topic card for:', title);
+                    console.log('Role:', role, 'Mode:', mode);
+                    console.log('Save button should show:', role === 'professor');
                     simpleContent = simpleContent.replace(fullMatch, cardHTML);
                     topicIndex++;
                 }
@@ -1781,6 +1844,60 @@
             // Submit the form
             document.body.appendChild(form);
             form.submit();
+        }
+
+        // Save topic functionality
+        async function saveTopic(topicId, title) {
+            const topicContent = document.getElementById(topicId).innerHTML;
+            const role = document.getElementById('role').value;
+            const mode = document.getElementById('mode').value;
+            const userId = document.getElementById('user_id').value;
+
+            if (!userId) {
+                alert('User ID is required to save topics.');
+                return;
+            }
+
+            if (role !== 'professor') {
+                alert('Only professors can save topics.');
+                return;
+            }
+
+            const saveBtn = event.target.closest('.save-button');
+            const originalText = saveBtn.innerHTML;
+            saveBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Saving...';
+            saveBtn.disabled = true;
+
+            try {
+                const formData = new FormData();
+                formData.append('user_id', userId);
+                formData.append('topic_content', topicContent);
+                formData.append('mode', mode);
+
+                const response = await fetch('/save-topic', {
+                    method: 'POST',
+                    body: formData
+                });
+
+                if (response.ok) {
+                    alert(`Topic "${title}" saved successfully!`);
+                    // Update the button to show saved status
+                    saveBtn.innerHTML = '<i class="fas fa-check"></i> Saved';
+                    saveBtn.style.background = 'rgba(16, 185, 129, 0.3)';
+                    saveBtn.style.borderColor = 'rgba(16, 185, 129, 0.5)';
+                    saveBtn.disabled = true;
+                } else {
+                    const errorData = await response.json();
+                    alert(`Error saving topic: ${errorData.detail}`);
+                }
+            } catch (error) {
+                alert(`Error saving topic: ${error.message}`);
+            } finally {
+                if (!saveBtn.disabled) {
+                    saveBtn.innerHTML = originalText;
+                    saveBtn.disabled = false;
+                }
+            }
         }
     </script>
 </body>

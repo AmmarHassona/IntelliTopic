@@ -19,6 +19,9 @@ import asyncio
 import aiohttp
 import xml.etree.ElementTree as ET
 from urllib.parse import quote_plus
+from sklearn.feature_extraction.text import TfidfVectorizer
+from sklearn.metrics.pairwise import cosine_similarity
+import numpy as np
 
 load_dotenv()
 client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
@@ -379,22 +382,258 @@ Keywords:"""
         print(f"Error extracting keywords: {e}")
         return []
 
+def save_professor_topic(user_id: str, topic_content: str, mode: str) -> bool:
+    """Save a topic to professor's profile"""
+    try:
+        profiles = load_user_profiles()
+        profile = profiles.get(user_id, {})
+        
+        if profile.get("role") != "professor":
+            return False
+        
+        # Extract topic information
+        topic_info = extract_topic_info(topic_content, mode)
+        
+        # Initialize saved_topics if it doesn't exist
+        if "saved_topics" not in profile:
+            profile["saved_topics"] = []
+        
+        # Add the topic to saved topics
+        profile["saved_topics"].append(topic_info)
+        
+        # Update the profile
+        profiles[user_id] = profile
+        save_user_profiles(profiles)
+        
+        return True
+    except Exception as e:
+        print(f"Error saving professor topic: {e}")
+        return False
+
+def extract_topic_info(topic_content: str, mode: str) -> Dict:
+    """Extract structured information from topic content"""
+    try:
+        # Extract title from the first line or use a default
+        lines = topic_content.split('\n')
+        title = "Untitled Topic"
+        
+        # Look for title in the content
+        for line in lines:
+            if line.strip() and not line.startswith('**'):
+                title = line.strip()
+                break
+        
+        # Extract keywords using OpenAI
+        keywords = extract_keywords_from_content(topic_content)
+        
+        # Extract scope and uniqueness if present
+        scope = "Medium"
+        uniqueness = 8
+        
+        scope_match = re.search(r'Scope Rating.*?\[(Easy|Medium|Hard)\]', topic_content)
+        if scope_match:
+            scope = scope_match.group(1)
+        
+        uniqueness_match = re.search(r'Uniqueness Score.*?\[(\d+)\]', topic_content)
+        if uniqueness_match:
+            uniqueness = int(uniqueness_match.group(1))
+        
+        # Generate a unique ID using timestamp
+        import time
+        unique_id = f"topic_{int(time.time() * 1000)}"
+        
+        return {
+            "id": unique_id,
+            "content": topic_content,
+            "title": title,
+            "keywords": keywords,
+            "scope": scope,
+            "uniqueness": uniqueness,
+            "created_at": pd.Timestamp.now().isoformat(),
+            "mode": mode
+        }
+    except Exception as e:
+        print(f"Error extracting topic info: {e}")
+        return {
+            "id": f"topic_{int(time.time() * 1000)}",
+            "content": topic_content,
+            "title": "Untitled Topic", 
+            "scope": "Medium", 
+            "uniqueness": 8, 
+            "keywords": [], 
+            "mode": mode
+        }
+
+def extract_keywords_from_content(content: str) -> List[str]:
+    """Extract keywords from topic content using NLP techniques"""
+    try:
+        # Simple keyword extraction - can be enhanced with more sophisticated NLP
+        words = re.findall(r'\b[a-zA-Z]{4,}\b', content.lower())
+        
+        # Filter out common words
+        stop_words = {'this', 'that', 'with', 'from', 'they', 'have', 'will', 'been', 'were', 'said', 'each', 'which', 'their', 'time', 'would', 'there', 'could', 'other', 'than', 'first', 'very', 'after', 'where', 'most', 'over', 'think', 'also', 'around', 'another', 'into', 'during', 'before', 'while', 'under', 'never', 'become', 'himself', 'hundred', 'against', 'among', 'everything', 'through', 'within', 'further', 'himself', 'toward', 'together', 'however', 'neither', 'twenty', 'because', 'should', 'above', 'below', 'between', 'without', 'almost', 'sometimes', 'along', 'often', 'until', 'always', 'something', 'anything', 'nothing', 'everything', 'everyone', 'someone', 'anyone', 'nobody', 'somebody', 'anybody', 'everybody'}
+        
+        # Count word frequencies
+        word_freq = {}
+        for word in words:
+            if word not in stop_words and len(word) > 3:
+                word_freq[word] = word_freq.get(word, 0) + 1
+        
+        # Return top keywords
+        sorted_words = sorted(word_freq.items(), key=lambda x: x[1], reverse=True)
+        return [word for word, freq in sorted_words[:10]]
+    except Exception as e:
+        print(f"Error extracting keywords: {e}")
+        return []
+
+def find_similar_topics(student_input: str, max_suggestions: int = 5) -> List[Dict]:
+    """Find similar topics from professor profiles based on student input"""
+    try:
+        profiles = load_user_profiles()
+        professor_topics = []
+        
+        print(f"DEBUG: Student input: {student_input}")
+        print(f"DEBUG: Total profiles loaded: {len(profiles)}")
+        
+        # Collect all topics from ALL professors (not just the current user)
+        for user_id, profile in profiles.items():
+            if profile.get("role") == "professor" and "saved_topics" in profile:
+                print(f"DEBUG: Professor {user_id} has {len(profile['saved_topics'])} saved topics")
+                for topic in profile["saved_topics"]:
+                    # Include both research and non-research topics
+                    professor_topics.append({
+                        "topic": topic,
+                        "professor_id": user_id,
+                        "professor_name": profile.get("name", f"Professor {user_id}"),
+                        "expertise": profile.get("extracted_info", {}).get("expertise", "General")
+                    })
+        
+        print(f"DEBUG: Total professor topics found: {len(professor_topics)}")
+        
+        if not professor_topics:
+            print("DEBUG: No professor topics found")
+            return []
+        
+        # Create TF-IDF vectors for similarity comparison
+        vectorizer = TfidfVectorizer(
+            max_features=2000,  # Increased features
+            stop_words='english',
+            ngram_range=(1, 3),  # Include trigrams for better matching
+            min_df=1,
+            max_df=0.95  # Remove very common terms
+        )
+        
+        # Prepare texts for comparison - include more comprehensive content
+        texts = [student_input]
+        topic_texts = []
+        
+        for pt in professor_topics:
+            topic = pt['topic']
+            # Include title, keywords, and content for better matching
+            topic_text = f"{topic.get('title', '')} {' '.join(topic.get('keywords', []))} {topic.get('content', '')[:500]}"  # Include first 500 chars of content
+            topic_texts.append(topic_text)
+            texts.append(topic_text)
+            print(f"DEBUG: Topic text for '{topic.get('title', '')}': {topic_text[:100]}...")
+        
+        # Create TF-IDF matrix
+        tfidf_matrix = vectorizer.fit_transform(texts)
+        
+        # Calculate similarities
+        student_vector = tfidf_matrix[0:1]
+        topic_vectors = tfidf_matrix[1:]
+        
+        similarities = cosine_similarity(student_vector, topic_vectors).flatten()
+        
+        print(f"DEBUG: Similarity scores: {similarities}")
+        
+        # Sort by similarity and return top matches
+        topic_similarities = list(zip(professor_topics, similarities))
+        topic_similarities.sort(key=lambda x: x[1], reverse=True)
+        
+        # Return top suggestions with similarity scores - lower threshold
+        suggestions = []
+        for topic_info, similarity in topic_similarities[:max_suggestions]:
+            if similarity > 0.01:  # Much lower threshold to catch more matches
+                suggestions.append({
+                    **topic_info,
+                    "similarity_score": round(similarity * 100, 1)
+                })
+                print(f"DEBUG: Added suggestion '{topic_info['topic'].get('title', '')}' with score {similarity:.3f}")
+        
+        print(f"DEBUG: Final suggestions count: {len(suggestions)}")
+        return suggestions
+    except Exception as e:
+        print(f"Error finding similar topics: {e}")
+        import traceback
+        traceback.print_exc()
+        return []
+
 @app.get("/", response_class=HTMLResponse)
 async def form(request: Request):
     return templates.TemplateResponse("index.html", {"request": request})
 
 @app.get("/profile/{user_id}", response_class=HTMLResponse)
 async def view_profile(request: Request, user_id: str):
-    """View user profile and extracted information"""
+    """View user profile with extracted information"""
     profiles = load_user_profiles()
-    if user_id not in profiles:
-        raise HTTPException(status_code=404, detail="User profile not found")
+    profile = profiles.get(user_id, {})
     
-    profile = profiles[user_id]
     return templates.TemplateResponse("profile.html", {
         "request": request,
         "profile": profile,
         "user_id": user_id
+    })
+
+@app.post("/save-topic")
+async def save_topic(
+    request: Request,
+    user_id: str = Form(...),
+    topic_content: str = Form(...),
+    mode: str = Form(...)
+):
+    """Save a generated topic to professor's profile"""
+    profiles = load_user_profiles()
+    profile = profiles.get(user_id, {})
+    
+    if profile.get("role") != "professor":
+        raise HTTPException(status_code=403, detail="Only professors can save topics")
+    
+    success = save_professor_topic(user_id, topic_content, mode)
+    
+    if success:
+        return {"success": True, "message": "Topic saved successfully"}
+    else:
+        raise HTTPException(status_code=500, detail="Failed to save topic")
+
+@app.get("/topic-suggestions", response_class=HTMLResponse)
+async def get_topic_suggestions(request: Request, user_id: str = None):
+    """Get topic suggestions page"""
+    return templates.TemplateResponse("suggestions.html", {
+        "request": request,
+        "user_id": user_id or "demo"
+    })
+
+@app.post("/find-suggestions", response_class=HTMLResponse)
+async def find_suggestions(
+    request: Request,
+    user_id: str = Form(...),
+    student_input: str = Form(...)
+):
+    """Find similar topics from professor profiles"""
+    print(f"DEBUG: Received find-suggestions request")
+    print(f"DEBUG: User ID: {user_id}")
+    print(f"DEBUG: Student input: {student_input}")
+    
+    suggestions = find_similar_topics(student_input, max_suggestions=8)
+    
+    print(f"DEBUG: Found {len(suggestions)} suggestions")
+    
+    return templates.TemplateResponse("suggestions.html", {
+        "request": request,
+        "user_id": user_id,
+        "student_input": student_input,
+        "suggestions": suggestions,
+        "found_suggestions": len(suggestions) > 0
     })
 
 @app.post("/scrape-scholar", response_class=HTMLResponse)
@@ -782,3 +1021,26 @@ Format the response with clear headings and bullet points. Focus on expanding th
         "file_content": "",
         "enriched_topic": topic_title
     })
+
+@app.get("/debug-profiles")
+async def debug_profiles():
+    """Debug endpoint to check user profiles"""
+    profiles = load_user_profiles()
+    debug_info = {
+        "total_profiles": len(profiles),
+        "professors": [],
+        "topics_count": 0
+    }
+    
+    for user_id, profile in profiles.items():
+        if profile.get("role") == "professor":
+            topics_count = len(profile.get("saved_topics", []))
+            debug_info["professors"].append({
+                "user_id": user_id,
+                "name": profile.get("name", "Unknown"),
+                "topics_count": topics_count,
+                "topics": [{"title": t.get("title", "No title"), "mode": t.get("mode", "Unknown")} for t in profile.get("saved_topics", [])]
+            })
+            debug_info["topics_count"] += topics_count
+    
+    return {"debug_info": debug_info}

@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Topic Suggestions - IntelliTopic</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #334155 100%);
+            min-height: 100vh;
+            color: #e2e8f0;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding: 30px 0;
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .header p {
+            font-size: 1.1rem;
+            color: #94a3b8;
+        }
+
+        .search-section {
+            background: rgba(30, 41, 59, 0.8);
+            border: 1px solid rgba(148, 163, 184, 0.2);
+            border-radius: 16px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+        }
+
+        .search-section h2 {
+            color: #f1f5f9;
+            font-size: 1.5rem;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .search-description {
+            color: #cbd5e1;
+            font-size: 0.95rem;
+            margin-bottom: 25px;
+            padding: 15px;
+            background: rgba(15, 23, 42, 0.4);
+            border-radius: 8px;
+            border-left: 4px solid #3b82f6;
+        }
+
+        .search-description i {
+            color: #60a5fa;
+            margin-right: 8px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: #e2e8f0;
+            font-weight: 500;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 12px 16px;
+            border: 1px solid rgba(148, 163, 184, 0.3);
+            border-radius: 8px;
+            background: rgba(15, 23, 42, 0.6);
+            color: #e2e8f0;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        }
+
+        .btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 12px 24px;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
+        }
+
+        .suggestions-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 25px;
+            margin-top: 30px;
+        }
+
+        .suggestion-card {
+            background: rgba(30, 41, 59, 0.8);
+            border: 1px solid rgba(148, 163, 184, 0.2);
+            border-radius: 16px;
+            padding: 25px;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .suggestion-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.4);
+            border-color: rgba(59, 130, 246, 0.3);
+        }
+
+        .similarity-badge {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            color: white;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+
+        .topic-header {
+            margin-bottom: 15px;
+        }
+
+        .topic-title {
+            color: #f1f5f9;
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: 8px;
+            line-height: 1.4;
+        }
+
+        .professor-info {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 15px;
+            padding: 10px;
+            background: rgba(15, 23, 42, 0.4);
+            border-radius: 8px;
+        }
+
+        .professor-avatar {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            color: white;
+        }
+
+        .professor-details h4 {
+            color: #60a5fa;
+            font-size: 1rem;
+            margin-bottom: 2px;
+        }
+
+        .professor-details p {
+            color: #94a3b8;
+            font-size: 0.9rem;
+        }
+
+        .topic-meta {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+
+        .meta-item {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            font-size: 0.9rem;
+        }
+
+        .scope-easy { color: #10b981; }
+        .scope-medium { color: #f59e0b; }
+        .scope-hard { color: #ef4444; }
+
+        .keywords {
+            margin-bottom: 15px;
+        }
+
+        .keywords h5 {
+            color: #e2e8f0;
+            font-size: 0.9rem;
+            margin-bottom: 8px;
+        }
+
+        .keyword-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+        }
+
+        .keyword-tag {
+            background: rgba(59, 130, 246, 0.2);
+            color: #60a5fa;
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 0.8rem;
+            border: 1px solid rgba(59, 130, 246, 0.3);
+        }
+
+        .topic-actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: #e2e8f0;
+            padding: 8px 16px;
+            border-radius: 6px;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateY(-1px);
+        }
+
+        .no-suggestions {
+            text-align: center;
+            padding: 60px 20px;
+            color: #94a3b8;
+        }
+
+        .no-suggestions i {
+            font-size: 3rem;
+            margin-bottom: 20px;
+            color: #64748b;
+        }
+
+        .back-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            color: #60a5fa;
+            text-decoration: none;
+            margin-bottom: 20px;
+            transition: all 0.3s ease;
+        }
+
+        .back-link:hover {
+            color: #3b82f6;
+            transform: translateX(-5px);
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 15px;
+            }
+            
+            .header h1 {
+                font-size: 2rem;
+            }
+            
+            .suggestions-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .topic-meta {
+                flex-direction: column;
+                gap: 8px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1><i class="fas fa-lightbulb"></i> Topic Suggestions</h1>
+            <p>Find similar thesis topics from all professors based on your interests</p>
+        </div>
+
+        <a href="/" class="back-link">
+            <i class="fas fa-arrow-left"></i>
+            Back to Generator
+        </a>
+
+        <div class="search-section">
+            <h2><i class="fas fa-search"></i> Find Similar Topics from Professors</h2>
+            <p class="search-description">
+                <i class="fas fa-info-circle"></i>
+                Search through all saved thesis topics from professors to find research ideas that match your interests.
+            </p>
+            <form method="post" action="/find-suggestions">
+                <div class="form-group">
+                    <label for="user_id">Your User ID</label>
+                    <input type="text" name="user_id" id="user_id" class="form-control" required placeholder="Enter your user ID" value="{{ user_id or '' }}">
+                </div>
+                
+                <div class="form-group">
+                    <label for="student_input">Describe Your Research Interests</label>
+                    <textarea name="student_input" id="student_input" class="form-control" rows="4" required placeholder="Describe your academic background, research interests, areas of expertise, and what kind of thesis topics you're looking for...">{{ student_input or "" }}</textarea>
+                </div>
+                
+                <button type="submit" class="btn">
+                    <i class="fas fa-search"></i>
+                    Find Similar Topics
+                </button>
+            </form>
+        </div>
+
+        {% if found_suggestions is defined %}
+            {% if found_suggestions %}
+                <div class="suggestions-grid">
+                    {% for suggestion in suggestions %}
+                    <div class="suggestion-card">
+                        <div class="similarity-badge">
+                            {{ suggestion.similarity_score }}% Match
+                        </div>
+                        
+                        <div class="topic-header">
+                            <h3 class="topic-title">{{ suggestion.topic.title }}</h3>
+                        </div>
+                        
+                        <div class="professor-info">
+                            <div class="professor-avatar">
+                                {{ suggestion.professor_name[0].upper() }}
+                            </div>
+                            <div class="professor-details">
+                                <h4>{{ suggestion.professor_name }}</h4>
+                                <p>{{ suggestion.expertise }}</p>
+                            </div>
+                        </div>
+                        
+                        <div class="topic-meta">
+                            <div class="meta-item">
+                                <i class="fas fa-layer-group"></i>
+                                <span class="scope-{{ suggestion.topic.scope.lower() }}">{{ suggestion.topic.scope }}</span>
+                            </div>
+                            <div class="meta-item">
+                                <i class="fas fa-star"></i>
+                                <span>{{ suggestion.topic.uniqueness }}/10</span>
+                            </div>
+                            <div class="meta-item">
+                                <i class="fas fa-calendar"></i>
+                                <span>{{ suggestion.topic.created_at[:10] }}</span>
+                            </div>
+                        </div>
+                        
+                        {% if suggestion.topic.keywords %}
+                        <div class="keywords">
+                            <h5><i class="fas fa-tags"></i> Keywords</h5>
+                            <div class="keyword-tags">
+                                {% for keyword in suggestion.topic.keywords[:5] %}
+                                <span class="keyword-tag">{{ keyword }}</span>
+                                {% endfor %}
+                            </div>
+                        </div>
+                        {% endif %}
+                        
+                        <div class="topic-actions">
+                            <button class="btn-secondary" onclick="viewTopicDetails('{{ suggestion.topic.id }}')">
+                                <i class="fas fa-eye"></i>
+                                View Details
+                            </button>
+                            <a href="/profile/{{ suggestion.professor_id }}" class="btn-secondary">
+                                <i class="fas fa-user"></i>
+                                Professor Profile
+                            </a>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            {% else %}
+                <div class="no-suggestions">
+                    <i class="fas fa-search"></i>
+                    <h3>No Similar Topics Found</h3>
+                    <p>Try adjusting your search terms or check back later when more professors have saved topics.</p>
+                </div>
+            {% endif %}
+        {% endif %}
+    </div>
+
+    <script>
+        function viewTopicDetails(topicId) {
+            // This could open a modal or navigate to a detailed view
+            alert('Topic details feature coming soon!');
+        }
+    </script>
+</body>
+</html> 

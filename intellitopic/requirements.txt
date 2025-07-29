@@ -13,3 +13,4 @@ pytesseract
 httpx
 beautifulsoup4
 aiohttp
+scikit-learn

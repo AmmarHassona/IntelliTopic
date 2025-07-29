@@ -218,12 +218,72 @@
         }
 
         .content-preview {
-            color: #cbd5e1;
+            color: #94a3b8;
             font-size: 0.9rem;
-            line-height: 1.5;
-            max-height: 100px;
-            overflow: hidden;
-            text-overflow: ellipsis;
+            margin-top: 8px;
+        }
+
+        .content-meta {
+            display: flex;
+            gap: 10px;
+            margin: 10px 0;
+            flex-wrap: wrap;
+        }
+
+        .meta-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 0.8rem;
+            font-weight: 500;
+        }
+
+        .meta-badge.scope-easy {
+            background: rgba(16, 185, 129, 0.2);
+            color: #10b981;
+            border: 1px solid rgba(16, 185, 129, 0.3);
+        }
+
+        .meta-badge.scope-medium {
+            background: rgba(245, 158, 11, 0.2);
+            color: #f59e0b;
+            border: 1px solid rgba(245, 158, 11, 0.3);
+        }
+
+        .meta-badge.scope-hard {
+            background: rgba(239, 68, 68, 0.2);
+            color: #ef4444;
+            border: 1px solid rgba(239, 68, 68, 0.3);
+        }
+
+        .meta-badge.uniqueness {
+            background: rgba(59, 130, 246, 0.2);
+            color: #3b82f6;
+            border: 1px solid rgba(59, 130, 246, 0.3);
+        }
+
+        .meta-badge.mode {
+            background: rgba(139, 92, 246, 0.2);
+            color: #8b5cf6;
+            border: 1px solid rgba(139, 92, 246, 0.3);
+        }
+
+        .content-keywords {
+            display: flex;
+            gap: 6px;
+            margin: 10px 0;
+            flex-wrap: wrap;
+        }
+
+        .keyword-tag {
+            background: rgba(59, 130, 246, 0.2);
+            color: #60a5fa;
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 0.8rem;
+            border: 1px solid rgba(59, 130, 246, 0.3);
         }
 
         .expand-button {
@@ -496,6 +556,66 @@
                     </div>
                 {% endif %}
             </div>
+
+            <!-- Saved Topics (Professors Only) -->
+            {% if profile.role == "professor" %}
+            <div class="profile-card">
+                <div class="card-header">
+                    <div class="card-icon">
+                        <i class="fas fa-bookmark"></i>
+                    </div>
+                    <div>
+                        <div class="card-title">Saved Topics</div>
+                        <div class="card-subtitle">Your saved thesis topics</div>
+                    </div>
+                </div>
+                
+                {% if profile.saved_topics %}
+                    <div class="extracted-content">
+                        {% for topic in profile.saved_topics %}
+                            <div class="content-item">
+                                <div class="content-header">
+                                    <div class="content-title">
+                                        <i class="fas fa-lightbulb"></i> {{ topic.title }}
+                                    </div>
+                                    <div class="content-date">{{ topic.created_at[:10] if topic.created_at else 'N/A' }}</div>
+                                </div>
+                                <div class="content-meta">
+                                    <span class="meta-badge scope-{{ topic.scope.lower() }}">
+                                        <i class="fas fa-layer-group"></i> {{ topic.scope }}
+                                    </span>
+                                    <span class="meta-badge uniqueness">
+                                        <i class="fas fa-star"></i> {{ topic.uniqueness }}/10
+                                    </span>
+                                    <span class="meta-badge mode">
+                                        <i class="fas fa-cog"></i> {{ topic.mode.title() }}
+                                    </span>
+                                </div>
+                                {% if topic.keywords %}
+                                <div class="content-keywords">
+                                    {% for keyword in topic.keywords[:5] %}
+                                    <span class="keyword-tag">{{ keyword }}</span>
+                                    {% endfor %}
+                                </div>
+                                {% endif %}
+                                <button class="expand-button" onclick="toggleContent('topic-{{ loop.index }}')">
+                                    <i class="fas fa-expand-alt"></i> View Details
+                                </button>
+                                <div id="topic-{{ loop.index }}" class="full-content">
+                                    {{ topic.content if topic.content else 'No content available' }}
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    <div class="empty-state">
+                        <i class="fas fa-bookmark"></i>
+                        <h3>No Saved Topics</h3>
+                        <p>You haven't saved any topics yet. Generate and save topics to see them here.</p>
+                    </div>
+                {% endif %}
+            </div>
+            {% endif %}
         </div>
     </div>
 
