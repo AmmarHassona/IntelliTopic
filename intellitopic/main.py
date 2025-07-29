@@ -150,9 +150,9 @@ async def scrape_google_scholar(profile_url: str) -> Dict:
         return {"error": f"Failed to scrape Google Scholar profile: {str(e)}"}
 
 async def extract_research_insights(profile_data: Dict) -> str:
-    """Extract research insights from Google Scholar profile data"""
+    """Extract research insights from Google Scholar profile data for context understanding"""
     try:
-        prompt = f"""Analyze the following Google Scholar profile data and extract key research insights:
+        prompt = f"""Analyze the following Google Scholar profile data to understand the researcher's background and expertise (for context only):
 
 Profile Information:
 - Name: {profile_data.get('name', 'N/A')}
@@ -165,14 +165,31 @@ Profile Information:
 Recent Publications:
 {chr(10).join([f"- {pub.get('title', 'N/A')} (Citations: {pub.get('citations', 0)})" for pub in profile_data.get('publications', [])])}
 
-Please provide a comprehensive analysis including:
-1. Research focus areas and expertise
-2. Publication patterns and impact
-3. Potential research directions
-4. Collaboration opportunities
-5. Teaching and mentoring strengths
+CONTEXT ANALYSIS (Do NOT suggest research topics based on existing work):
 
-Format the response in a clear, structured manner suitable for academic topic generation."""
+1. **Expertise Assessment:**
+   - Core research areas and methodological strengths
+   - Level of expertise and impact in their field
+   - Technical skills and knowledge domains
+
+2. **Research Patterns:**
+   - Publication frequency and collaboration patterns
+   - Citation impact and recognition in the field
+   - Research evolution and trajectory
+
+3. **Capability Profile:**
+   - Teaching and mentoring experience indicators
+   - Interdisciplinary connections and breadth
+   - Innovation capacity and adaptability
+
+4. **Field Context:**
+   - Current position in their research domain
+   - Network and collaboration potential
+   - Emerging opportunities in their area
+
+IMPORTANT: This analysis should inform understanding of the researcher's capabilities and background, NOT suggest topics similar to their existing work. The goal is to understand what they CAN do, not what they HAVE done.
+
+Format the response as a structured background analysis suitable for informing NEW topic generation."""
         
         response = client.chat.completions.create(
             model="gpt-3.5-turbo",
@@ -350,6 +367,8 @@ async def generate(
     role: str = Form(...),
     mode: str = Form(...),
     input_text: str = Form(...),
+    course_description: str = Form(default=""),
+    course_details: str = Form(default=""),
     files: List[UploadFile] = File(default=[])
 ):
     # Role-based access control
@@ -389,6 +408,10 @@ async def generate(
     
     # Build context from user input, file content, and extracted information
     context = input_text
+    if course_description:
+        context += f"\n\nCourse Description:\n{course_description}"
+    if course_details:
+        context += f"\n\nAdditional Course Details:\n{course_details}"
     if file_content:
         context += f"\n\nAdditional context from uploaded documents:\n{file_content}"
     if extracted_context:
@@ -398,20 +421,38 @@ async def generate(
     document_section = ""
     if file_content:
         document_section = f"\nDocument Content:\n{file_content}\n"
+    if course_description:
+        document_section += f"\nCourse Description:\n{course_description}\n"
+    if course_details:
+        document_section += f"\nAdditional Course Details:\n{course_details}\n"
 
     if mode == "research":
-        prompt = f"""Generate 3 unique and comprehensive thesis topics for a {role} based on the following information:
+        prompt = f"""Generate 3 COMPLETELY NEW and innovative thesis topics for a {role} using chain-of-thought reasoning.
 
+CONTEXT INFORMATION (Use for understanding background, NOT for topic generation):
 User Input: {input_text}{document_section}
-
 User Profile Context: {extracted_context}
+
+CHAIN-OF-THOUGHT PROCESS:
+1. First, analyze the user's background and expertise from the context
+2. Identify emerging trends, gaps, and opportunities in their field
+3. Consider interdisciplinary connections and novel applications
+4. Think about future challenges and unexplored research directions
+5. Generate topics that leverage their expertise but explore NEW territory
+
+CRITICAL REQUIREMENTS:
+- Topics MUST be completely new and not based on existing research from the context
+- Use context only to understand the user's capabilities and field
+- Focus on emerging areas, interdisciplinary approaches, or novel applications
+- Each topic should represent a significant departure from current work
+- Aim for high innovation and novelty scores (8-10)
 
 For each thesis topic, provide the following structured format:
 
 ## Topic [Number]: [Title]
 
 **Scope Rating:** [Easy/Medium/Hard] - Rate based on complexity, time requirements, and resource needs
-**Uniqueness Score:** [1-10] - Rate how novel and innovative this topic is (10 = highly unique)
+**Uniqueness Score:** [8-10] - Rate how novel and innovative this topic is (must be 8 or higher)
 **Brief Overview:** [2-3 sentences summarizing the core concept]
 
 **Research Problem:** [Detailed explanation of the research problem/objective]
@@ -431,47 +472,63 @@ For each thesis topic, provide the following structured format:
 
 **Prerequisites:** [Required background knowledge or skills]
 
-Use the provided document content and user profile context to inform and personalize the thesis topics. Consider the user's background, research interests, and the specific content from their uploaded documents and Google Scholar profile.
+**Innovation Factor:** [What makes this topic truly novel and different from existing research]
 
-Ensure each topic is distinct and offers different perspectives or approaches."""
+Remember: Use the context to understand the user's expertise and field, but generate topics that represent NEW research directions, not extensions of existing work."""
     else:
-        prompt = f"""Generate 3 creative and comprehensive course/module ideas for a {role} based on the following information:
+        prompt = f"""Generate 3 COMPLETELY NEW and innovative course project ideas for a {role} using chain-of-thought reasoning.
 
+CONTEXT INFORMATION (Use for understanding background, NOT for project generation):
 User Input: {input_text}{document_section}
-
 User Profile Context: {extracted_context}
 
-For each course/module, provide the following structured format:
+CHAIN-OF-THOUGHT PROCESS:
+1. First, analyze the user's teaching background and research expertise from the context
+2. Identify emerging educational needs and gaps in current curricula
+3. Consider interdisciplinary approaches and novel project-based learning methodologies
+4. Think about future skills students will need and unexplored project areas
+5. Generate course projects that leverage their expertise but explore NEW educational territory
 
-## Course [Number]: [Title]
+CRITICAL REQUIREMENTS:
+- Course projects MUST be completely new and not based on existing projects from the context
+- Use context only to understand the user's teaching capabilities and field
+- Focus on emerging subjects, interdisciplinary approaches, or novel project methodologies
+- Each project should represent a significant departure from traditional assignments
+- Aim for high innovation and novelty scores (8-10)
+
+For each course project, provide the following structured format:
+
+## Course Project [Number]: [Title]
 
 **Scope Rating:** [Easy/Medium/Hard] - Rate based on complexity, time requirements, and resource needs
-**Uniqueness Score:** [1-10] - Rate how innovative and distinctive this course concept is (10 = highly unique)
-**Brief Overview:** [2-3 sentences summarizing the course concept]
+**Uniqueness Score:** [8-10] - Rate how innovative and distinctive this project concept is (must be 8 or higher)
+**Brief Overview:** [2-3 sentences summarizing the project concept]
 
-**Course Description:** [Detailed description and learning objectives]
+**Project Description:** [Detailed description and learning objectives]
 
 **Learning Outcomes:** [Specific skills and knowledge students will develop]
 
-**Key Topics & Themes:**
-- [Topic 1]
-- [Topic 2]
-- [Topic 3]
-- [Topic 4]
+**Project Components:**
+- [Component 1]
+- [Component 2]
+- [Component 3]
+- [Component 4]
 
-**Teaching Methods:** [Innovative teaching approaches and activities]
+**Implementation Methods:** [Innovative project approaches and activities]
 
-**Assessment Strategies:** [Evaluation methods and criteria]
+**Assessment Criteria:** [Evaluation methods and criteria]
 
 **Prerequisites:** [Required background knowledge or skills]
 
-**Target Audience:** [Who would benefit most from this course]
+**Target Students:** [Who would benefit most from this project]
 
-**Innovation Factor:** [What makes this course unique or cutting-edge]
+**Innovation Factor:** [What makes this project truly novel and different from existing assignments]
 
-Use the provided document content and user profile context to inform and personalize the course ideas. Consider the user's background, teaching style, research expertise, and the specific content from their uploaded documents and Google Scholar profile.
+**Resource Requirements:** [Materials, tools, and resources needed]
 
-Ensure each course is distinct and offers different learning approaches or subject areas."""
+**Timeline:** [Suggested project duration and milestones]
+
+Remember: Use the context to understand the user's expertise and teaching style, but generate course projects that represent NEW educational directions, not extensions of existing assignments."""
 
     try:
         response = client.chat.completions.create(
@@ -511,6 +568,8 @@ Ensure each course is distinct and offers different learning approaches or subje
         "request": request,
         "result": generated,
         "input_text": input_text,
+        "course_description": course_description,
+        "course_details": course_details,
         "user_id": user_id,
         "role": role,
         "mode": mode,
@@ -525,7 +584,8 @@ async def enrich_topic(
     topic_content: str = Form(...),
     role: str = Form(...),
     mode: str = Form(...),
-    user_id: str = Form(...)
+    user_id: str = Form(...),
+    course_description: str = Form(default="")
 ):
     """Enrich a specific topic with additional details"""
     
@@ -539,36 +599,42 @@ Current Content:
 
 Please provide additional details for:
 
-1. **Literature Review Suggestions**: Key papers and authors to review
+1. **Literature Review Strategy**: How to approach the literature review for this NEW topic
 2. **Methodology Deep Dive**: Detailed research methods and data collection strategies
 3. **Timeline & Milestones**: Suggested project timeline with key milestones
 4. **Resource Requirements**: Equipment, software, funding, and other resources needed
 5. **Potential Challenges**: Anticipated difficulties and mitigation strategies
-6. **Collaboration Opportunities**: Potential collaborators or institutions
-7. **Publication Strategy**: Target journals/conferences and publication timeline
+6. **Collaboration Opportunities**: Potential collaborators or institutions for this innovative work
+7. **Publication Strategy**: Target journals/conferences for this novel research
 8. **Impact Assessment**: Broader implications and potential applications
+9. **Innovation Validation**: How to validate the novelty and significance of this research
+10. **Future Directions**: Potential extensions and follow-up research opportunities
 
-Format the response with clear headings and bullet points."""
+Format the response with clear headings and bullet points. Focus on expanding the existing topic rather than suggesting similar research."""
     else:
-        enrichment_prompt = f"""Enrich and expand the following course idea with additional details:
+        enrichment_prompt = f"""Enrich and expand the following course project idea with additional details:
 
-Course: {topic_title}
+Course Project: {topic_title}
 
 Current Content:
 {topic_content}
 
 Please provide additional details for:
 
-1. **Detailed Syllabus**: Week-by-week breakdown of topics and activities
-2. **Learning Resources**: Textbooks, articles, videos, and other materials
+1. **Detailed Project Plan**: Step-by-step breakdown of project phases and activities
+2. **Learning Resources**: Materials, tools, and references needed for the project
 3. **Assessment Rubrics**: Detailed grading criteria and evaluation methods
-4. **Technology Integration**: Digital tools and platforms to enhance learning
-5. **Student Engagement Strategies**: Interactive activities and participation methods
-6. **Differentiation Strategies**: Adaptations for diverse learning styles
-7. **Industry Connections**: Guest speakers, field trips, or industry partnerships
-8. **Student Projects**: Capstone projects or hands-on assignments
+4. **Technology Integration**: Digital tools and platforms to enhance project work
+5. **Student Engagement Strategies**: Interactive project approaches and participation methods
+6. **Differentiation Strategies**: Adaptations for diverse learning styles and skill levels
+7. **Industry Connections**: Real-world applications, guest speakers, or industry partnerships
+8. **Project Deliverables**: Specific outputs and presentations students will create
+9. **Innovation Validation**: How to demonstrate the novelty and value of this project
+10. **Future Adaptations**: How to evolve and improve this project over time
+11. **Risk Management**: Potential challenges and mitigation strategies
+12. **Success Metrics**: How to measure the effectiveness and impact of this project
 
-Format the response with clear headings and bullet points."""
+Format the response with clear headings and bullet points. Focus on expanding the existing project rather than suggesting similar projects."""
 
     try:
         response = client.chat.completions.create(
@@ -585,6 +651,7 @@ Format the response with clear headings and bullet points."""
         "request": request,
         "result": enriched_content,
         "input_text": "",
+        "course_description": course_description,
         "user_id": user_id,
         "role": role,
         "mode": mode,

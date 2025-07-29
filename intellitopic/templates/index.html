@@ -22,9 +22,25 @@
         }
 
         .container {
-            max-width: 800px;
+            max-width: 1400px;
             margin: 0 auto;
             padding: 20px;
+        }
+
+        .main-layout {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            align-items: start;
+        }
+
+        .form-section {
+            position: sticky;
+            top: 20px;
+        }
+
+        .results-section {
+            min-height: 100vh;
         }
 
         .header {
@@ -67,6 +83,23 @@
 
         .form-group {
             margin-bottom: 25px;
+        }
+
+        .form-help {
+            margin-top: 8px;
+        }
+
+        .form-help p {
+            font-size: 0.85rem;
+            color: #94a3b8;
+            margin: 0;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .form-help i {
+            color: #60a5fa;
         }
 
         .form-group label {
@@ -249,18 +282,136 @@
         }
 
         .result-content {
-            background: rgba(15, 23, 42, 0.4);
-            padding: 25px;
-            border-radius: 16px;
-            border-left: 4px solid #3b82f6;
-            white-space: pre-wrap;
+            background: transparent;
+            padding: 0;
+            border-radius: 0;
+            border-left: none;
+            white-space: normal;
             font-family: 'Inter', sans-serif;
             line-height: 1.7;
             color: #e2e8f0;
-            box-shadow: inset 0 2px 4px rgba(0,0,0,0.2);
+            box-shadow: none;
             animation: slideInRight 0.6s ease-out;
-            max-height: 70vh;
-            overflow-y: auto;
+            max-height: none;
+            overflow-y: visible;
+        }
+
+        .topic-card {
+            background: rgba(30, 41, 59, 0.9);
+            border: 1px solid rgba(148, 163, 184, 0.2);
+            border-radius: 16px;
+            margin-bottom: 30px;
+            overflow: hidden;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+            transition: all 0.3s ease;
+        }
+
+        .topic-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.4);
+        }
+
+        .topic-header {
+            background: linear-gradient(135deg, #1e40af 0%, #3730a3 100%);
+            color: white;
+            padding: 30px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .topic-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 20px;
+            line-height: 1.3;
+        }
+
+        .topic-actions {
+            display: flex;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .expand-button {
+            background: rgba(255,255,255,0.2);
+            border: 1px solid rgba(255,255,255,0.3);
+            color: white;
+            padding: 12px 20px;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .expand-button:hover {
+            background: rgba(255,255,255,0.3);
+            transform: translateY(-1px);
+        }
+
+        .enrich-button {
+            background: rgba(255,255,255,0.15);
+            border: 1px solid rgba(255,255,255,0.3);
+            color: white;
+            padding: 12px 20px;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .enrich-button:hover {
+            background: rgba(255,255,255,0.25);
+            transform: translateY(-1px);
+        }
+
+        .topic-content {
+            padding: 0;
+            max-height: 0;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            color: #e2e8f0;
+        }
+
+        .topic-content.expanded {
+            padding: 30px;
+            max-height: none;
+            overflow: visible;
+        }
+
+        .topic-section {
+            margin-bottom: 25px;
+            padding: 20px;
+            background: rgba(15, 23, 42, 0.6);
+            border-radius: 10px;
+            border-left: 4px solid #3b82f6;
+        }
+
+        .section-title {
+            font-weight: 600;
+            color: #f1f5f9;
+            margin-bottom: 12px;
+            font-size: 1.1rem;
+        }
+
+        .section-content {
+            color: #cbd5e1;
+            line-height: 1.7;
+            margin-top: 10px;
+        }
+
+        .section-content ul {
+            margin: 10px 0;
+            padding-left: 20px;
+        }
+
+        .section-content li {
+            margin-bottom: 8px;
         }
 
         .loading {
@@ -335,6 +486,19 @@
             
             .header h1 {
                 font-size: 2.5rem;
+            }
+            
+            .main-layout {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+            
+            .form-section {
+                position: static;
+            }
+            
+            .results-section {
+                min-height: auto;
             }
             
             .card {
@@ -749,34 +913,55 @@
             <p>AI-Powered Academic Idea Generator for Students and Professors</p>
         </div>
 
-        <div class="card">
-            <form method="post" action="/generate" id="ideaForm" enctype="multipart/form-data">
-                <div class="form-row">
-                    <div class="form-group">
-                        <label for="user_id"><i class="fas fa-id-card"></i> User ID</label>
-                        <input type="text" name="user_id" id="user_id" class="form-control" required placeholder="Enter your unique identifier" value="{{ user_id or '' }}">
-                    </div>
-                    
-                    <div class="form-group">
-                        <label for="role"><i class="fas fa-user-graduate"></i> Role</label>
-                        <select name="role" id="role" class="form-control" required>
-      <option value="student">Student</option>
-      <option value="professor">Professor</option>
-                        </select>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="mode"><i class="fas fa-cogs"></i> Mode</label>
-                        <select name="mode" id="mode" class="form-control" required>
-      <option value="research">Research (Thesis Topics)</option>
-      <option value="non-research" id="non-research-option">Non-Research (Course Ideas)</option>
-                        </select>
-                    </div>
+        <div class="main-layout">
+            <div class="form-section">
+                <div class="card">
+                    <form method="post" action="/generate" id="ideaForm" enctype="multipart/form-data">
+                <div class="form-group">
+                    <label for="user_id"><i class="fas fa-id-card"></i> User ID</label>
+                    <input type="text" name="user_id" id="user_id" class="form-control" required placeholder="Enter your unique identifier" value="{{ user_id or '' }}">
+                </div>
+                
+                <div class="form-group">
+                    <label for="role"><i class="fas fa-user-graduate"></i> Role</label>
+                    <select name="role" id="role" class="form-control" required>
+  <option value="student">Student</option>
+  <option value="professor">Professor</option>
+                    </select>
                 </div>
 
                 <div class="form-group">
-                    <label for="input_text"><i class="fas fa-edit"></i> Describe your background or course</label>
-                    <textarea name="input_text" id="input_text" class="form-control" rows="6" placeholder="Tell us about your academic background, interests, or the type of course you're looking for..." required>{{ input_text or "" }}</textarea>
+                    <label for="mode"><i class="fas fa-cogs"></i> Mode</label>
+                    <select name="mode" id="mode" class="form-control" required>
+  <option value="research">Research (Thesis Topics)</option>
+  <option value="non-research" id="non-research-option">Non-Research (Course Project Ideas)</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="input_text"><i class="fas fa-user-graduate"></i> Your Background & Expertise</label>
+                    <textarea name="input_text" id="input_text" class="form-control" rows="4" placeholder="Tell us about your academic background, research interests, teaching experience, and areas of expertise..." required>{{ input_text or "" }}</textarea>
+                    <div class="form-help">
+                        <p><i class="fas fa-info-circle"></i> This helps us understand your capabilities and tailor suggestions to your expertise</p>
+                    </div>
+                </div>
+
+                <!-- Course Description Section (Non-Research Mode Only) -->
+                <div class="form-group" id="course-description-section" style="display: none;">
+                    <label for="course_description"><i class="fas fa-chalkboard-teacher"></i> Course Description</label>
+                    <textarea name="course_description" id="course_description" class="form-control" rows="4" placeholder="Describe the course you want to create projects for (e.g., course level, subject area, learning objectives, target students, etc.)..." required>{{ course_description or "" }}</textarea>
+                    <div class="form-help">
+                        <p><i class="fas fa-info-circle"></i> This helps generate project ideas that align with your specific course goals</p>
+                    </div>
+                </div>
+
+                <!-- Course Details Section (Non-Research Mode Only) -->
+                <div class="form-group" id="course-details-section" style="display: none;">
+                    <label for="course_details"><i class="fas fa-cogs"></i> Additional Course Details (Optional)</label>
+                    <textarea name="course_details" id="course_details" class="form-control" rows="3" placeholder="Any additional details (e.g., class size, duration, specific requirements, existing curriculum, technology constraints, etc.)...">{{ course_details or "" }}</textarea>
+                    <div class="form-help">
+                        <p><i class="fas fa-info-circle"></i> Optional information to further refine project suggestions</p>
+                    </div>
                 </div>
 
                 <div class="form-group">
@@ -817,13 +1002,15 @@
                         View Profile
                     </a>
                 </div>
-  </form>
-        </div>
+                    </form>
+                </div>
+            </div>
 
-        <div class="loading" id="loading">
-            <div class="spinner"></div>
-            <p class="loading-text">Generating your ideas...</p>
-        </div>
+            <div class="results-section">
+                <div class="loading" id="loading">
+                    <div class="spinner"></div>
+                    <p class="loading-text">Generating your ideas...</p>
+                </div>
 
   {% if scholar_result %}
         <div class="card result-section">
@@ -898,6 +1085,8 @@
             {% endif %}
         </div>
   {% endif %}
+            </div>
+        </div>
     </div>
 
     <script>
@@ -907,6 +1096,8 @@
             const mode = document.getElementById('mode');
             const nonResearchOption = document.getElementById('non-research-option');
             const scholarSection = document.getElementById('scholar-section');
+            const courseDescriptionSection = document.getElementById('course-description-section');
+            const courseDetailsSection = document.getElementById('course-details-section');
             const profileLink = document.getElementById('profile-link');
             const userId = document.getElementById('user_id').value;
 
@@ -924,7 +1115,18 @@
                     mode.value = 'research';
                 }
                 scholarSection.style.display = 'none';
+                courseDescriptionSection.style.display = 'none';
+                courseDetailsSection.style.display = 'none';
                 profileLink.style.display = 'none';
+            }
+
+            // Show/hide course sections based on mode
+            if (mode.value === 'non-research') {
+                courseDescriptionSection.style.display = 'block';
+                courseDetailsSection.style.display = 'block';
+            } else {
+                courseDescriptionSection.style.display = 'none';
+                courseDetailsSection.style.display = 'none';
             }
         }
 
@@ -1246,6 +1448,7 @@
             const role = document.getElementById('role').value;
             const mode = document.getElementById('mode').value;
             const userId = document.getElementById('user_id').value;
+            const courseDescription = document.getElementById('course_description') ? document.getElementById('course_description').value : '';
             
             // Create a form to submit the enrichment request
             const form = document.createElement('form');
@@ -1259,7 +1462,8 @@
                 'topic_content': topicContent,
                 'role': role,
                 'mode': mode,
-                'user_id': userId
+                'user_id': userId,
+                'course_description': courseDescription
             };
             
             for (const [name, value] of Object.entries(fields)) {
