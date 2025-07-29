@@ -1,0 +1,520 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IntelliTopic - User Profile</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #334155 100%);
+            min-height: 100vh;
+            color: #e2e8f0;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 16px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 10px;
+            background: linear-gradient(135deg, #60a5fa 0%, #a78bfa 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .header p {
+            font-size: 1.1rem;
+            opacity: 0.8;
+        }
+
+        .back-button {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(59, 130, 246, 0.2);
+            border: 1px solid rgba(59, 130, 246, 0.3);
+            color: #60a5fa;
+            padding: 12px 20px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            margin-bottom: 20px;
+        }
+
+        .back-button:hover {
+            background: rgba(59, 130, 246, 0.3);
+            transform: translateY(-2px);
+        }
+
+        .profile-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 30px;
+            margin-bottom: 30px;
+        }
+
+        .profile-card {
+            background: rgba(30, 41, 59, 0.9);
+            border: 1px solid rgba(148, 163, 184, 0.2);
+            border-radius: 16px;
+            padding: 30px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+            transition: all 0.3s ease;
+        }
+
+        .profile-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.4);
+        }
+
+        .card-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid rgba(148, 163, 184, 0.2);
+        }
+
+        .card-icon {
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            color: white;
+        }
+
+        .card-title {
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: #f1f5f9;
+        }
+
+        .card-subtitle {
+            font-size: 0.9rem;
+            opacity: 0.7;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .stat-item {
+            text-align: center;
+            padding: 15px;
+            background: rgba(15, 23, 42, 0.6);
+            border-radius: 10px;
+            border: 1px solid rgba(59, 130, 246, 0.2);
+        }
+
+        .stat-number {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #60a5fa;
+            margin-bottom: 5px;
+        }
+
+        .stat-label {
+            font-size: 0.85rem;
+            opacity: 0.8;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .info-list {
+            list-style: none;
+        }
+
+        .info-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 0;
+            border-bottom: 1px solid rgba(148, 163, 184, 0.1);
+        }
+
+        .info-item:last-child {
+            border-bottom: none;
+        }
+
+        .info-label {
+            font-weight: 500;
+            color: #cbd5e1;
+        }
+
+        .info-value {
+            color: #60a5fa;
+            font-weight: 600;
+        }
+
+        .extracted-content {
+            background: rgba(15, 23, 42, 0.6);
+            border-radius: 10px;
+            padding: 20px;
+            margin-top: 15px;
+            border-left: 4px solid #3b82f6;
+        }
+
+        .content-item {
+            margin-bottom: 20px;
+            padding: 15px;
+            background: rgba(30, 41, 59, 0.8);
+            border-radius: 8px;
+            border: 1px solid rgba(148, 163, 184, 0.1);
+        }
+
+        .content-item:last-child {
+            margin-bottom: 0;
+        }
+
+        .content-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .content-title {
+            font-weight: 600;
+            color: #f1f5f9;
+        }
+
+        .content-date {
+            font-size: 0.85rem;
+            opacity: 0.7;
+        }
+
+        .content-preview {
+            color: #cbd5e1;
+            font-size: 0.9rem;
+            line-height: 1.5;
+            max-height: 100px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .expand-button {
+            background: rgba(59, 130, 246, 0.2);
+            border: 1px solid rgba(59, 130, 246, 0.3);
+            color: #60a5fa;
+            padding: 8px 16px;
+            border-radius: 6px;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 10px;
+        }
+
+        .expand-button:hover {
+            background: rgba(59, 130, 246, 0.3);
+        }
+
+        .full-content {
+            display: none;
+            margin-top: 15px;
+            padding: 15px;
+            background: rgba(15, 23, 42, 0.8);
+            border-radius: 8px;
+            border: 1px solid rgba(59, 130, 246, 0.2);
+            color: #cbd5e1;
+            line-height: 1.6;
+            white-space: pre-wrap;
+        }
+
+        .full-content.expanded {
+            display: block;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 40px 20px;
+            color: #94a3b8;
+        }
+
+        .empty-state i {
+            font-size: 3rem;
+            margin-bottom: 15px;
+            opacity: 0.5;
+        }
+
+        .empty-state h3 {
+            font-size: 1.2rem;
+            margin-bottom: 10px;
+            color: #cbd5e1;
+        }
+
+        .empty-state p {
+            opacity: 0.7;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 15px;
+            }
+            
+            .header h1 {
+                font-size: 2rem;
+            }
+            
+            .profile-grid {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+            
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a href="/" class="back-button">
+            <i class="fas fa-arrow-left"></i>
+            Back to IntelliTopic
+        </a>
+
+        <div class="header">
+            <h1><i class="fas fa-user-circle"></i> User Profile</h1>
+            <p>Comprehensive overview of your academic profile and extracted information</p>
+        </div>
+
+        <div class="profile-grid">
+            <!-- Basic Information -->
+            <div class="profile-card">
+                <div class="card-header">
+                    <div class="card-icon">
+                        <i class="fas fa-info-circle"></i>
+                    </div>
+                    <div>
+                        <div class="card-title">Basic Information</div>
+                        <div class="card-subtitle">Profile details and role</div>
+                    </div>
+                </div>
+                
+                <div class="info-list">
+                    <div class="info-item">
+                        <span class="info-label">User ID:</span>
+                        <span class="info-value">{{ user_id }}</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">Role:</span>
+                        <span class="info-value">{{ profile.role.title() }}</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">Member Since:</span>
+                        <span class="info-value">{{ profile.created_at[:10] if profile.created_at else 'N/A' }}</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Statistics -->
+            <div class="profile-card">
+                <div class="card-header">
+                    <div class="card-icon">
+                        <i class="fas fa-chart-bar"></i>
+                    </div>
+                    <div>
+                        <div class="card-title">Activity Statistics</div>
+                        <div class="card-subtitle">Your usage metrics</div>
+                    </div>
+                </div>
+                
+                <div class="stats-grid">
+                    <div class="stat-item">
+                        <div class="stat-number">{{ profile.statistics.topics_generated if profile.statistics else 0 }}</div>
+                        <div class="stat-label">Topics Generated</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-number">{{ profile.statistics.documents_processed if profile.statistics else 0 }}</div>
+                        <div class="stat-label">Documents Processed</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-number">{{ profile.statistics.scholar_profiles_analyzed if profile.statistics else 0 }}</div>
+                        <div class="stat-label">Scholar Profiles</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Google Scholar Profiles -->
+            <div class="profile-card">
+                <div class="card-header">
+                    <div class="card-icon">
+                        <i class="fas fa-graduation-cap"></i>
+                    </div>
+                    <div>
+                        <div class="card-title">Google Scholar Profiles</div>
+                        <div class="card-subtitle">Research profile analysis</div>
+                    </div>
+                </div>
+                
+                {% if profile.extracted_info and profile.extracted_info.google_scholar %}
+                    <div class="extracted-content">
+                        {% for scholar in profile.extracted_info.google_scholar %}
+                            <div class="content-item">
+                                <div class="content-header">
+                                    <div class="content-title">
+                                        <i class="fas fa-link"></i> {{ scholar.url.split('/')[-1] if scholar.url else 'Profile' }}
+                                    </div>
+                                    <div class="content-date">{{ scholar.scraped_at[:10] if scholar.scraped_at else 'N/A' }}</div>
+                                </div>
+                                <div class="content-preview">
+                                    {% if scholar.profile_data and scholar.profile_data.name %}
+                                        <strong>{{ scholar.profile_data.name }}</strong><br>
+                                        {% if scholar.profile_data.affiliation %}
+                                            {{ scholar.profile_data.affiliation }}<br>
+                                        {% endif %}
+                                        {% if scholar.profile_data.research_interests %}
+                                            <strong>Research Interests:</strong> {{ ', '.join(scholar.profile_data.research_interests[:3]) }}
+                                            {% if scholar.profile_data.research_interests|length > 3 %}...{% endif %}
+                                        {% endif %}
+                                    {% else %}
+                                        Profile data extracted
+                                    {% endif %}
+                                </div>
+                                <button class="expand-button" onclick="toggleContent('scholar-{{ loop.index }}')">
+                                    <i class="fas fa-expand-alt"></i> View Analysis
+                                </button>
+                                <div id="scholar-{{ loop.index }}" class="full-content">
+                                    {{ scholar.research_insights if scholar.research_insights else 'No analysis available' }}
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    <div class="empty-state">
+                        <i class="fas fa-graduation-cap"></i>
+                        <h3>No Scholar Profiles</h3>
+                        <p>No Google Scholar profiles have been analyzed yet.</p>
+                    </div>
+                {% endif %}
+            </div>
+
+            <!-- Uploaded Documents -->
+            <div class="profile-card">
+                <div class="card-header">
+                    <div class="card-icon">
+                        <i class="fas fa-file-upload"></i>
+                    </div>
+                    <div>
+                        <div class="card-title">Uploaded Documents</div>
+                        <div class="card-subtitle">Files you've uploaded</div>
+                    </div>
+                </div>
+                
+                {% if profile.extracted_info and profile.extracted_info.documents %}
+                    <div class="extracted-content">
+                        {% for doc in profile.extracted_info.documents %}
+                            <div class="content-item">
+                                <div class="content-header">
+                                    <div class="content-title">
+                                        <i class="fas fa-file"></i> {{ doc.filename }}
+                                    </div>
+                                    <div class="content-date">{{ doc.uploaded_at[:10] if doc.uploaded_at else 'N/A' }}</div>
+                                </div>
+                                <div class="content-preview">
+                                    File size: {{ (doc.size / 1024)|round(1) if doc.size else 'Unknown' }} KB
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    <div class="empty-state">
+                        <i class="fas fa-file-upload"></i>
+                        <h3>No Documents</h3>
+                        <p>No documents have been uploaded yet.</p>
+                    </div>
+                {% endif %}
+            </div>
+
+            <!-- Recent Inputs -->
+            <div class="profile-card">
+                <div class="card-header">
+                    <div class="card-icon">
+                        <i class="fas fa-comments"></i>
+                    </div>
+                    <div>
+                        <div class="card-title">Recent Inputs</div>
+                        <div class="card-subtitle">Your recent queries</div>
+                    </div>
+                </div>
+                
+                {% if profile.extracted_info and profile.extracted_info.user_inputs %}
+                    <div class="extracted-content">
+                        {% for input in profile.extracted_info.user_inputs[-5:] %}
+                            <div class="content-item">
+                                <div class="content-header">
+                                    <div class="content-title">
+                                        <i class="fas fa-search"></i> {{ input.mode.title() }} Mode
+                                    </div>
+                                    <div class="content-date">{{ input.timestamp[:10] if input.timestamp else 'N/A' }}</div>
+                                </div>
+                                <div class="content-preview">
+                                    {{ input.input[:100] }}{% if input.input|length > 100 %}...{% endif %}
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    <div class="empty-state">
+                        <i class="fas fa-comments"></i>
+                        <h3>No Recent Inputs</h3>
+                        <p>No recent queries found.</p>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function toggleContent(elementId) {
+            const element = document.getElementById(elementId);
+            element.classList.toggle('expanded');
+            
+            const button = element.previousElementSibling;
+            const icon = button.querySelector('i');
+            
+            if (element.classList.contains('expanded')) {
+                icon.className = 'fas fa-compress-alt';
+                button.innerHTML = '<i class="fas fa-compress-alt"></i> Hide Analysis';
+            } else {
+                icon.className = 'fas fa-expand-alt';
+                button.innerHTML = '<i class="fas fa-expand-alt"></i> View Analysis';
+            }
+        }
+    </script>
+</body>
+</html> 

@@ -1,0 +1,89 @@
+{
+  "1": {
+    "role": "professor",
+    "created_at": "2025-07-29T12:43:04.947632",
+    "extracted_info": {
+      "documents": [],
+      "google_scholar": [
+        {
+          "url": "https://scholar.google.com/citations?user=fcbh--sAAAAJ&hl=en",
+          "scraped_at": "2025-07-29T12:43:11.466413",
+          "profile_data": {
+            "name": "Nada Sharaf",
+            "affiliation": "Lecturer at the German International University, German University in Cairo",
+            "research_interests": [],
+            "publications": [
+              {
+                "title": "MiniColon; teaching kids computational thinking using an interactive serious game",
+                "authors": "R Ayman, N Sharaf, G Ahmed, S Abdennadher",
+                "citations": 39
+              },
+              {
+                "title": "Codaroutine: A serious game for introducing sequential programming concepts to children with autism",
+                "authors": "M Elshahawy, K Aboelnaga, N Sharaf",
+                "citations": 29
+              },
+              {
+                "title": "Developing computational thinking for children with autism using a serious game",
+                "authors": "M Elshahawy, M Bakhaty, N Sharaf",
+                "citations": 22
+              },
+              {
+                "title": "Chranimation: An animation tool for constraint handling rules",
+                "authors": "N Sharaf, S Abdennadher, T Frühwirth",
+                "citations": 18
+              },
+              {
+                "title": "Visualization of CHR through source-to-source transformation",
+                "authors": "S Abdennadher, N Sharaf",
+                "citations": 18
+              },
+              {
+                "title": "AraScore: A deep learning-based system for Arabic short answer scoring",
+                "authors": "O Nael, Y ELmanyalawy, N Sharaf",
+                "citations": 16
+              },
+              {
+                "title": "A rule-based approach for animating java algorithms",
+                "authors": "N Sharaf, S Abdennadher, T Frühwirth",
+                "citations": 13
+              },
+              {
+                "title": "Eye-to-eye: towards visualizing eye gaze data",
+                "authors": "Y Othman, M Khalaf, A Ragab, A Salaheldin, R Ayman, N Sharaf",
+                "citations": 12
+              },
+              {
+                "title": "ARTour: an augmented reality collaborative experience for enhancing tourism",
+                "authors": "M Elshahawy, S Magdy, N Sharaf",
+                "citations": 11
+              },
+              {
+                "title": "AraScore: Investigating response-based Arabic short answer scoring",
+                "authors": "A ElNaka, O Nael, H Afifi, N Sharaf",
+                "citations": 11
+              }
+            ],
+            "citations": 356,
+            "h_index": 268,
+            "i10_index": 11
+          },
+          "research_insights": "1. Research Focus Areas and Expertise:\nNada Sharaf's research interests are primarily focused on educational technology, specifically in the field of computational thinking and programming education for children, with a particular emphasis on children with autism. Her work also extends to the development and application of serious games as educational tools. Additionally, she has expertise in constraint handling rules, animation tools, deep learning-based systems, eye gaze data visualization, and augmented reality technologies for enhancing tourism experiences.\n\n2. Publication Patterns and Impact:\nNada Sharaf has a total of 356 citations, with an impressive H-index of 26 and an i10-index of 11, indicating a strong impact in her field. Her recent publications have garnered significant attention, with some of her works such as \"MiniColon\" and \"Codaroutine\" receiving high citation counts, showcasing the relevance and impact of her research in the educational technology domain. The topics she covers in her publications demonstrate a diverse range of interests and expertise, contributing to the advancement of knowledge in the field of educational technology.\n\n3. Potential Research Directions:\nGiven Nada Sharaf's expertise in computational thinking education for children, there are several potential research directions she could explore. For example, she could delve deeper into the development of innovative serious games tailored for specific learning needs of children, such as those with autism. Additionally, she could further investigate the application of emerging technologies like artificial intelligence and virtual/augmented reality in educational settings to enhance learning outcomes for children.\n\n4. Collaboration Opportunities:\nNada Sharaf's research expertise presents opportunities for collaboration with researchers in related fields such as educational psychology, computer science, and human-computer interaction. Collaborating with experts in these areas could lead to interdisciplinary research projects that leverage different perspectives and methodologies to address complex educational technology challenges. Furthermore, collaborating with educators and practitioners could facilitate the translation of research findings into practical applications in real-world educational settings.\n\n5. Teaching and Mentoring Strengths:\nAs a lecturer at the German International University, Nada Sharaf likely possesses strong teaching and mentoring skills that complement her research expertise. Her research in educational technology could inform her teaching practices, allowing her to incorporate innovative teaching methods and technologies into her courses. Additionally, her experience in developing serious games for educational purposes could provide valuable insights for mentoring students interested in pursuing research in this area. Overall, Nada Sharaf's teaching and mentoring strengths could contribute to the development of future researchers and practitioners in the field of educational technology."
+        }
+      ],
+      "user_inputs": [
+        {
+          "input": "i am a computer science lecturer with an expertise in data structures and programming specifically in c++.",
+          "mode": "research",
+          "timestamp": "2025-07-29T12:44:03.753284"
+        }
+      ]
+    },
+    "preferences": {},
+    "statistics": {
+      "topics_generated": 1,
+      "documents_processed": 0,
+      "scholar_profiles_analyzed": 1
+    }
+  }
+}

@@ -15,9 +15,9 @@
 
         body {
             font-family: 'Inter', sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
             min-height: 100vh;
-            color: #333;
+            color: #e2e8f0;
             line-height: 1.6;
         }
 
@@ -36,22 +36,24 @@
         .header h1 {
             font-size: 3rem;
             font-weight: 700;
-            color: white;
+            color: #f1f5f9;
             margin-bottom: 10px;
-            text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+            text-shadow: 0 2px 4px rgba(0,0,0,0.5);
         }
 
         .header p {
             font-size: 1.1rem;
-            color: rgba(255,255,255,0.9);
+            color: rgba(241, 245, 249, 0.8);
             font-weight: 300;
         }
 
         .card {
-            background: white;
+            background: rgba(30, 41, 59, 0.8);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(148, 163, 184, 0.1);
             border-radius: 20px;
             padding: 40px;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.3);
             margin-bottom: 30px;
             animation: fadeInUp 0.8s ease-out;
             transition: transform 0.3s ease, box-shadow 0.3s ease;
@@ -59,7 +61,8 @@
 
         .card:hover {
             transform: translateY(-5px);
-            box-shadow: 0 25px 50px rgba(0,0,0,0.15);
+            box-shadow: 0 25px 50px rgba(0,0,0,0.4);
+            border-color: rgba(148, 163, 184, 0.2);
         }
 
         .form-group {
@@ -70,26 +73,31 @@
             display: block;
             font-weight: 600;
             margin-bottom: 8px;
-            color: #4a5568;
+            color: #e2e8f0;
             font-size: 0.95rem;
         }
 
         .form-control {
             width: 100%;
             padding: 12px 16px;
-            border: 2px solid #e2e8f0;
+            border: 2px solid rgba(148, 163, 184, 0.3);
             border-radius: 12px;
             font-size: 1rem;
             font-family: inherit;
             transition: all 0.3s ease;
-            background: #f8fafc;
+            background: rgba(15, 23, 42, 0.6);
+            color: #e2e8f0;
         }
 
         .form-control:focus {
             outline: none;
-            border-color: #667eea;
-            background: white;
-            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+            border-color: #60a5fa;
+            background: rgba(15, 23, 42, 0.8);
+            box-shadow: 0 0 0 3px rgba(96, 165, 250, 0.2);
+        }
+
+        .form-control::placeholder {
+            color: rgba(148, 163, 184, 0.6);
         }
 
         select.form-control {
@@ -107,7 +115,7 @@
         }
 
         .btn {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
             color: white;
             border: none;
             padding: 15px 30px;
@@ -119,12 +127,13 @@
             display: inline-flex;
             align-items: center;
             gap: 8px;
-            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+            box-shadow: 0 4px 15px rgba(59, 130, 246, 0.3);
         }
 
         .btn:hover {
             transform: translateY(-2px);
-            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
+            box-shadow: 0 8px 25px rgba(59, 130, 246, 0.4);
+            background: linear-gradient(135deg, #2563eb 0%, #1e40af 100%);
         }
 
         .btn:active {
@@ -133,6 +142,88 @@
 
         .btn i {
             font-size: 0.9rem;
+        }
+
+        .btn-secondary {
+            background: linear-gradient(135deg, #64748b 0%, #475569 100%);
+            border: 1px solid rgba(100, 116, 139, 0.3);
+        }
+
+        .btn-secondary:hover {
+            background: linear-gradient(135deg, #475569 0%, #334155 100%);
+            box-shadow: 0 8px 25px rgba(100, 116, 139, 0.4);
+        }
+
+        .btn-profile {
+            background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%);
+            border: 1px solid rgba(139, 92, 246, 0.3);
+        }
+
+        .btn-profile:hover {
+            background: linear-gradient(135deg, #7c3aed 0%, #6d28d9 100%);
+            box-shadow: 0 8px 25px rgba(139, 92, 246, 0.4);
+        }
+
+        .form-actions {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .scholar-container {
+            background: rgba(15, 23, 42, 0.6);
+            border: 1px solid rgba(59, 130, 246, 0.2);
+            border-radius: 10px;
+            padding: 20px;
+            margin-top: 10px;
+        }
+
+        .scholar-info {
+            margin-top: 15px;
+        }
+
+        .scholar-info p {
+            margin: 8px 0;
+            font-size: 0.9rem;
+            color: #cbd5e1;
+        }
+
+        .scholar-info i {
+            color: #60a5fa;
+            margin-right: 8px;
+        }
+
+        .scholar-profile-info {
+            background: rgba(15, 23, 42, 0.6);
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 20px;
+            border-left: 4px solid #60a5fa;
+        }
+
+        .scholar-profile-info h4 {
+            color: #f1f5f9;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .profile-details {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 10px;
+        }
+
+        .profile-details p {
+            margin: 0;
+            color: #cbd5e1;
+            font-size: 0.9rem;
+        }
+
+        .profile-details strong {
+            color: #60a5fa;
         }
 
         .result-section {
@@ -147,27 +238,29 @@
         }
 
         .result-header h2 {
-            color: #2d3748;
+            color: #f1f5f9;
             font-size: 1.8rem;
             font-weight: 600;
         }
 
         .result-header i {
-            color: #667eea;
+            color: #3b82f6;
             font-size: 1.5rem;
         }
 
         .result-content {
-            background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+            background: rgba(15, 23, 42, 0.4);
             padding: 25px;
             border-radius: 16px;
-            border-left: 4px solid #667eea;
+            border-left: 4px solid #3b82f6;
             white-space: pre-wrap;
             font-family: 'Inter', sans-serif;
             line-height: 1.7;
-            color: #4a5568;
-            box-shadow: inset 0 2px 4px rgba(0,0,0,0.05);
+            color: #e2e8f0;
+            box-shadow: inset 0 2px 4px rgba(0,0,0,0.2);
             animation: slideInRight 0.6s ease-out;
+            max-height: 70vh;
+            overflow-y: auto;
         }
 
         .loading {
@@ -298,6 +391,349 @@
             0%, 100% { transform: translateY(0px) rotate(0deg); }
             50% { transform: translateY(-20px) rotate(180deg); }
         }
+
+        .file-upload-container {
+            border: 2px dashed rgba(148, 163, 184, 0.4);
+            border-radius: 12px;
+            padding: 20px;
+            text-align: center;
+            transition: all 0.3s ease;
+            background: rgba(15, 23, 42, 0.4);
+        }
+
+        .file-upload-container:hover {
+            border-color: #3b82f6;
+            background: rgba(59, 130, 246, 0.1);
+        }
+
+        .file-upload-container.dragover {
+            border-color: #667eea;
+            background: #e6f3ff;
+            transform: scale(1.02);
+        }
+
+        .file-input {
+            margin-bottom: 15px;
+            border: none;
+            background: transparent;
+        }
+
+        .file-input::-webkit-file-upload-button {
+            background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 500;
+            margin-right: 10px;
+        }
+
+        .file-input::-webkit-file-upload-button:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+        }
+
+        .file-upload-info {
+            text-align: left;
+        }
+
+        .file-upload-info p {
+            margin: 8px 0;
+            font-size: 0.9rem;
+            color: #cbd5e1;
+        }
+
+        .file-upload-info i {
+            color: #3b82f6;
+            margin-right: 8px;
+        }
+
+        .uploaded-files {
+            margin-top: 15px;
+            padding: 15px;
+            background: rgba(59, 130, 246, 0.1);
+            border-radius: 8px;
+            border-left: 4px solid #3b82f6;
+        }
+
+        .uploaded-files h4 {
+            color: #93c5fd;
+            margin-bottom: 10px;
+            font-size: 1rem;
+        }
+
+        .file-list {
+            list-style: none;
+            padding: 0;
+        }
+
+        .file-list li {
+            display: flex;
+            align-items: center;
+            padding: 8px 0;
+            border-bottom: 1px solid rgba(59, 130, 246, 0.2);
+        }
+
+        .file-list li:last-child {
+            border-bottom: none;
+        }
+
+        .file-list i {
+            color: #3b82f6;
+            margin-right: 10px;
+        }
+
+        .file-preview {
+            margin-top: 20px;
+            padding: 15px;
+            background: rgba(15, 23, 42, 0.6);
+            border-radius: 8px;
+            border: 1px solid rgba(148, 163, 184, 0.2);
+            max-height: 200px;
+            overflow-y: auto;
+        }
+
+        .file-preview h4 {
+            color: #e2e8f0;
+            margin-bottom: 10px;
+            font-size: 1rem;
+        }
+
+        .file-preview-content {
+            font-size: 0.85rem;
+            line-height: 1.5;
+            color: #cbd5e1;
+            white-space: pre-wrap;
+        }
+
+        /* Enhanced Topic Display Styles */
+        .topic-card {
+            background: rgba(30, 41, 59, 0.9);
+            border: 1px solid rgba(148, 163, 184, 0.2);
+            border-radius: 16px;
+            margin-bottom: 30px;
+            overflow: hidden;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+            transition: all 0.3s ease;
+        }
+
+        .topic-card:hover {
+            box-shadow: 0 8px 20px rgba(0,0,0,0.4);
+            transform: translateY(-2px);
+            border-color: rgba(148, 163, 184, 0.3);
+        }
+
+        .topic-header {
+            background: linear-gradient(135deg, #1e40af 0%, #3730a3 100%);
+            color: white;
+            padding: 30px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .topic-header:hover {
+            background: linear-gradient(135deg, #1d4ed8 0%, #4338ca 100%);
+        }
+
+        .topic-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 20px;
+            line-height: 1.3;
+        }
+
+        .topic-meta {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+            margin-bottom: 15px;
+        }
+
+
+
+        .topic-content {
+            padding: 0;
+            max-height: 0;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            color: #e2e8f0;
+        }
+
+        .topic-content.expanded {
+            padding: 30px;
+            max-height: none;
+            overflow: visible;
+        }
+
+        .topic-section {
+            margin-bottom: 20px;
+        }
+
+        .topic-section:last-child {
+            margin-bottom: 0;
+        }
+
+        .section-title {
+            font-weight: 600;
+            color: #f1f5f9;
+            margin-bottom: 12px;
+            font-size: 1.1rem;
+        }
+
+        .section-content {
+            color: #cbd5e1;
+            line-height: 1.7;
+            margin-top: 10px;
+        }
+
+        .section-content ul {
+            margin: 8px 0;
+            padding-left: 20px;
+        }
+
+        .section-content li {
+            margin-bottom: 6px;
+            line-height: 1.5;
+        }
+
+        .topic-section {
+            margin-bottom: 25px;
+            padding: 20px;
+            background: rgba(15, 23, 42, 0.6);
+            border-radius: 10px;
+            border-left: 4px solid #3b82f6;
+        }
+
+        .topic-section:last-child {
+            margin-bottom: 0;
+        }
+
+        .expand-button {
+            background: rgba(255,255,255,0.2);
+            border: 1px solid rgba(255,255,255,0.3);
+            color: white;
+            padding: 12px 20px;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .expand-button:hover {
+            background: rgba(255,255,255,0.3);
+            transform: translateY(-1px);
+        }
+
+        .expand-icon {
+            transition: transform 0.3s ease;
+        }
+
+        .expand-icon.rotated {
+            transform: rotate(180deg);
+        }
+
+        .topic-actions {
+            display: flex;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .enrich-button {
+            background: rgba(255,255,255,0.15);
+            border: 1px solid rgba(255,255,255,0.3);
+            color: white;
+            padding: 12px 20px;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .enrich-button:hover {
+            background: rgba(255,255,255,0.25);
+            transform: translateY(-1px);
+        }
+
+        .enrich-button i {
+            color: #f59e0b;
+        }
+
+        /* Markdown-like formatting */
+        .result-content h2 {
+            color: #f1f5f9;
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin: 30px 0 20px 0;
+            padding-bottom: 10px;
+            border-bottom: 2px solid rgba(148, 163, 184, 0.3);
+        }
+
+        .result-content h3 {
+            color: #e2e8f0;
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin: 20px 0 10px 0;
+        }
+
+        .result-content strong {
+            color: #f1f5f9;
+            font-weight: 600;
+        }
+
+        .result-content ul {
+            margin: 10px 0;
+            padding-left: 20px;
+        }
+
+        .result-content li {
+            margin-bottom: 6px;
+            line-height: 1.5;
+            color: #cbd5e1;
+        }
+
+        /* Custom scrollbar for dark theme */
+        .result-content::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        .result-content::-webkit-scrollbar-track {
+            background: rgba(15, 23, 42, 0.3);
+            border-radius: 4px;
+        }
+
+        .result-content::-webkit-scrollbar-thumb {
+            background: rgba(59, 130, 246, 0.5);
+            border-radius: 4px;
+        }
+
+        .result-content::-webkit-scrollbar-thumb:hover {
+            background: rgba(59, 130, 246, 0.7);
+        }
+
+        .file-preview::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        .file-preview::-webkit-scrollbar-track {
+            background: rgba(15, 23, 42, 0.3);
+            border-radius: 4px;
+        }
+
+        .file-preview::-webkit-scrollbar-thumb {
+            background: rgba(59, 130, 246, 0.5);
+            border-radius: 4px;
+        }
+
+        .file-preview::-webkit-scrollbar-thumb:hover {
+            background: rgba(59, 130, 246, 0.7);
+        }
     </style>
 </head>
 <body>
@@ -314,35 +750,74 @@
         </div>
 
         <div class="card">
-            <form method="post" action="/generate" id="ideaForm">
+            <form method="post" action="/generate" id="ideaForm" enctype="multipart/form-data">
                 <div class="form-row">
+                    <div class="form-group">
+                        <label for="user_id"><i class="fas fa-id-card"></i> User ID</label>
+                        <input type="text" name="user_id" id="user_id" class="form-control" required placeholder="Enter your unique identifier" value="{{ user_id or '' }}">
+                    </div>
+                    
                     <div class="form-group">
                         <label for="role"><i class="fas fa-user-graduate"></i> Role</label>
                         <select name="role" id="role" class="form-control" required>
-                            <option value="student">Student</option>
-                            <option value="professor">Professor</option>
+      <option value="student">Student</option>
+      <option value="professor">Professor</option>
                         </select>
                     </div>
 
                     <div class="form-group">
                         <label for="mode"><i class="fas fa-cogs"></i> Mode</label>
                         <select name="mode" id="mode" class="form-control" required>
-                            <option value="research">Research (Thesis Topics)</option>
-                            <option value="non-research">Non-Research (Course Ideas)</option>
+      <option value="research">Research (Thesis Topics)</option>
+      <option value="non-research" id="non-research-option">Non-Research (Course Ideas)</option>
                         </select>
                     </div>
                 </div>
 
                 <div class="form-group">
                     <label for="input_text"><i class="fas fa-edit"></i> Describe your background or course</label>
-                    <textarea name="input_text" id="input_text" class="form-control" rows="6" placeholder="Tell us about your academic background, interests, or the type of course you're looking for..." required></textarea>
+                    <textarea name="input_text" id="input_text" class="form-control" rows="6" placeholder="Tell us about your academic background, interests, or the type of course you're looking for..." required>{{ input_text or "" }}</textarea>
                 </div>
 
-                <button type="submit" class="btn">
-                    <i class="fas fa-magic"></i>
-                    Generate Ideas
-                </button>
-            </form>
+                <div class="form-group">
+                    <label for="files"><i class="fas fa-file-upload"></i> Upload Supporting Documents (Optional)</label>
+                    <div class="file-upload-container">
+                        <input type="file" name="files" id="files" class="form-control file-input" multiple accept=".pdf,.docx,.doc,.xlsx,.xls,.txt,.md,.png,.jpg,.jpeg,.gif,.bmp">
+                        <div class="file-upload-info">
+                            <p><i class="fas fa-info-circle"></i> Supported formats: PDF, DOCX, Excel, Images, Text files</p>
+                            <p><i class="fas fa-lightbulb"></i> Upload your CV, research papers, course materials, or any relevant documents to get more personalized suggestions</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Google Scholar Section (Professor Only) -->
+                <div class="form-group" id="scholar-section" style="display: none;">
+                    <label for="scholar_url"><i class="fas fa-graduation-cap"></i> Google Scholar Profile (Optional)</label>
+                    <div class="scholar-container">
+                        <input type="url" name="scholar_url" id="scholar_url" class="form-control" placeholder="https://scholar.google.com/citations?user=..." pattern="https://scholar\.google\.com/.*">
+                        <div class="scholar-info">
+                            <p><i class="fas fa-info-circle"></i> Add your Google Scholar profile URL to analyze your research background</p>
+                            <p><i class="fas fa-shield-alt"></i> Only professors can access this feature</p>
+                        </div>
+                        <button type="button" id="analyze-scholar" class="btn btn-secondary">
+                            <i class="fas fa-search"></i>
+                            Analyze Profile
+                        </button>
+                    </div>
+                </div>
+
+                <div class="form-actions">
+                    <button type="submit" class="btn">
+                        <i class="fas fa-magic"></i>
+                        Generate Ideas
+                    </button>
+                    
+                    <a href="/profile/{{ user_id or 'demo' }}" class="btn btn-profile" id="profile-link" style="display: none;">
+                        <i class="fas fa-user-circle"></i>
+                        View Profile
+                    </a>
+                </div>
+  </form>
         </div>
 
         <div class="loading" id="loading">
@@ -350,23 +825,169 @@
             <p class="loading-text">Generating your ideas...</p>
         </div>
 
-        {% if result %}
+  {% if scholar_result %}
         <div class="card result-section">
             <div class="result-header">
-                <i class="fas fa-star"></i>
-                <h2>Generated Ideas</h2>
+                <i class="fas fa-graduation-cap"></i>
+                <h2>Google Scholar Profile Analysis</h2>
             </div>
+            
+            {% if scholar_profile %}
+            <div class="scholar-profile-info">
+                <h4><i class="fas fa-user"></i> Profile Information</h4>
+                <div class="profile-details">
+                    {% if scholar_profile.name %}
+                        <p><strong>Name:</strong> {{ scholar_profile.name }}</p>
+                    {% endif %}
+                    {% if scholar_profile.affiliation %}
+                        <p><strong>Affiliation:</strong> {{ scholar_profile.affiliation }}</p>
+                    {% endif %}
+                    {% if scholar_profile.research_interests %}
+                        <p><strong>Research Interests:</strong> {{ ', '.join(scholar_profile.research_interests) }}</p>
+                    {% endif %}
+                    {% if scholar_profile.citations %}
+                        <p><strong>Total Citations:</strong> {{ scholar_profile.citations }}</p>
+                    {% endif %}
+                    {% if scholar_profile.h_index %}
+                        <p><strong>H-index:</strong> {{ scholar_profile.h_index }}</p>
+                    {% endif %}
+                </div>
+            </div>
+            {% endif %}
+            
             <div class="result-content">
-                {{ result }}
+                {{ scholar_result | safe }}
             </div>
         </div>
-        {% endif %}
+  {% endif %}
+
+  {% if result %}
+        <div class="card result-section">
+            <div class="result-header">
+                {% if enriched_topic %}
+                    <i class="fas fa-magic"></i>
+                    <h2>Enriched Topic: {{ enriched_topic }}</h2>
+                {% else %}
+                    <i class="fas fa-star"></i>
+                    <h2>Generated Ideas</h2>
+                {% endif %}
+            </div>
+            
+            {% if uploaded_files %}
+            <div class="uploaded-files">
+                <h4><i class="fas fa-file-alt"></i> Documents Used for Analysis</h4>
+                <ul class="file-list">
+                    {% for file in uploaded_files %}
+                    <li><i class="fas fa-file"></i> {{ file }}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+            {% endif %}
+            
+            <div class="result-content">
+                {{ result | safe }}
+            </div>
+            
+            {% if file_content %}
+            <div class="file-preview">
+                <h4><i class="fas fa-eye"></i> Extracted Content from Documents</h4>
+                <div class="file-preview-content">
+                    {{ file_content[:500] }}{% if file_content|length > 500 %}... (truncated){% endif %}
+                </div>
+            </div>
+            {% endif %}
+        </div>
+  {% endif %}
     </div>
 
     <script>
+        // Role-based access control
+        function updateFormAccess() {
+            const role = document.getElementById('role').value;
+            const mode = document.getElementById('mode');
+            const nonResearchOption = document.getElementById('non-research-option');
+            const scholarSection = document.getElementById('scholar-section');
+            const profileLink = document.getElementById('profile-link');
+            const userId = document.getElementById('user_id').value;
+
+            // Show/hide non-research option based on role
+            if (role === 'professor') {
+                nonResearchOption.style.display = 'block';
+                scholarSection.style.display = 'block';
+                if (userId) {
+                    profileLink.style.display = 'inline-flex';
+                    profileLink.href = `/profile/${userId}`;
+                }
+            } else {
+                nonResearchOption.style.display = 'none';
+                if (mode.value === 'non-research') {
+                    mode.value = 'research';
+                }
+                scholarSection.style.display = 'none';
+                profileLink.style.display = 'none';
+            }
+        }
+
+        // Google Scholar analysis
+        async function analyzeScholarProfile() {
+            const userId = document.getElementById('user_id').value;
+            const role = document.getElementById('role').value;
+            const scholarUrl = document.getElementById('scholar_url').value;
+
+            if (!userId || !scholarUrl) {
+                alert('Please enter both User ID and Google Scholar URL');
+                return;
+            }
+
+            if (role !== 'professor') {
+                alert('Only professors can analyze Google Scholar profiles');
+                return;
+            }
+
+            const analyzeBtn = document.getElementById('analyze-scholar');
+            const originalText = analyzeBtn.innerHTML;
+            analyzeBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Analyzing...';
+            analyzeBtn.disabled = true;
+
+            try {
+                const formData = new FormData();
+                formData.append('user_id', userId);
+                formData.append('role', role);
+                formData.append('scholar_url', scholarUrl);
+
+                const response = await fetch('/scrape-scholar', {
+                    method: 'POST',
+                    body: formData
+                });
+
+                if (response.ok) {
+                    const result = await response.text();
+                    document.body.innerHTML = result;
+                } else {
+                    const errorData = await response.json();
+                    alert(`Error: ${errorData.detail}`);
+                }
+            } catch (error) {
+                alert(`Error analyzing profile: ${error.message}`);
+            } finally {
+                analyzeBtn.innerHTML = originalText;
+                analyzeBtn.disabled = false;
+            }
+        }
+
+        // Event listeners
         document.getElementById('ideaForm').addEventListener('submit', function() {
             document.getElementById('loading').style.display = 'block';
             document.querySelector('.card').style.opacity = '0.7';
+        });
+
+        document.getElementById('role').addEventListener('change', updateFormAccess);
+        document.getElementById('user_id').addEventListener('input', updateFormAccess);
+        document.getElementById('analyze-scholar').addEventListener('click', analyzeScholarProfile);
+
+        // Initialize form access on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            updateFormAccess();
         });
 
         // Add some interactive effects
@@ -379,6 +1000,286 @@
                 this.parentElement.style.transform = 'scale(1)';
             });
         });
+
+        // File upload enhancements
+        const fileInput = document.getElementById('files');
+        const fileContainer = document.querySelector('.file-upload-container');
+
+        // Drag and drop functionality
+        fileContainer.addEventListener('dragover', function(e) {
+            e.preventDefault();
+            this.classList.add('dragover');
+        });
+
+        fileContainer.addEventListener('dragleave', function(e) {
+            e.preventDefault();
+            this.classList.remove('dragover');
+        });
+
+        fileContainer.addEventListener('drop', function(e) {
+            e.preventDefault();
+            this.classList.remove('dragover');
+            const files = e.dataTransfer.files;
+            fileInput.files = files;
+            updateFileList();
+        });
+
+        // File selection change
+        fileInput.addEventListener('change', updateFileList);
+
+        function updateFileList() {
+            const files = fileInput.files;
+            if (files.length > 0) {
+                let fileList = '<div class="uploaded-files"><h4><i class="fas fa-file-alt"></i> Selected Files</h4><ul class="file-list">';
+                for (let i = 0; i < files.length; i++) {
+                    const file = files[i];
+                    const size = (file.size / 1024).toFixed(1);
+                    fileList += `<li><i class="fas fa-file"></i> ${file.name} (${size} KB)</li>`;
+                }
+                fileList += '</ul></div>';
+                
+                // Remove existing file list if any
+                const existingList = fileContainer.querySelector('.uploaded-files');
+                if (existingList) {
+                    existingList.remove();
+                }
+                
+                fileContainer.insertAdjacentHTML('beforeend', fileList);
+            }
+        }
+
+        // Click to upload
+        fileContainer.addEventListener('click', function() {
+            fileInput.click();
+        });
+
+        // Enhanced topic display functionality
+        function enhanceTopicDisplay() {
+            const resultContent = document.querySelector('.result-content');
+            if (!resultContent) return;
+
+            // Convert markdown-style content to enhanced cards
+            const content = resultContent.innerHTML;
+            console.log('Content to process:', content.substring(0, 500) + '...');
+            
+            // Split content by ## headers to find topics
+            const sections = content.split(/## /);
+            let enhancedContent = content;
+            let topicIndex = 0;
+
+            for (let i = 1; i < sections.length; i++) {
+                const section = sections[i];
+                const lines = section.split('\n');
+                const firstLine = lines[0];
+                
+                // Check if this looks like a topic header
+                if (firstLine.match(/(Topic|Course) \d+:/)) {
+                    const topicId = `topic-${topicIndex}`;
+                    const [type, number, ...titleParts] = firstLine.split(/[:\s]+/);
+                    const title = titleParts.join(' ');
+                    
+                    // Get the content for this topic
+                    const topicContent = lines.slice(1).join('\n');
+                    
+                                    // Extract metadata from the content (for future use if needed)
+                const scopeMatch = topicContent.match(/\*\*Scope Rating:\*\* \[(Easy|Medium|Hard)\]/);
+                const uniquenessMatch = topicContent.match(/\*\*Uniqueness Score:\*\* \[(\d+)\]/);
+                const overviewMatch = topicContent.match(/\*\*Brief Overview:\*\* \[(.+?)\]/);
+
+                    // Clean up the content for display
+                    let cleanContent = topicContent
+                        .replace(/\*\*Scope Rating:\*\* \[.+?\]\n/, '') // Remove scope rating
+                        .replace(/\*\*Uniqueness Score:\*\* \[\d+\]\n/, '') // Remove uniqueness score
+                        .replace(/\*\*Brief Overview:\*\* \[.+?\]\n/, '') // Remove brief overview
+                        .replace(/\*\*(.+?):\*\*/g, '<div class="section-title">$1</div>') // Convert bold headers to section titles
+                        .replace(/- (.+?)(?=\n|$)/g, '<li>$1</li>') // Convert dashes to list items
+                        .replace(/(<li>.+?<\/li>)/gs, '<ul class="section-content">$1</ul>') // Wrap list items in ul
+                        .replace(/\n\n/g, '</div><div class="topic-section">') // Add section breaks
+                        .replace(/^/, '<div class="topic-section">') // Start first section
+                        .replace(/$/, '</div>') // End last section
+                        .replace(/\n/g, '<br>'); // Convert remaining newlines to line breaks
+
+                    // Create enhanced card HTML
+                    const cardHTML = `
+                        <div class="topic-card">
+                            <div class="topic-header" onclick="toggleTopic('${topicId}')">
+                                <div class="topic-title">${type} ${number}: ${title}</div>
+                                                                                        <div class="topic-actions">
+                                <button class="expand-button" onclick="event.stopPropagation(); toggleTopic('${topicId}')">
+                                    <i class="fas fa-info-circle"></i>
+                                    <span>Expand Details</span>
+                                    <i class="fas fa-chevron-down expand-icon" id="icon-${topicId}"></i>
+                                </button>
+                                <button class="enrich-button" onclick="event.stopPropagation(); enrichTopic('${topicId}', '${type}', '${title}')">
+                                    <i class="fas fa-plus-circle"></i>
+                                    <span>Enrich Topic</span>
+                                </button>
+                            </div>
+                            </div>
+                            <div class="topic-content" id="${topicId}">
+                                ${cleanContent}
+                            </div>
+                        </div>
+                    `;
+
+                    // Replace the original section with the enhanced card
+                    const originalSection = `## ${firstLine}\n${topicContent}`;
+                    enhancedContent = enhancedContent.replace(originalSection, cardHTML);
+                    topicIndex++;
+                }
+            }
+
+            // If no topics were found, try a simpler approach
+            if (topicIndex === 0 && content.trim()) {
+                // Look for any ## headers and create cards for them
+                const headerRegex = /## (.+?)\n(.+?)(?=## |$)/gs;
+                let headerMatch;
+                let simpleContent = content;
+                
+                while ((headerMatch = headerRegex.exec(content)) !== null) {
+                    const [fullMatch, title, content] = headerMatch;
+                    const topicId = `topic-${topicIndex}`;
+                    
+                    const cleanContent = content
+                        .replace(/\*\*(.+?):\*\*/g, '<div class="section-title">$1</div>')
+                        .replace(/- (.+?)(?=\n|$)/g, '<li>$1</li>')
+                        .replace(/(<li>.+?<\/li>)/gs, '<ul class="section-content">$1</ul>')
+                        .replace(/\n\n/g, '</div><div class="topic-section">')
+                        .replace(/^/, '<div class="topic-section">')
+                        .replace(/$/, '</div>')
+                        .replace(/\n/g, '<br>');
+                    
+                    const cardHTML = `
+                        <div class="topic-card">
+                            <div class="topic-header" onclick="toggleTopic('${topicId}')">
+                                <div class="topic-title">${title}</div>
+                                <div class="topic-actions">
+                                    <button class="expand-button" onclick="event.stopPropagation(); toggleTopic('${topicId}')">
+                                        <span>Expand Details</span>
+                                        <i class="fas fa-chevron-down expand-icon" id="icon-${topicId}"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="topic-content" id="${topicId}">
+                                ${cleanContent}
+                            </div>
+                        </div>
+                    `;
+                    
+                    simpleContent = simpleContent.replace(fullMatch, cardHTML);
+                    topicIndex++;
+                }
+                
+                if (topicIndex > 0) {
+                    resultContent.innerHTML = simpleContent;
+                } else {
+                    // Final fallback - just format the content nicely
+                    const fallbackContent = content
+                        .replace(/\*\*(.+?):\*\*/g, '<div class="section-title">$1</div>')
+                        .replace(/- (.+?)(?=\n|$)/g, '<li>$1</li>')
+                        .replace(/(<li>.+?<\/li>)/gs, '<ul class="section-content">$1</ul>')
+                        .replace(/\n\n/g, '</div><div class="topic-section">')
+                        .replace(/^/, '<div class="topic-section">')
+                        .replace(/$/, '</div>')
+                        .replace(/\n/g, '<br>');
+                    
+                    resultContent.innerHTML = `<div class="topic-card">
+                        <div class="topic-header">
+                            <div class="topic-title">Generated Content</div>
+                        </div>
+                        <div class="topic-content expanded">
+                            ${fallbackContent}
+                        </div>
+                    </div>`;
+                }
+            } else {
+                resultContent.innerHTML = enhancedContent;
+            }
+        }
+
+        // Toggle topic expansion
+        function toggleTopic(topicId) {
+            const content = document.getElementById(topicId);
+            const icon = document.getElementById(`icon-${topicId}`);
+            const button = content.previousElementSibling.querySelector('.expand-button span');
+            
+            if (content.classList.contains('expanded')) {
+                content.classList.remove('expanded');
+                icon.classList.remove('rotated');
+                button.textContent = 'View Details';
+            } else {
+                content.classList.add('expanded');
+                icon.classList.add('rotated');
+                button.textContent = 'Hide Details';
+            }
+        }
+
+        // Initialize enhanced display when results are loaded
+        document.addEventListener('DOMContentLoaded', function() {
+            // Check if we have results and enhance them
+            setTimeout(enhanceTopicDisplay, 100);
+        });
+
+        // Also enhance when the page loads with results
+        if (document.querySelector('.result-content')) {
+            setTimeout(enhanceTopicDisplay, 200);
+        }
+
+        // Enhanced display for when content is already loaded
+        window.addEventListener('load', function() {
+            setTimeout(enhanceTopicDisplay, 300);
+        });
+
+        // Re-enhance display after form submission
+        const originalSubmitHandler = document.getElementById('ideaForm').onsubmit;
+        document.getElementById('ideaForm').addEventListener('submit', function() {
+            // Wait for the page to reload with results
+            setTimeout(enhanceTopicDisplay, 500);
+        });
+
+        // Enrich topic functionality
+        function enrichTopic(topicId, type, title) {
+            const content = document.getElementById(topicId);
+            const topicContent = content.innerHTML;
+            
+            // Get current role and mode from the form
+            const role = document.getElementById('role').value;
+            const mode = document.getElementById('mode').value;
+            const userId = document.getElementById('user_id').value;
+            
+            // Create a form to submit the enrichment request
+            const form = document.createElement('form');
+            form.method = 'POST';
+            form.action = '/enrich-topic';
+            form.style.display = 'none';
+            
+            // Add form fields
+            const fields = {
+                'topic_title': title,
+                'topic_content': topicContent,
+                'role': role,
+                'mode': mode,
+                'user_id': userId
+            };
+            
+            for (const [name, value] of Object.entries(fields)) {
+                const input = document.createElement('input');
+                input.type = 'hidden';
+                input.name = name;
+                input.value = value;
+                form.appendChild(input);
+            }
+            
+            // Show loading state
+            const button = event.target.closest('.enrich-button');
+            const originalText = button.innerHTML;
+            button.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Enriching...';
+            button.disabled = true;
+            
+            // Submit the form
+            document.body.appendChild(form);
+            form.submit();
+        }
     </script>
 </body>
 </html>
