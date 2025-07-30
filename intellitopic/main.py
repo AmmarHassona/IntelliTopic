@@ -79,6 +79,7 @@ def format_topic_content(content):
         r'Uniqueness Score.*?\[(\d+)\]',
         r'Brief Overview.*?\[(.+?)\]',
         r'Research Problem.*?\[(.+?)\]',
+        r'Mini Literature Review.*?\[(.+?)\]',
         r'Research Gap.*?\[(.+?)\]',
         r'Significance.*?\[(.+?)\]',
         r'Key Research Questions.*?\[(.+?)\]',
@@ -139,7 +140,7 @@ def format_topic_content(content):
     # If no sections were found, format as a simple paragraph
     if not formatted_html:
         # Split by common delimiters and format
-        parts = re.split(r'(Scope Rating|Uniqueness Score|Brief Overview|Research Problem|Research Gap|Significance|Key Research Questions|Methodology|Expected Outcomes|Prerequisites|Innovation Factor)', clean_content)
+        parts = re.split(r'(Scope Rating|Uniqueness Score|Brief Overview|Research Problem|Mini Literature Review|Research Gap|Significance|Key Research Questions|Methodology|Expected Outcomes|Prerequisites|Innovation Factor)', clean_content)
         
         if len(parts) > 1:
             for i in range(1, len(parts), 2):
@@ -158,6 +159,43 @@ def format_topic_content(content):
 
 # Add the filter to templates
 templates.env.filters["format_topic_content"] = format_topic_content
+
+# Custom Jinja2 filter to format research insights
+def format_research_insights(content):
+    """Format research insights content into proper HTML"""
+    if not content:
+        return "No analysis available"
+    
+    # Convert markdown-style formatting to HTML
+    formatted = content
+    
+    # Convert headers
+    formatted = re.sub(r'## (.+)', r'<h2>\1</h2>', formatted)
+    formatted = re.sub(r'### (.+)', r'<h3>\1</h3>', formatted)
+    
+    # Convert bold text
+    formatted = re.sub(r'\*\*(.+?)\*\*', r'<strong>\1</strong>', formatted)
+    
+    # Convert bullet points
+    formatted = re.sub(r'- (.+)', r'<li>\1</li>', formatted)
+    
+    # Wrap lists properly
+    formatted = re.sub(r'(<li>.+</li>)', r'<ul>\1</ul>', formatted, flags=re.DOTALL)
+    
+    # Clean up multiple list wrappers
+    formatted = re.sub(r'</ul>\s*<ul>', '', formatted)
+    
+    # Convert line breaks
+    formatted = formatted.replace('\n', '<br>')
+    
+    # Clean up extra spacing
+    formatted = re.sub(r'<br>\s*<br>', '</p><p>', formatted)
+    formatted = f'<p>{formatted}</p>'
+    
+    return formatted
+
+# Add the filter to templates
+templates.env.filters["format_research_insights"] = format_research_insights
 
 # User profiles storage (in production, use a proper database)
 USER_PROFILES_FILE = "user_profiles.json"
@@ -244,41 +282,89 @@ async def scrape_google_scholar(profile_url: str) -> Dict:
         if name_elem:
             profile_info["name"] = name_elem.get_text().strip()
         
-        # Extract affiliation
-        affiliation_elem = soup.find('div', {'class': 'gsc_prf_il'})
-        if affiliation_elem:
-            profile_info["affiliation"] = affiliation_elem.get_text().strip()
+        # Extract affiliation - look for multiple possible selectors
+        affiliation = ""
+        affiliation_selectors = [
+            'div.gsc_prf_il',
+            'div.gsc_prf_il a',
+            'div.gsc_prf_il span',
+            'div[class*="affiliation"]',
+            'div[class*="institution"]'
+        ]
         
-        # Extract research interests
-        interests_elem = soup.find('div', {'class': 'gsc_prf_il'})
-        if interests_elem:
-            interests = interests_elem.find_all('a')
-            profile_info["research_interests"] = [interest.get_text().strip() for interest in interests]
+        for selector in affiliation_selectors:
+            elem = soup.select_one(selector)
+            if elem and elem.get_text().strip():
+                affiliation = elem.get_text().strip()
+                break
         
-        # Extract publication information
+        profile_info["affiliation"] = affiliation
+        
+        # Extract research interests - look for multiple possible selectors
+        interests = []
+        interest_selectors = [
+            'div.gsc_prf_il a[href*="user="]',
+            'div.gsc_prf_il a',
+            'div[class*="interests"] a',
+            'div[class*="keywords"] a'
+        ]
+        
+        for selector in interest_selectors:
+            elems = soup.select(selector)
+            if elems:
+                interests = [elem.get_text().strip() for elem in elems if elem.get_text().strip()]
+                break
+        
+        profile_info["research_interests"] = interests[:5]  # Limit to 5 interests
+        
+        # Extract publication information with better error handling
         publications = []
         pub_elements = soup.find_all('tr', {'class': 'gsc_a_tr'})
-        for pub in pub_elements[:10]:  # Limit to first 10 publications
-            title_elem = pub.find('a', {'class': 'gsc_a_at'})
-            authors_elem = pub.find('div', {'class': 'gs_gray'})
-            citations_elem = pub.find('a', {'class': 'gsc_a_ac'})
-            
-            if title_elem:
-                publication = {
-                    "title": title_elem.get_text().strip(),
-                    "authors": authors_elem.get_text().strip() if authors_elem else "",
-                    "citations": int(citations_elem.get_text().strip()) if citations_elem and citations_elem.get_text().strip().isdigit() else 0
-                }
-                publications.append(publication)
+        
+        for pub in pub_elements[:8]:  # Limit to first 8 publications
+            try:
+                title_elem = pub.find('a', {'class': 'gsc_a_at'})
+                authors_elem = pub.find('div', {'class': 'gs_gray'})
+                citations_elem = pub.find('a', {'class': 'gsc_a_ac'})
+                
+                if title_elem:
+                    title = title_elem.get_text().strip()
+                    authors = authors_elem.get_text().strip() if authors_elem else ""
+                    
+                    # Clean up citations
+                    citations = 0
+                    if citations_elem:
+                        citation_text = citations_elem.get_text().strip()
+                        if citation_text.isdigit():
+                            citations = int(citation_text)
+                    
+                    if title:  # Only add if we have a title
+                        publication = {
+                            "title": title,
+                            "authors": authors,
+                            "citations": citations
+                        }
+                        publications.append(publication)
+            except Exception as e:
+                print(f"Error parsing publication: {e}")
+                continue
         
         profile_info["publications"] = publications
         
-        # Extract citation metrics
-        metrics = soup.find_all('td', {'class': 'gsc_rsb_std'})
-        if len(metrics) >= 3:
-            profile_info["citations"] = int(metrics[0].get_text().strip()) if metrics[0].get_text().strip().isdigit() else 0
-            profile_info["h_index"] = int(metrics[1].get_text().strip()) if metrics[1].get_text().strip().isdigit() else 0
-            profile_info["i10_index"] = int(metrics[2].get_text().strip()) if metrics[2].get_text().strip().isdigit() else 0
+        # Extract citation metrics with better error handling
+        try:
+            metrics = soup.find_all('td', {'class': 'gsc_rsb_std'})
+            if len(metrics) >= 3:
+                # Clean and parse metrics
+                citations_text = metrics[0].get_text().strip()
+                h_index_text = metrics[1].get_text().strip()
+                i10_index_text = metrics[2].get_text().strip()
+                
+                profile_info["citations"] = int(citations_text) if citations_text.isdigit() else 0
+                profile_info["h_index"] = int(h_index_text) if h_index_text.isdigit() else 0
+                profile_info["i10_index"] = int(i10_index_text) if i10_index_text.isdigit() else 0
+        except Exception as e:
+            print(f"Error parsing metrics: {e}")
         
         return profile_info
         
@@ -288,7 +374,7 @@ async def scrape_google_scholar(profile_url: str) -> Dict:
 async def extract_research_insights(profile_data: Dict) -> str:
     """Extract research insights from Google Scholar profile data for context understanding"""
     try:
-        prompt = f"""Analyze the following Google Scholar profile data to understand the researcher's background and expertise (for context only):
+        prompt = f"""Analyze the following Google Scholar profile data and provide a clean, structured summary of the researcher's background and expertise.
 
 Profile Information:
 - Name: {profile_data.get('name', 'N/A')}
@@ -301,37 +387,44 @@ Profile Information:
 Recent Publications:
 {chr(10).join([f"- {pub.get('title', 'N/A')} (Citations: {pub.get('citations', 0)})" for pub in profile_data.get('publications', [])])}
 
-CONTEXT ANALYSIS (Do NOT suggest research topics based on existing work):
+Provide a clean, structured analysis in the following format:
 
-1. **Expertise Assessment:**
-   - Core research areas and methodological strengths
-   - Level of expertise and impact in their field
-   - Technical skills and knowledge domains
+## Research Profile Summary
 
-2. **Research Patterns:**
-   - Publication frequency and collaboration patterns
-   - Citation impact and recognition in the field
-   - Research evolution and trajectory
+### Core Expertise
+[List 3-4 main research areas and methodological strengths]
 
-3. **Capability Profile:**
-   - Teaching and mentoring experience indicators
-   - Interdisciplinary connections and breadth
-   - Innovation capacity and adaptability
+### Academic Impact
+- **Citation Metrics**: [Brief interpretation of citation numbers]
+- **Research Recognition**: [Level of impact in their field]
+- **Publication Focus**: [Main themes in their recent work]
 
-4. **Field Context:**
-   - Current position in their research domain
-   - Network and collaboration potential
-   - Emerging opportunities in their area
+### Teaching & Mentoring Background
+- **Institutional Role**: [Based on affiliation and position]
+- **Research Supervision**: [Indicators of mentoring experience]
+- **Interdisciplinary Connections**: [Breadth of expertise]
 
-IMPORTANT: This analysis should inform understanding of the researcher's capabilities and background, NOT suggest topics similar to their existing work. The goal is to understand what they CAN do, not what they HAVE done.
+### Innovation Capacity
+- **Emerging Areas**: [New directions in their recent work]
+- **Collaboration Patterns**: [Based on publication co-authorship]
+- **Adaptability**: [Ability to work across different topics]
 
-Format the response as a structured background analysis suitable for informing NEW topic generation."""
+### Research Context
+- **Current Position**: [Where they stand in their research domain]
+- **Network Potential**: [Collaboration opportunities]
+- **Future Directions**: [Emerging opportunities in their area]
+
+IMPORTANT: 
+- Keep each section concise and focused
+- Use bullet points for clarity
+- Focus on understanding their capabilities, not suggesting similar topics
+- Format for easy reading in a web interface"""
         
         response = client.chat.completions.create(
             model="gpt-3.5-turbo",
             messages=[{"role": "user", "content": prompt}],
-            max_tokens=800,
-            temperature=0.7,
+            max_tokens=600,
+            temperature=0.5,
         )
         return response.choices[0].message.content
         
@@ -807,7 +900,7 @@ def fix_existing_topic_titles():
                         title = "Untitled Topic"
                         
                         # Method 1: Look for "Brief Overview" section
-                        overview_match = re.search(r'Brief Overview\s*(.+?)(?=Research Problem|Research Gap|Significance|Key Research Questions|Methodology|Expected Outcomes|Prerequisites|Innovation Factor|$)', clean_content, re.DOTALL | re.IGNORECASE)
+                        overview_match = re.search(r'Brief Overview\s*(.+?)(?=Research Problem|Mini Literature Review|Research Gap|Significance|Key Research Questions|Methodology|Expected Outcomes|Prerequisites|Innovation Factor|$)', clean_content, re.DOTALL | re.IGNORECASE)
                         if overview_match:
                             overview_text = overview_match.group(1).strip()
                             # Take first sentence as title
@@ -850,6 +943,33 @@ def fix_existing_topic_titles():
         return fixed_count
     except Exception as e:
         print(f"Error fixing existing topic titles: {e}")
+        return 0
+
+async def update_existing_research_insights():
+    """Update existing research insights to use the new format"""
+    try:
+        profiles = load_user_profiles()
+        updated_count = 0
+        
+        for user_id, profile in profiles.items():
+            if profile.get("extracted_info") and profile["extracted_info"].get("google_scholar"):
+                for scholar in profile["extracted_info"]["google_scholar"]:
+                    if scholar.get("research_insights") and "## Research Profile Summary" not in scholar["research_insights"]:
+                        # This is an old format insight, regenerate it
+                        print(f"Updating research insights for user {user_id}")
+                        
+                        # Regenerate the analysis with new format
+                        new_insights = await extract_research_insights(scholar.get("profile_data", {}))
+                        scholar["research_insights"] = new_insights
+                        updated_count += 1
+        
+        if updated_count > 0:
+            save_user_profiles(profiles)
+            print(f"Updated {updated_count} research insights to new format")
+        
+        return updated_count
+    except Exception as e:
+        print(f"Error updating research insights: {e}")
         return 0
 
 @app.get("/", response_class=HTMLResponse)
@@ -1046,6 +1166,10 @@ async def generate(
         document_section = ""
         if file_content:
             document_section = f"\nDocument Content:\n{file_content}\n"
+        
+        # Debug logging
+        print(f"DEBUG: Generating thesis topics with difficulty: {difficulty}")
+        print(f"DEBUG: Mode: {mode}, Role: {role}")
             
     else:
         # COURSE PROJECT MODE: ONLY include course-specific context (NO research context)
@@ -1069,12 +1193,12 @@ async def generate(
             document_section += f"\nAdditional Course Details:\n{course_details}\n"
 
     if mode == "research":
-        prompt = f"""Generate 3 COMPLETELY NEW and innovative thesis topics for a {role} using chain-of-thought reasoning.
+        prompt = f"""Generate EXACTLY 3 COMPLETELY NEW and innovative thesis topics for a {role} using chain-of-thought reasoning.
 
 DESIRED DIFFICULTY LEVEL: {difficulty.upper()}
-- EASY: Suitable for beginners, basic concepts, fundamental research
-- MEDIUM: Moderate complexity, some advanced concepts, intermediate research
-- HARD: Advanced concepts, complex implementation, cutting-edge research
+- EASY: Suitable for beginners, basic concepts, fundamental research, undergraduate level
+- MEDIUM: Moderate complexity, some advanced concepts, intermediate research, master's level
+- HARD: Advanced concepts, complex implementation, cutting-edge research, PhD level
 - MIXED: Variety of difficulty levels (1 easy, 1 medium, 1 hard)
 
 CONTEXT INFORMATION (Use for understanding background, NOT for topic generation):
@@ -1083,55 +1207,69 @@ User Profile Context: {extracted_context}
 
 CHAIN-OF-THOUGHT PROCESS:
 1. First, analyze the user's background and expertise from the context
-2. Consider the desired difficulty level and adjust complexity accordingly
+2. CRITICAL: Consider the desired difficulty level ({difficulty.upper()}) and adjust complexity accordingly
 3. Identify emerging trends, gaps, and opportunities in their field
 4. Consider interdisciplinary connections and novel applications
 5. Think about future challenges and unexplored research directions
 6. Generate topics that leverage their expertise but explore NEW territory
 
 CRITICAL REQUIREMENTS:
+- MANDATORY: Generate EXACTLY 3 topics - no more, no less
 - Topics MUST be completely new and not based on existing research from the context
 - Use context only to understand the user's capabilities and field
 - Focus on emerging areas, interdisciplinary approaches, or novel applications
 - Each topic should represent a significant departure from current work
 - Aim for high innovation and novelty scores (8-10)
-- ADJUST SCOPE RATING based on the desired difficulty level
+- MANDATORY: ADJUST SCOPE RATING to match the desired difficulty level ({difficulty.upper()})
+- MANDATORY: Adjust topic complexity, methodology, and prerequisites based on difficulty level
+
+DIFFICULTY-SPECIFIC GUIDELINES:
+- EASY: Basic research methods, simple data analysis, fundamental concepts, 3-6 month timeline
+- MEDIUM: Mixed methods, moderate data complexity, intermediate concepts, 6-12 month timeline
+- HARD: Advanced methodologies, complex data analysis, cutting-edge concepts, 12-24 month timeline
+- MIXED: Generate exactly 1 easy, 1 medium, and 1 hard topic
 
 For each thesis topic, provide the following structured format:
 
 ## Topic [Number]: [Title]
 
-**Scope Rating:** [Easy/Medium/Hard] - Rate based on complexity, time requirements, and resource needs (should match desired difficulty)
+**Scope Rating:** [Easy/Medium/Hard] - MUST match the desired difficulty level ({difficulty.upper()})
 **Uniqueness Score:** [8-10] - Rate how novel and innovative this topic is (must be 8 or higher)
 **Brief Overview:** [2-3 sentences summarizing the core concept]
 
-**Research Problem:** [Detailed explanation of the research problem/objective]
+**Research Problem:** [Detailed explanation of the research problem/objective - adjust complexity based on difficulty]
 
-**Research Gap:** [Describe the specific gap in current literature/knowledge this addresses]
+**Mini Literature Review:**
+- **Current State of Research:** [Brief overview of existing work in this area]
+- **Key Studies:** [2-3 most relevant recent studies with brief findings]
+- **Limitations in Current Work:** [What existing research lacks or doesn't address]
+- **Emerging Trends:** [Recent developments that create opportunities for this research]
+
+**Research Gap:** [Describe the specific gap in current literature/knowledge this addresses - should directly connect to the literature review limitations]
 
 **Significance & Impact:** [The potential impact and importance of this research]
 
-**Key Research Questions:**
+**Key Research Questions:** [3 questions - adjust complexity based on difficulty level]
 - [Question 1]
 - [Question 2]
 - [Question 3]
 
-**Methodology:** [Suggested research approach and methods]
+**Methodology:** [Suggested research approach and methods - MUST match difficulty level complexity]
 
 **Expected Outcomes:** [What contributions this research will make to the field]
 
-**Prerequisites:** [Required background knowledge or skills]
+**Prerequisites:** [Required background knowledge or skills - adjust based on difficulty level]
 
 **Innovation Factor:** [What makes this topic truly novel and different from existing research]
 
-Remember: Use the context to understand the user's expertise and field, but generate topics that represent NEW research directions, not extensions of existing work. Ensure the scope rating aligns with the desired difficulty level."""
+IMPORTANT: You MUST generate exactly 3 topics. Each topic must have a Scope Rating that matches the desired difficulty level ({difficulty.upper()}). Use the context to understand the user's expertise and field, but generate topics that represent NEW research directions, not extensions of existing work."""
     else:
-        prompt = f"""Generate 3 COMPLETELY NEW and innovative course project ideas for a {role} using chain-of-thought reasoning.
+        prompt = f"""Generate EXACTLY 3 COMPLETELY NEW and innovative course project ideas for a {role} using chain-of-thought reasoning.
 
 DESIRED DIFFICULTY LEVEL: {difficulty.upper()}
-- EASY: Suitable for beginners, basic concepts, fundamental skills
-- MEDIUM: Moderate complexity, some advanced concepts, intermediate skills
-- HARD: Advanced concepts, complex implementation, expert-level skills
+- EASY: Suitable for beginners, basic concepts, fundamental skills, introductory level
+- MEDIUM: Moderate complexity, some advanced concepts, intermediate skills, intermediate level
+- HARD: Advanced concepts, complex implementation, expert-level skills, advanced level
 - MIXED: Variety of difficulty levels (1 easy, 1 medium, 1 hard)
 
 CONTEXT INFORMATION (Use for understanding background, NOT for project generation):
@@ -1139,30 +1277,38 @@ User Input: {input_text}{document_section}
 
 CHAIN-OF-THOUGHT PROCESS:
 1. First, analyze the user's teaching background and expertise from the context
-2. Consider the desired difficulty level and adjust project complexity accordingly
+2. CRITICAL: Consider the desired difficulty level ({difficulty.upper()}) and adjust project complexity accordingly
 3. Identify emerging educational needs and gaps in current curricula
 4. Consider interdisciplinary approaches and novel project-based learning methodologies
 5. Think about future skills students will need and unexplored project areas
 6. Generate course projects that leverage their expertise but explore NEW educational territory
 
 CRITICAL REQUIREMENTS:
+- MANDATORY: Generate EXACTLY 3 course projects - no more, no less
 - Course projects MUST be completely new and not based on existing projects from the context
 - Use context only to understand the user's teaching capabilities and field
 - Focus on emerging subjects, interdisciplinary approaches, or novel project methodologies
 - Each project should represent a significant departure from traditional assignments
 - Aim for high innovation and novelty scores (8-10)
-- ADJUST SCOPE RATING based on the desired difficulty level
+- MANDATORY: ADJUST SCOPE RATING to match the desired difficulty level ({difficulty.upper()})
+- MANDATORY: Adjust project complexity, implementation methods, and prerequisites based on difficulty level
 - IGNORE any research-related context (Google Scholar, previous research papers, etc.)
+
+DIFFICULTY-SPECIFIC GUIDELINES:
+- EASY: Basic concepts, simple implementation, fundamental skills, 2-4 week timeline
+- MEDIUM: Moderate complexity, mixed approaches, intermediate skills, 4-8 week timeline
+- HARD: Advanced concepts, complex implementation, expert skills, 8-12 week timeline
+- MIXED: Generate exactly 1 easy, 1 medium, and 1 hard project
 
 For each course project, provide the following structured format:
 
 ## Course Project [Number]: [Title]
 
-**Scope Rating:** [Easy/Medium/Hard] - Rate based on complexity, time requirements, and resource needs (should match desired difficulty)
+**Scope Rating:** [Easy/Medium/Hard] - MUST match the desired difficulty level ({difficulty.upper()})
 **Uniqueness Score:** [8-10] - Rate how innovative and distinctive this project concept is (must be 8 or higher)
 **Brief Overview:** [2-3 sentences summarizing the project concept]
 
-**Project Description:** [Detailed description and learning objectives]
+**Project Description:** [Detailed description and learning objectives - adjust complexity based on difficulty]
 
 **Learning Outcomes:** [Specific skills and knowledge students will develop]
 
@@ -1172,23 +1318,23 @@ For each course project, provide the following structured format:
 - [Component 3]
 - [Component 4]
 
-**Implementation Methods:** [Innovative project approaches and activities]
+**Implementation Methods:** [Innovative project approaches and activities - MUST match difficulty level complexity]
 
 **Assessment Criteria:** [Evaluation methods and criteria]
 
-**Prerequisites:** [Required background knowledge or skills]
+**Prerequisites:** [Required background knowledge or skills - adjust based on difficulty level]
 
 **Target Students:** [Who would benefit most from this project]
 
 **Innovation Factor:** [What makes this project truly novel and different from traditional assignments]
 
-Remember: Use the context to understand the user's teaching expertise and field, but generate projects that represent NEW educational directions, not extensions of existing assignments. Focus ONLY on course-specific information and ignore any research context. Ensure the scope rating aligns with the desired difficulty level."""
+IMPORTANT: You MUST generate exactly 3 course projects. Each project must have a Scope Rating that matches the desired difficulty level ({difficulty.upper()}). Use the context to understand the user's teaching expertise and field, but generate projects that represent NEW educational directions, not extensions of existing assignments."""
 
     try:
         response = client.chat.completions.create(
             model="gpt-3.5-turbo",
             messages=[{"role": "user", "content": prompt}],
-            max_tokens=1000,
+            max_tokens=2000,
             temperature=0.7,
         )
         generated = response.choices[0].message.content
@@ -1373,5 +1519,14 @@ async def fix_titles_endpoint():
     try:
         fixed_count = fix_existing_topic_titles()
         return {"message": f"Fixed {fixed_count} topic titles", "fixed_count": fixed_count}
+    except Exception as e:
+        return {"error": str(e)}
+
+@app.get("/update-insights")
+async def update_insights_endpoint():
+    """Manually trigger research insights update"""
+    try:
+        updated_count = await update_existing_research_insights()
+        return {"message": f"Updated {updated_count} research insights", "updated_count": updated_count}
     except Exception as e:
         return {"error": str(e)}

@@ -1,28 +1,34 @@
 {
   "1": {
     "role": "professor",
-    "created_at": "2025-07-29T12:57:46.677794",
+    "created_at": "2025-07-30T12:00:58.777199",
     "extracted_info": {
       "documents": [
         {
           "filename": "P3_Course.pdf",
-          "uploaded_at": "2025-07-29T23:42:05.063155",
+          "uploaded_at": "2025-07-30T12:00:59.492202",
           "size": 0
         },
         {
           "filename": "P3_Course.pdf",
-          "uploaded_at": "2025-07-29T23:48:38.849055",
+          "uploaded_at": "2025-07-30T12:31:36.268429",
           "size": 0
         }
       ],
       "google_scholar": [
         {
           "url": "https://scholar.google.com/citations?user=fcbh--sAAAAJ&hl=en",
-          "scraped_at": "2025-07-29T12:58:58.085778",
+          "scraped_at": "2025-07-30T12:02:55.179348",
           "profile_data": {
             "name": "Nada Sharaf",
             "affiliation": "Lecturer at the German International University, German University in Cairo",
-            "research_interests": [],
+            "research_interests": [
+              "Visualization",
+              "Gamification",
+              "Smart Adaptive Education",
+              "Arabic Language Processing",
+              "Industry 5.0"
+            ],
             "publications": [
               {
                 "title": "MiniColon; teaching kids computational thinking using an interactive serious game",
@@ -63,296 +69,93 @@
                 "title": "Eye-to-eye: towards visualizing eye gaze data",
                 "authors": "Y Othman, M Khalaf, A Ragab, A Salaheldin, R Ayman, N Sharaf",
                 "citations": 12
-              },
-              {
-                "title": "ARTour: an augmented reality collaborative experience for enhancing tourism",
-                "authors": "M Elshahawy, S Magdy, N Sharaf",
-                "citations": 11
-              },
-              {
-                "title": "AraScore: Investigating response-based Arabic short answer scoring",
-                "authors": "A ElNaka, O Nael, H Afifi, N Sharaf",
-                "citations": 11
               }
             ],
             "citations": 356,
             "h_index": 268,
             "i10_index": 11
           },
-          "research_insights": "1. **Expertise Assessment:**\n   - Nada Sharaf's core research areas appear to revolve around educational technology, specifically focusing on developing serious games and tools to teach computational thinking and programming concepts to children, particularly those with autism. She also has expertise in constraint handling rules, source-to-source transformation, deep learning, animation, eye gaze data visualization, and augmented reality. \n   - Her methodological strengths likely include game development, rule-based systems, machine learning, and visualization techniques.\n   - With a high H-index of 268 and a total citation count of 356, Nada Sharaf has made a significant impact in her field, demonstrating the recognition and influence of her work.\n   - Her technical skills span across programming, game design, machine learning, and data visualization domains.\n\n2. **Research Patterns:**\n   - Nada Sharaf's publication frequency seems consistent, with a focus on developing innovative tools and systems for educational purposes.\n   - She has a pattern of collaborating on projects that involve interdisciplinary aspects such as education, computer science, and psychology, particularly in the context of autism.\n   - The citation impact of her work indicates that she has made noteworthy contributions to the field, with several publications garnering significant attention.\n\n3. **Capability Profile:**\n   - As a lecturer at the German International University, Nada Sharaf likely has experience in teaching and mentoring students, especially in the areas of educational technology, programming, and computational thinking.\n   - Her work in developing tools for children with autism showcases her interdisciplinary connections with psychology and special education, highlighting her ability to adapt her research to address specific needs.\n   - Nada Sharaf's capacity for innovation is evident in her development of serious games, rule-based systems, and visualization tools, indicating a strong potential for further creativity and adaptability in her research.\n\n4. **Field Context:**\n   - Nada Sharaf's position as a lecturer at the German International University places her in a research domain that values innovation in educational technology and computational thinking.\n   - Her collaborative patterns suggest potential network opportunities with researchers in education, computer science, and psychology, particularly those working on similar interdisciplinary projects.\n   - In the field of educational technology, there are emerging opportunities for further exploration of serious games, machine learning applications, and augmented reality experiences, which align with Nada Sharaf's current research focus."
+          "research_insights": "## Research Profile Summary\n\n### Core Expertise\n- Visualization\n- Gamification\n- Smart Adaptive Education\n- Arabic Language Processing\n\n### Academic Impact\n- **Citation Metrics**: High H-index and total citations indicate significant impact in the field.\n- **Research Recognition**: Well-regarded in the areas of visualization, gamification, and education.\n- **Publication Focus**: Recent work focuses on serious games for teaching computational thinking and programming concepts.\n\n### Teaching & Mentoring Background\n- **Institutional Role**: Lecturer at the German International University, German University in Cairo.\n- **Research Supervision**: Experience in developing educational tools for children with autism.\n- **Interdisciplinary Connections**: Expertise in both technical (visualization, processing) and educational (adaptive learning) domains.\n\n### Innovation Capacity\n- **Emerging Areas**: Exploration of Arabic language processing and Industry 5.0.\n- **Collaboration Patterns**: Collaborates on interdisciplinary projects, evident in publications.\n- **Adaptability**: Demonstrated ability to work on diverse topics within education and technology.\n\n### Research Context\n- **Current Position**: Established researcher with a strong publication record.\n- **Network Potential**: Opportunities for collaboration in visualization, gamification, and education.\n- **Future Directions**: Potential for further advancements in smart adaptive education and Arabic language processing."
         }
       ],
       "user_inputs": [
         {
-          "input": "i am a computer science lecturer teaching programming (c++), research methodology, computer architecture, discrete math",
-          "mode": "research",
-          "timestamp": "2025-07-29T12:57:53.314247"
+          "input": "i am a computer science lecturer teaching computer architecture, programming and oop (c++), discrete math, research methodology",
+          "mode": "non-research",
+          "timestamp": "2025-07-30T12:01:12.054699"
         },
         {
-          "input": "i am a computer science lecturer teaching computer architecture, research methodology, discrete math, programming (c++). i am interested in teaching computational thinking and programming concepts",
+          "input": "i am a computer science lecturer teaching computer architecture, programming and oop (c++), discrete math, research methodology",
           "mode": "research",
-          "timestamp": "2025-07-29T13:00:35.265660"
+          "timestamp": "2025-07-30T12:04:19.662852"
+        },
+        {
+          "input": "i am a computer science lecturer teaching computer architecture, programming and oop (c++), discrete math, research methodology",
+          "mode": "research",
+          "timestamp": "2025-07-30T12:05:13.147697"
+        },
+        {
+          "input": "i am a computer science lecturer teaching computer architecture, programming and oop (c++), discrete math, research methodology",
+          "mode": "research",
+          "timestamp": "2025-07-30T12:19:28.850994"
+        },
+        {
+          "input": "i am a computer science lecturer teaching computer architecture, programming and oop (c++), discrete math, research methodology",
+          "mode": "research",
+          "timestamp": "2025-07-30T12:20:52.025082"
+        },
+        {
+          "input": "i am a computer science lecturer teaching computer architecture, programming and oop (c++), discrete math, research methodology",
+          "mode": "research",
+          "timestamp": "2025-07-30T12:22:07.031783"
+        },
+        {
+          "input": "i am a computer science lecturer teaching computer architecture, programming and oop (c++), discrete math, research methodology",
+          "mode": "research",
+          "timestamp": "2025-07-30T12:25:14.026512"
+        },
+        {
+          "input": "i am a computer science lecturer teaching computer architecture, programming and oop (c++), discrete math, research methodology",
+          "mode": "research",
+          "timestamp": "2025-07-30T12:25:47.583393"
+        },
+        {
+          "input": "i am a computer science lecturer teaching computer architecture, programming and oop (c++), discrete math, research methodology",
+          "mode": "research",
+          "timestamp": "2025-07-30T12:26:11.801827"
         },
         {
           "input": "i am a computer science lecturer teaching computer architecture, programming and oop (c++), discrete math, research methodology",
           "mode": "non-research",
-          "timestamp": "2025-07-29T13:02:50.382041"
+          "timestamp": "2025-07-30T12:27:08.082545"
         },
         {
           "input": "i am a computer science lecturer teaching computer architecture, programming and oop (c++), discrete math, research methodology",
           "mode": "non-research",
-          "timestamp": "2025-07-29T13:21:05.147633"
-        },
-        {
-          "input": "i am a computer science lecturer teaching computer architecture, programming and oop (c++), discrete math, research methodology\r\n",
-          "mode": "non-research",
-          "timestamp": "2025-07-29T13:30:58.935445"
-        },
-        {
-          "input": "i am a computer science lecturer teaching computer architecture, programming and oop (c++), discrete math, research methodology\r\n",
-          "mode": "research",
-          "timestamp": "2025-07-29T13:31:49.552259"
+          "timestamp": "2025-07-30T12:29:32.742144"
         },
         {
           "input": "i am a computer science lecturer teaching computer architecture, programming and oop (c++), discrete math, research methodology",
           "mode": "non-research",
-          "timestamp": "2025-07-29T14:50:29.240493"
+          "timestamp": "2025-07-30T12:30:03.112569"
         },
         {
           "input": "i am a computer science lecturer teaching computer architecture, programming and oop (c++), discrete math, research methodology",
           "mode": "research",
-          "timestamp": "2025-07-29T14:51:31.570835"
-        },
-        {
-          "input": "i want to create a project in c++ that aims to teach students about data structures and oop in c++",
-          "mode": "research",
-          "timestamp": "2025-07-29T14:59:07.479549"
-        },
-        {
-          "input": "i am a computer science lecturer teaching computer architecture, programming and oop (c++), discrete math, research methodology",
-          "mode": "research",
-          "timestamp": "2025-07-29T15:00:55.942605"
-        },
-        {
-          "input": "i am a computer science lecturer teaching computer architecture, programming and oop (c++), discrete math, research methodology",
-          "mode": "non-research",
-          "timestamp": "2025-07-29T15:01:33.998233"
-        },
-        {
-          "input": "i am a computer science lecturer teaching computer architecture, programming and oop (c++), discrete math, research methodology",
-          "mode": "non-research",
-          "timestamp": "2025-07-29T15:03:35.802939"
-        },
-        {
-          "input": "i am a computer science lecturer teaching computer architecture, programming and oop (c++), discrete math, research methodology",
-          "mode": "research",
-          "timestamp": "2025-07-29T15:26:06.504769"
-        },
-        {
-          "input": "i am a computer science lecturer teaching computer architecture, programming and oop (c++), discrete math, research methodology\r\n",
-          "mode": "research",
-          "timestamp": "2025-07-29T15:36:55.187661"
+          "timestamp": "2025-07-30T12:30:46.767355"
         },
         {
           "input": "i am a computer science lecturer teaching computer architecture, programming and oop (c++), discrete math, research methodology\r\n",
           "mode": "research",
-          "timestamp": "2025-07-29T15:38:06.405449"
-        },
-        {
-          "input": "i am a computer science lecturer teaching computer architecture, programming and oop (c++), discrete math, research methodology\r\n",
-          "mode": "research",
-          "timestamp": "2025-07-29T15:43:46.771606"
-        },
-        {
-          "input": "i am a computer science lecturer teaching computer architecture, programming and oop (c++), discrete math, research methodology",
-          "mode": "research",
-          "timestamp": "2025-07-29T15:55:31.667325"
-        },
-        {
-          "input": "i am a computer science lecturer teaching computer architecture, programming and oop (c++), discrete math, research methodology",
-          "mode": "research",
-          "timestamp": "2025-07-29T15:58:00.791042"
-        },
-        {
-          "input": "i am an expert in visualizations, animations of programs and data structures as well as educational tools",
-          "mode": "research",
-          "timestamp": "2025-07-29T16:05:32.031575"
-        },
-        {
-          "input": "i am a computer science lecturer teaching computer architecture, programming and oop (c++), discrete math, research methodology",
-          "mode": "non-research",
-          "timestamp": "2025-07-29T16:08:37.528333"
-        },
-        {
-          "input": "i am a computer science lecturer teaching computer architecture, programming and oop (c++), discrete math, research methodology",
-          "mode": "non-research",
-          "timestamp": "2025-07-29T23:42:20.569597"
-        },
-        {
-          "input": "i am a computer science lecturer teaching computer architecture, programming and oop (c++), discrete math, research methodology",
-          "mode": "non-research",
-          "timestamp": "2025-07-29T23:48:42.600702"
-        },
-        {
-          "input": "i am a computer science lecturer teaching computer architecture, programming and oop (c++), discrete math, research methodology",
-          "mode": "non-research",
-          "timestamp": "2025-07-29T23:49:22.784096"
-        },
-        {
-          "input": "i am a computer science lecturer teaching computer architecture, programming and oop (c++), discrete math, research methodology",
-          "mode": "non-research",
-          "timestamp": "2025-07-29T23:49:59.896399"
-        },
-        {
-          "input": "i am a computer science lecturer teaching computer architecture, programming and oop (c++), discrete math, research methodology",
-          "mode": "non-research",
-          "timestamp": "2025-07-29T23:50:31.292477"
-        },
-        {
-          "input": "i am a computer science lecturer teaching computer architecture, programming and oop (c++), discrete math, research methodology",
-          "mode": "research",
-          "timestamp": "2025-07-30T00:24:23.593788"
-        },
-        {
-          "input": "i am a computer science lecturer teaching computer architecture, programming and oop (c++), discrete math, research methodology",
-          "mode": "research",
-          "timestamp": "2025-07-30T00:24:49.798250"
+          "timestamp": "2025-07-30T12:31:57.357965"
         }
       ]
     },
     "preferences": {},
     "statistics": {
-      "topics_generated": 27,
+      "topics_generated": 14,
       "documents_processed": 2,
       "scholar_profiles_analyzed": 1
-    },
-    "saved_topics": [
-      {
-        "id": "topic_1753797388706",
-        "content": "Scope Rating MediumUniqueness Score 8Brief Overview This thesis focuses on the development of blockchain-based secure programming environments tailored for teaching object-oriented programming (OOP) concepts to students.Research Problem The research aims to address the growing concerns about cybersecurity in programming education by exploring how blockchain technology can be utilized to create secure coding environments for OOP learners.Research Gap Existing literature lacks studies on the application of blockchain in educational settings, specifically in the context of OOP programming environments, highlighting the need for research in this innovative area.Significance & Impact By introducing blockchain-based security measures into OOP education, this research has the potential to enhance student data protection, prevent plagiarism, and foster a more secure learning environment for programming students.Key Research QuestionsHow can blockchain technology be integrated into programming IDEs to enhance security and privacy for OOP learners?What are the potential benefits and challenges of using blockchain in programming education?How does the implementation of blockchain-based security measures impact student learning outcomes and coding practices in OOP?Methodology The research will involve designing and implementing a blockchain-based programming environment, conducting usability tests with student participants, analyzing user feedback, and evaluating the impact of blockchain security features on student performance and behavior.Expected Outcomes This research is expected to demonstrate the feasibility and benefits of using blockchain technology to enhance security in OOP education, providing valuable insights for educators and software developers looking to improve the safety of programming learning environments.Prerequisites Proficiency in blockchain technology, programming skills, and a strong background in object-oriented programming concepts.Innovation Factor This topic introduces a novel approach by applying blockchain technology to enhance security in OOP education, offering a unique solution to address the cybersecurity challenges faced by programming learners in educational settings.",
-        "title": "This thesis focuses on the development of blockchain-based secure programming environments tailored for teaching object-oriented programming (OOP) concepts to students.",
-        "keywords": [
-          "class",
-          "section",
-          "blockchain",
-          "programming",
-          "topic",
-          "title",
-          "content",
-          "research",
-          "security",
-          "education"
-        ],
-        "scope": "Medium",
-        "uniqueness": 8,
-        "created_at": "2025-07-29T15:56:28.706890",
-        "mode": "research"
-      },
-      {
-        "id": "topic_1753797499265",
-        "content": "Scope Rating HardUniqueness Score 10Brief Overview This topic explores the integration of gamification and augmented reality technologies to enhance the teaching and learning of discrete mathematics concepts, offering a novel and immersive educational experience for students.Research Problem The research aims to investigate how gamified augmented reality applications can be utilized to make abstract discrete mathematics concepts more tangible, engaging, and accessible to students, thereby improving their understanding and retention of key principles.Research Gap Discrete mathematics is often perceived as a challenging subject due to its abstract nature, leading to difficulties in comprehension and motivation among students. By leveraging gamification and augmented reality, this research addresses the gap in providing innovative and interactive learning experiences in this domain.Significance & Impact By combining gamification elements with augmented reality technology in",
-        "title": "This topic explores the integration of gamification and augmented reality technologies to enhance the teaching and learning of discrete mathematics concepts, offering a novel and immersive educational experience for students.",
-        "keywords": [
-          "class",
-          "section",
-          "title",
-          "topic",
-          "augmented",
-          "reality",
-          "research",
-          "gamification",
-          "discrete",
-          "mathematics"
-        ],
-        "scope": "Medium",
-        "uniqueness": 8,
-        "created_at": "2025-07-29T15:58:19.265671",
-        "mode": "research"
-      },
-      {
-        "id": "topic_1753798025198",
-        "content": "Scope Rating MediumUniqueness Score 8Brief Overview This research explores the use of interactive storytelling techniques to gamify the learning of data structures, where students engage with narratives and characters to understand complex concepts in a fun and immersive way.Research Problem Data structure concepts can be abstract and difficult for students to grasp. By incorporating gamification elements and interactive storytelling, this research aims to make learning data structures more engaging and enjoyable.Research Gap While gamification has been used in education, the integration of interactive storytelling specifically for teaching data structures is a relatively unexplored area. This research seeks to bridge the gap between entertainment and education to enhance student learning experiences.Significance & Impact This research has the potential to transform the way data structures are taught by combining storytelling and gameplay elements to create a more immersive and effective learning environment. By making complex concepts more accessible and engaging, students may",
-        "title": "This research explores the use of interactive storytelling techniques to gamify the learning of data structures, where students engage with narratives and characters to understand complex concepts in a fun and immersive way.",
-        "keywords": [
-          "class",
-          "section",
-          "title",
-          "research",
-          "data",
-          "topic",
-          "storytelling",
-          "learning",
-          "structures",
-          "interactive"
-        ],
-        "scope": "Medium",
-        "uniqueness": 8,
-        "created_at": "2025-07-29T16:07:05.198974",
-        "mode": "research"
-      },
-      {
-        "id": "topic_1753827919936",
-        "content": "                                Scope Rating EasyUniqueness Score 10Brief Overview This thesis focuses on developing explainable artificial intelligence models for educational assessment systems to provide transparent insights into how student performance is evaluated.Research Problem The research aims to design AI models that not only predict student performance accurately but also provide interpretable explanations for the assessment outcomes, enabling educators and students to understand the reasoning behind the results.Research Gap Existing AI models used in educational assessment lack transparency and interpretability, making it challenging for stakeholders to trust and understand the decision-making process. By introducing explainable AI, this research addresses the need for transparency in educational evaluations.Significance & Impact This research can enhance the credibility and effectiveness of educational assessment systems by incorporating explainable AI models that offer insights into how student performance is evaluated. It can empower educators to make informed decisions and students to improve their learning strategies.Key Research Questions-                                        ",
-        "title": "Research Gap Existing AI models used in educational assessment lack transparency and interpretability, making it challenging for stakeholders to trust and understand the decision-making process.",
-        "keywords": [
-          "research",
-          "models",
-          "educational",
-          "assessment",
-          "explainable",
-          "student",
-          "performance",
-          "systems",
-          "provide",
-          "insights"
-        ],
-        "scope": "Medium",
-        "uniqueness": 8,
-        "created_at": "2025-07-30T00:25:19.936309",
-        "mode": "research"
-      }
-    ]
-  },
-  "2": {
-    "role": "student",
-    "created_at": "2025-07-29T15:05:23.592884",
-    "extracted_info": {
-      "documents": [
-        {
-          "filename": "Ammar Hassona CV.pdf",
-          "uploaded_at": "2025-07-29T15:10:00.738757",
-          "size": 0
-        }
-      ],
-      "google_scholar": [],
-      "user_inputs": [
-        {
-          "input": "i am a senior computer science student majoring in data science interested in llms and sports",
-          "mode": "research",
-          "timestamp": "2025-07-29T15:05:41.113367"
-        },
-        {
-          "input": "i am a senior computer science student majoring in data science interested in llms and sports",
-          "mode": "research",
-          "timestamp": "2025-07-29T15:09:46.008024"
-        },
-        {
-          "input": "i am a senior computer science student majoring in data science interested in llms and sports",
-          "mode": "research",
-          "timestamp": "2025-07-29T15:10:14.508394"
-        },
-        {
-          "input": "i am a senior computer science student majoring in data science interested in working with discrete math with augmented reality\r\n",
-          "mode": "research",
-          "timestamp": "2025-07-29T15:59:10.232167"
-        }
-      ]
-    },
-    "preferences": {},
-    "statistics": {
-      "topics_generated": 4,
-      "documents_processed": 1,
-      "scholar_profiles_analyzed": 0
     }
   }
 }
