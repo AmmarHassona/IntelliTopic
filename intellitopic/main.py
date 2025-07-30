@@ -39,7 +39,7 @@ templates = Jinja2Templates(directory="templates")
 # Auto-clean existing topics on startup
 @app.on_event("startup")
 async def startup_event():
-    """Clean existing topics and fix titles on application startup"""
+    """Clean existing topics, fix titles, and update keywords on application startup"""
     try:
         # Clean existing topics
         cleaned_count = clean_existing_topics()
@@ -54,6 +54,13 @@ async def startup_event():
             print(f"✅ Auto-fixed {fixed_count} existing topic titles on startup")
         else:
             print("✅ No topic titles needed fixing on startup")
+        
+        # Update existing keywords with improved extraction
+        updated_keywords_count = update_existing_keywords()
+        if updated_keywords_count > 0:
+            print(f"✅ Auto-updated keywords for {updated_keywords_count} existing topics on startup")
+        else:
+            print("✅ No keywords needed updating on startup")
             
     except Exception as e:
         print(f"⚠️ Error during startup cleanup: {e}")
@@ -740,13 +747,124 @@ def extract_topic_info(topic_content: str, mode: str, topic_title: str) -> Dict:
         }
 
 def extract_keywords_from_content(content: str) -> List[str]:
-    """Extract keywords from topic content using NLP techniques"""
+    """Extract domain-specific keywords from topic content using AI"""
     try:
-        # Simple keyword extraction - can be enhanced with more sophisticated NLP
-        words = re.findall(r'\b[a-zA-Z]{4,}\b', content.lower())
+        # Use OpenAI to extract meaningful, domain-specific keywords
+        prompt = f"""
+        Extract 8-12 specific, technical, and domain-relevant keywords from this academic topic content. 
         
-        # Filter out common words
-        stop_words = {'this', 'that', 'with', 'from', 'they', 'have', 'will', 'been', 'were', 'said', 'each', 'which', 'their', 'time', 'would', 'there', 'could', 'other', 'than', 'first', 'very', 'after', 'where', 'most', 'over', 'think', 'also', 'around', 'another', 'into', 'during', 'before', 'while', 'under', 'never', 'become', 'himself', 'hundred', 'against', 'among', 'everything', 'through', 'within', 'further', 'himself', 'toward', 'together', 'however', 'neither', 'twenty', 'because', 'should', 'above', 'below', 'between', 'without', 'almost', 'sometimes', 'along', 'often', 'until', 'always', 'something', 'anything', 'nothing', 'everything', 'everyone', 'someone', 'anyone', 'nobody', 'somebody', 'anybody', 'everybody'}
+        Requirements:
+        - Focus on technical terms, methodologies, technologies, and domain-specific concepts
+        - Avoid generic words like "research", "study", "analysis", "system", "data", "model", "approach"
+        - Prefer specific terms like "machine learning", "blockchain", "IoT", "cybersecurity", "sustainability"
+        - Include emerging technologies, frameworks, or specific methodologies mentioned
+        - Keywords should be descriptive and meaningful for academic search/discovery
+        
+        Content:
+        {content[:2000]}
+        
+        Return only the keywords as a comma-separated list, no explanations.
+        """
+        
+        response = client.chat.completions.create(
+            model="gpt-3.5-turbo",
+            messages=[
+                {"role": "system", "content": "You are an expert at extracting meaningful technical keywords from academic content. Focus on specific, domain-relevant terms that would be useful for topic discovery and categorization."},
+                {"role": "user", "content": prompt}
+            ],
+            max_tokens=200,
+            temperature=0.3
+        )
+        
+        keywords_text = response.choices[0].message.content.strip()
+        
+        # Parse the comma-separated keywords
+        keywords = [kw.strip() for kw in keywords_text.split(',') if kw.strip()]
+        
+        # Clean and filter keywords
+        cleaned_keywords = []
+        generic_terms = {
+            'research', 'study', 'analysis', 'system', 'data', 'model', 'approach', 
+            'method', 'technique', 'framework', 'process', 'solution', 'application',
+            'implementation', 'development', 'design', 'evaluation', 'assessment',
+            'investigation', 'examination', 'exploration', 'review', 'survey',
+            'overview', 'summary', 'description', 'characterization', 'classification',
+            'categorization', 'identification', 'detection', 'prediction', 'forecasting',
+            'optimization', 'improvement', 'enhancement', 'integration', 'management',
+            'monitoring', 'control', 'automation', 'digitalization', 'modernization'
+        }
+        
+        for keyword in keywords:
+            # Clean the keyword
+            clean_kw = keyword.strip().lower()
+            
+            # Skip if too short or too long
+            if len(clean_kw) < 3 or len(clean_kw) > 50:
+                continue
+                
+            # Skip generic terms
+            if clean_kw in generic_terms:
+                continue
+                
+            # Skip if it's just a common word
+            if len(clean_kw.split()) == 1 and len(clean_kw) < 6:
+                # Check if it's a meaningful single word
+                meaningful_single_words = {
+                    'ai', 'ml', 'iot', 'api', 'ui', 'ux', 'vr', 'ar', 'mr', 'nlp',
+                    'cv', 'dl', 'rl', 'cnn', 'rnn', 'lstm', 'gan', 'svm', 'knn',
+                    'pca', 'svd', 'pca', 'kmeans', 'dbscan', 'hmm', 'crf', 'bert',
+                    'gpt', 'transformer', 'attention', 'embedding', 'tokenization',
+                    'blockchain', 'cryptocurrency', 'bitcoin', 'ethereum', 'smart',
+                    'contract', 'defi', 'nft', 'metaverse', 'web3', 'decentralized',
+                    'cybersecurity', 'malware', 'phishing', 'encryption', 'authentication',
+                    'biometrics', 'firewall', 'intrusion', 'detection', 'prevention',
+                    'sustainability', 'renewable', 'carbon', 'emission', 'green',
+                    'energy', 'solar', 'wind', 'battery', 'storage', 'grid',
+                    'healthcare', 'telemedicine', 'diagnosis', 'treatment', 'patient',
+                    'medical', 'clinical', 'pharmaceutical', 'drug', 'therapy'
+                }
+                if clean_kw not in meaningful_single_words:
+                    continue
+            
+            # Add to cleaned keywords
+            cleaned_keywords.append(keyword.strip())
+        
+        # If AI extraction failed or returned too few keywords, fall back to enhanced traditional method
+        if len(cleaned_keywords) < 5:
+            cleaned_keywords = extract_keywords_traditional(content)
+        
+        # Return top 10 keywords
+        return cleaned_keywords[:10]
+        
+    except Exception as e:
+        print(f"Error in AI keyword extraction: {e}")
+        # Fall back to traditional method
+        return extract_keywords_traditional(content)
+
+def extract_keywords_traditional(content: str) -> List[str]:
+    """Enhanced traditional keyword extraction as fallback"""
+    try:
+        # Extract technical terms and domain-specific words
+        words = re.findall(r'\b[a-zA-Z][a-zA-Z0-9-]{2,}\b', content.lower())
+        
+        # Enhanced stop words list
+        stop_words = {
+            'this', 'that', 'with', 'from', 'they', 'have', 'will', 'been', 'were', 
+            'said', 'each', 'which', 'their', 'time', 'would', 'there', 'could', 
+            'other', 'than', 'first', 'very', 'after', 'where', 'most', 'over', 
+            'think', 'also', 'around', 'another', 'into', 'during', 'before', 
+            'while', 'under', 'never', 'become', 'himself', 'hundred', 'against', 
+            'among', 'everything', 'through', 'within', 'further', 'himself', 
+            'toward', 'together', 'however', 'neither', 'twenty', 'because', 
+            'should', 'above', 'below', 'between', 'without', 'almost', 'sometimes', 
+            'along', 'often', 'until', 'always', 'something', 'anything', 'nothing', 
+            'everything', 'everyone', 'someone', 'anyone', 'nobody', 'somebody', 
+            'anybody', 'everybody', 'research', 'study', 'analysis', 'system', 
+            'data', 'model', 'approach', 'method', 'technique', 'framework', 
+            'process', 'solution', 'application', 'implementation', 'development', 
+            'design', 'evaluation', 'assessment', 'investigation', 'examination', 
+            'exploration', 'review', 'survey', 'overview', 'summary', 'description'
+        }
         
         # Count word frequencies
         word_freq = {}
@@ -756,9 +874,9 @@ def extract_keywords_from_content(content: str) -> List[str]:
         
         # Return top keywords
         sorted_words = sorted(word_freq.items(), key=lambda x: x[1], reverse=True)
-        return [word for word, freq in sorted_words[:10]]
+        return [word for word, freq in sorted_words[:8]]
     except Exception as e:
-        print(f"Error extracting keywords: {e}")
+        print(f"Error in traditional keyword extraction: {e}")
         return []
 
 def find_similar_topics(student_input: str, max_suggestions: int = 5) -> List[Dict]:
@@ -979,6 +1097,44 @@ async def update_existing_research_insights():
     except Exception as e:
         print(f"Error updating research insights: {e}")
         return 0
+
+def update_existing_keywords():
+    """Update existing saved topics with improved keywords using AI extraction"""
+    try:
+        profiles = load_user_profiles()
+        updated_count = 0
+        
+        for user_id, profile in profiles.items():
+            if profile.get("role") == "professor" and "saved_topics" in profile:
+                for topic in profile["saved_topics"]:
+                    if topic.get("content"):
+                        print(f"Updating keywords for topic: {topic.get('title', 'Unknown')}")
+                        
+                        # Extract new keywords using AI
+                        new_keywords = extract_keywords_from_content(topic["content"])
+                        
+                        if new_keywords and len(new_keywords) > 3:
+                            topic["keywords"] = new_keywords
+                            updated_count += 1
+                            print(f"Updated keywords: {new_keywords}")
+        
+        if updated_count > 0:
+            save_user_profiles(profiles)
+            print(f"Updated keywords for {updated_count} topics")
+        
+        return updated_count
+    except Exception as e:
+        print(f"Error updating existing keywords: {e}")
+        return 0
+
+@app.get("/update-keywords")
+async def update_keywords_endpoint():
+    """Endpoint to update existing keywords"""
+    try:
+        updated_count = update_existing_keywords()
+        return {"success": True, "message": f"Updated keywords for {updated_count} topics"}
+    except Exception as e:
+        return {"success": False, "error": str(e)}
 
 @app.get("/", response_class=HTMLResponse)
 async def form(request: Request):

@@ -1,164 +1,156 @@
 {
   "1": {
     "role": "professor",
-    "created_at": "2025-07-30T12:56:25.001489",
+    "created_at": "2025-07-30T23:51:37.734141",
     "extracted_info": {
-      "documents": [
-        {
-          "filename": "P3_Course.pdf",
-          "uploaded_at": "2025-07-30T12:57:12.204868",
-          "size": 0
-        }
-      ],
+      "documents": [],
       "google_scholar": [
         {
-          "url": "https://scholar.google.com/citations?user=fcbh--sAAAAJ&hl=en",
-          "scraped_at": "2025-07-30T12:56:29.256018",
+          "url": "https://scholar.google.com/citations?user=X_y76Q4AAAAJ&hl=en&oi=ao",
+          "scraped_at": "2025-07-30T23:51:44.460001",
           "profile_data": {
-            "name": "Nada Sharaf",
-            "affiliation": "Lecturer at the German International University, German University in Cairo",
+            "name": "Marwa Zamzam",
+            "affiliation": "Lecturer",
             "research_interests": [
-              "Visualization",
-              "Gamification",
-              "Smart Adaptive Education",
-              "Arabic Language Processing",
-              "Industry 5.0"
+              "Digital Forensics",
+              "Network Security",
+              "Computer Network",
+              "Localization",
+              "Distributed Systems"
             ],
             "publications": [
               {
-                "title": "MiniColon; teaching kids computational thinking using an interactive serious game",
-                "authors": "R Ayman, N Sharaf, G Ahmed, S Abdennadher",
-                "citations": 39
+                "title": "Game theory for computation offloading and resource allocation in edge computing: A survey",
+                "authors": "M Zamzam, T El-Shabrawy, M Ashour",
+                "citations": 24
               },
               {
-                "title": "Codaroutine: A serious game for introducing sequential programming concepts to children with autism",
-                "authors": "M Elshahawy, K Aboelnaga, N Sharaf",
-                "citations": 29
+                "title": "Resource management using machine learning in mobile edge computing: A survey",
+                "authors": "M Zamzam, T Elshabrawy, M Ashour",
+                "citations": 23
               },
               {
-                "title": "Developing computational thinking for children with autism using a serious game",
-                "authors": "M Elshahawy, M Bakhaty, N Sharaf",
-                "citations": 22
+                "title": "A minimized latency collaborative computation offloading game under mobile edge computing for indoor localization",
+                "authors": "M Zamzam, T Elshabrawy, M Ashour",
+                "citations": 11
               },
               {
-                "title": "Chranimation: An animation tool for constraint handling rules",
-                "authors": "N Sharaf, S Abdennadher, T Frühwirth",
-                "citations": 18
+                "title": "Precision Localization: An Experimental Study on BLE Fingerprinting and Trilateration with ESP32",
+                "authors": "AH Elhusseiny, M Zamzam, Y Zaghloul",
+                "citations": 2
               },
               {
-                "title": "Visualization of CHR through source-to-source transformation",
-                "authors": "S Abdennadher, N Sharaf",
-                "citations": 18
+                "title": "Automating Cyber Defense: Enhancing Threat Intelligence with AI-Driven Annotation",
+                "authors": "Y Mostafa, SG Sayed, M Zamzam",
+                "citations": 1
               },
               {
-                "title": "AraScore: A deep learning-based system for Arabic short answer scoring",
-                "authors": "O Nael, Y ELmanyalawy, N Sharaf",
-                "citations": 16
+                "title": "Accuracy and latency tradeoffs for WiFi and BLE in an indoor localization system",
+                "authors": "M Zamzam, Y Ashraf, T Elshabrawy, M Ashour",
+                "citations": 1
               },
               {
-                "title": "A rule-based approach for animating java algorithms",
-                "authors": "N Sharaf, S Abdennadher, T Frühwirth",
-                "citations": 13
+                "title": "Energy-efficient computation offloading for indoor localization based on game theory",
+                "authors": "M Zamzam, T El-Shabrawy, M Ashour",
+                "citations": 1
               },
               {
-                "title": "Eye-to-eye: towards visualizing eye gaze data",
-                "authors": "Y Othman, M Khalaf, A Ragab, A Salaheldin, R Ayman, N Sharaf",
-                "citations": 12
+                "title": "FEX-IDS: A Federated Learning-Based Explainable Intrusion Detection System for IoT Security",
+                "authors": "M Metwally, M Zamzam",
+                "citations": 0
               }
             ],
-            "citations": 356,
-            "h_index": 268,
-            "i10_index": 11
+            "citations": 63,
+            "h_index": 63,
+            "i10_index": 3
           },
-          "research_insights": "## Research Profile Summary\n\n### Core Expertise\n- Visualization\n- Gamification\n- Smart Adaptive Education\n- Arabic Language Processing\n\n### Academic Impact\n- **Citation Metrics**: Impressive total citations and high H-index indicate significant impact.\n- **Research Recognition**: Well-recognized in the fields of visualization, gamification, and education.\n- **Publication Focus**: Recent work focuses on serious games for teaching computational thinking and programming concepts.\n\n### Teaching & Mentoring Background\n- **Institutional Role**: Lecturer at the German International University, German University in Cairo.\n- **Research Supervision**: Likely involved in mentoring students based on research topics.\n- **Interdisciplinary Connections**: Expertise in diverse areas like education, language processing, and technology.\n\n### Innovation Capacity\n- **Emerging Areas**: Exploring applications of deep learning for Arabic short answer scoring.\n- **Collaboration Patterns**: Engages in collaborative research projects based on co-authored publications.\n- **Adaptability**: Demonstrated ability to work on different topics within the realm of technology and education.\n\n### Research Context\n- **Current Position**: Holds a strong position as a lecturer and researcher in visualization and gamification.\n- **Network Potential**: Opportunities for collaboration with researchers in the fields of education, language processing, and technology.\n- **Future Directions**: Likely to continue exploring innovative approaches in smart adaptive education and industry 5.0."
+          "research_insights": "## Research Profile Summary\n\n### Core Expertise\n- Digital Forensics\n- Network Security\n- Computer Networks\n- Distributed Systems\n- Game theory in computation offloading\n\n### Academic Impact\n- **Citation Metrics**: High H-index of 63 indicates significant impact in the field\n- **Research Recognition**: Well-recognized for contributions in edge computing and mobile systems\n- **Publication Focus**: Recent work focuses on resource management, collaborative computation offloading, and precision localization\n\n### Teaching & Mentoring Background\n- **Institutional Role**: Lecturer position suggests involvement in teaching and academic guidance\n- **Research Supervision**: Experience in guiding students evident from research topics\n- **Interdisciplinary Connections**: Expertise in both security and networking, indicating interdisciplinary knowledge\n\n### Innovation Capacity\n- **Emerging Areas**: Exploring AI-driven cyber defense, federated learning-based intrusion detection\n- **Collaboration Patterns**: Collaborative work on computation offloading and resource management\n- **Adaptability**: Ability to apply game theory in diverse areas like localization and security\n\n### Research Context\n- **Current Position**: Established researcher with a focus on edge computing and network security\n- **Network Potential**: Opportunities for collaboration in AI-driven security and mobile systems\n- **Future Directions**: Potential for further exploration in emerging technologies like federated learning and IoT security"
         }
       ],
       "user_inputs": [
         {
-          "input": "i am a computer science lecturer teaching computer architecture, programming and oop (c++), discrete math, research methodology",
+          "input": "i am a computer science lecturer teaching computer networks, distributed systems, digital forensics ",
           "mode": "research",
-          "timestamp": "2025-07-30T12:57:26.565999"
+          "timestamp": "2025-07-30T23:53:52.778371"
         },
         {
-          "input": "expert in oop and c++",
+          "input": "i am a computer science lecturer teaching computer networks, distributed systems, digital forensics ",
           "mode": "research",
-          "timestamp": "2025-07-30T13:44:36.393608"
+          "timestamp": "2025-07-30T23:55:51.730627"
         },
         {
-          "input": "expert in oop and c++",
+          "input": "i am a computer science lecturer teaching computer networks, distributed systems, digital forensics ",
           "mode": "research",
-          "timestamp": "2025-07-30T13:45:55.777194"
+          "timestamp": "2025-07-30T23:57:45.391298"
+        },
+        {
+          "input": "i am a computer science lecturer teaching computer networks, distributed systems, digital forensics ",
+          "mode": "research",
+          "timestamp": "2025-07-30T23:58:54.023608"
+        },
+        {
+          "input": "i am a computer science lecturer teaching computer networks, distributed systems, digital forensics ",
+          "mode": "research",
+          "timestamp": "2025-07-31T00:00:01.623362"
+        },
+        {
+          "input": "i am a computer science lecturer teaching computer networks, distributed systems, digital forensics ",
+          "mode": "non-research",
+          "timestamp": "2025-07-31T00:04:27.079978"
+        },
+        {
+          "input": "i am a computer science lecturer teaching computer networks, distributed systems, digital forensics ",
+          "mode": "non-research",
+          "timestamp": "2025-07-31T00:05:58.657944"
         }
       ]
     },
     "preferences": {},
     "statistics": {
-      "topics_generated": 3,
-      "documents_processed": 1,
+      "topics_generated": 7,
+      "documents_processed": 0,
       "scholar_profiles_analyzed": 1
     },
     "saved_topics": [
       {
-        "id": "topic_1753873054729",
-        "content": "                                Scope Rating EASYUniqueness Score 9Brief Overview This thesis explores the development of smart learning environments that utilize gamification and visualization techniques to teach Object-Oriented Programming (OOP) concepts, specifically focusing on C++.Research Problem The research aims to investigate how interactive and engaging smart learning environments can enhance the understanding and retention of OOP principles in C++ programming.Mini Literature ReviewCurrent State of Research Existing studies have shown the effectiveness of gamification in educational settings and the benefits of visualization in programming education.Key Studies Recent research has highlighted the importance of adaptive learning systems and personalized feedback in improving student performance in programming courses.Limitations in Current Work Current research lacks a comprehensive exploration of integrating gamification and visualization specifically for teaching OOP concepts in C++.Emerging Trends The rise of smart technologies and the increasing interest in personalized education present opportunities for innovative approaches in programming education.Research Gap This research addresses the gap in the current literature by focusing on the design and evaluation of smart learning environments tailored for teaching OOP concepts in C++ using gamification and visualization techniques.Significance & Impact The study has the potential to enhance student engagement, learning outcomes, and overall experience in OOP programming courses, ultimately contributing to more effective programming education.Key Research QuestionsHow can gamification elements be effectively integrated into the teaching of OOP in C++?What visualization techniques are most beneficial for enhancing student understanding of OOP concepts?How do smart learning environments impact student engagement and performance in programming courses?Methodology The research will involve designing and implementing a prototype smart learning environment, conducting user studies with students, collecting feedback, and analyzing the effectiveness of the approach through quantitative and qualitative methods.Expected Outcomes The research is expected to provide insights into the design of interactive and engaging learning tools for OOP education, potentially leading to improved student learning outcomes and increased interest in programming concepts.Prerequisites Basic knowledge of Object-Oriented Programming, familiarity with gamification principles, and an understanding of visualization techniques.Innovation Factor This topic innovatively combines smart technologies, gamification, and visualization to create a novel approach for teaching OOP concepts in C++, addressing a critical need in programming education.                            ",
-        "title": "Mini Literature ReviewCurrent State of Research Existing studies have shown the effectiveness of gamification in educational settings and the benefits of visualization in programming education.",
+        "id": "topic_1753912776557",
+        "content": "                                Scope Rating HARDUniqueness Score 9Brief Overview This research aims to design and implement self-healing mechanisms in distributed systems to enhance their resilience against various failures and attacks.Research Problem The lack of efficient self-healing mechanisms in distributed systems results in prolonged downtime, reduced performance, and vulnerability to cyber threats. This research seeks to address these challenges by developing proactive and reactive self-healing strategies.Mini Literature ReviewCurrent State of Research Existing research focuses on fault tolerance and recovery mechanisms but lacks comprehensive self-healing approaches.Key Studies Recent studies highlight the importance of autonomous healing in distributed systems and its potential impact on system reliability.Limitations in Current Work Current research lacks in-depth exploration of self-healing mechanisms tailored for distributed systems and their integration with existing fault tolerance techniques.Emerging Trends Emerging trends in self-adaptive systems and autonomic computing create opportunities for innovative self-healing solutions in distributed environments.Research Gap The research will bridge the gap in the literature by proposing novel self-healing mechanisms specifically designed for distributed systems, addressing their unique challenges and requirements.Significance & Impact This research has the potential to significantly enhance the resilience and reliability of distributed systems, leading to improved system performance, reduced downtime, and better defense against cyber threats.Key Research QuestionsHow can self-healing mechanisms be effectively integrated into distributed systems to improve their resilience?What factors should be considered in designing autonomous self-healing strategies for distributed environments?How can proactive and reactive self-healing mechanisms work together to ensure continuous operation in distributed systems?Methodology The research will involve a combination of theoretical analysis, system design, simulation studies, and experimental validation using real-world distributed system environments.Expected Outcomes The research is expected to contribute new self-healing mechanisms tailored for distributed systems, demonstrating improved system resilience, performance, and security against failures and attacks.Prerequisites Strong background in distributed systems, fault tolerance, self-adaptive systems, and system design.Innovation Factor This topic is innovative in its focus on developing self-healing mechanisms specifically for distributed systems, combining proactive and reactive strategies to enhance system resilience in a novel way.                            ",
+        "title": "Towards Resilient Distributed Systems through Self-Healing Mechanisms",
         "keywords": [
-          "programming",
-          "research",
-          "learning",
-          "smart",
-          "gamification",
-          "visualization",
-          "concepts",
-          "education",
-          "student",
-          "environments"
+          "self-healing mechanisms",
+          "distributed systems",
+          "resilience",
+          "cyber threats",
+          "fault tolerance",
+          "autonomous healing",
+          "self-adaptive systems",
+          "autonomic computing",
+          "innovative solutions",
+          "proactive"
         ],
         "scope": "Medium",
         "uniqueness": 8,
-        "created_at": "2025-07-30T12:57:34.729773",
+        "created_at": "2025-07-30T23:59:36.557771",
         "mode": "research"
       },
       {
-        "id": "topic_1753873060415",
-        "content": "                                Scope Rating EASYUniqueness Score 10Brief Overview This thesis explores the design and implementation of adaptive serious games for teaching Discrete Mathematics concepts, aiming to enhance student engagement and understanding in this foundational area of computer science.Research Problem The research seeks to investigate how adaptive serious games can be developed to effectively teach Discrete Math topics, providing personalized learning experiences and promoting active student participation.Mini Literature ReviewCurrent State of Research Existing studies have highlighted the benefits of serious games in educational contexts and the potential of adaptive learning systems in personalized education.Key Studies Recent research has shown the effectiveness of gamification in enhancing student motivation and learning outcomes in various academic subjects.Limitations in Current Work Current research lacks a comprehensive exploration of adaptive serious games specifically tailored for teaching Discrete Mathematics concepts.Emerging Trends The growing interest in educational technology and personalized learning tools creates opportunities for innovative approaches in teaching mathematical concepts.Research Gap This research addresses the gap in the literature by focusing on the development of adaptive serious games that target Discrete Math topics, offering engaging and individualized learning experiences for students.Significance & Impact The study has the potential to revolutionize the teaching of Discrete Mathematics by introducing interactive and adaptive game-based learning environments, fostering student interest, and improving learning outcomes in this critical subject area.Key Research QuestionsHow can adaptive serious games be designed to effectively teach Discrete Math concepts and engage students?What factors contribute to the effectiveness of serious games in promoting student understanding of mathematical principles?How do adaptive game elements impact student motivation and learning outcomes in Discrete Mathematics education?Methodology The research will involve designing and implementing a series of adaptive serious games for Discrete Math, conducting user studies with student participants, collecting feedback on the gaming experience, and analyzing the impact of adaptive elements on learning outcomes.Expected Outcomes The research is expected to produce insights into the development of adaptive serious games for Discrete Math education, potentially leading to the creation of innovative educational tools that enhance student engagement and comprehension of mathematical concepts.Prerequisites Basic knowledge of Discrete Mathematics concepts, familiarity with game design principles, and an interest in educational technology.Innovation Factor This topic introduces a groundbreaking approach by combining adaptive learning techniques with serious games to create a unique educational experience for teaching Discrete Mathematics, offering a novel and engaging way to learn fundamental mathematical principles.                                        ",
-        "title": "Key Studies Recent research has shown the effectiveness of gamification in enhancing student motivation and learning outcomes in various academic subjects.",
+        "id": "topic_1753912819057",
+        "content": "                                Scope Rating EasyUniqueness Score 9Brief Overview This research aims to explore the application of blockchain technology to enhance data sharing security in distributed systems, addressing issues of trust and integrity in a decentralized environment.Research Problem The research problem involves developing a secure and efficient mechanism for data sharing among distributed systems using blockchain technology, ensuring data integrity, authentication, and confidentiality.Mini Literature ReviewCurrent State of Research Limited research exists on integrating blockchain with distributed systems for secure data sharing.Key Studies Recent studies have shown the potential of blockchain in enhancing security and trust in distributed environments.Limitations in Current Work Existing research lacks a comprehensive solution for secure data sharing in distributed systems using blockchain.Emerging Trends Emerging trends in blockchain adoption offer new possibilities for enhancing distributed system security.Research Gap This research addresses the gap in the literature by proposing a novel approach to leverage blockchain for secure data sharing in distributed systems, filling the void in current research on this specific application.Significance & Impact The research can significantly impact the field of distributed systems by providing a secure and efficient solution for data sharing, fostering trust and integrity in decentralized environments.Key Research QuestionsHow can blockchain technology be integrated into distributed systems to enhance data sharing security?What are the key challenges in implementing blockchain for secure data sharing in distributed environments?How does the proposed blockchain-based solution compare to traditional methods in terms of security and efficiency?Methodology The research will involve a combination of theoretical analysis, system design, and experimental validation to demonstrate the effectiveness of the proposed blockchain solution in ensuring secure data sharing in distributed systems.Expected Outcomes The research is expected to contribute a novel approach to enhancing data sharing security in distributed systems using blockchain technology, offering insights into the potential benefits and challenges of this integration.Prerequisites Basic understanding of blockchain technology, distributed systems, and security concepts.Innovation Factor This topic is innovative as it explores a novel application of blockchain technology in the context of secure data sharing within distributed systems, tapping into the potential of blockchain for enhancing system security and trust.                            ",
+        "title": "Leveraging Blockchain for Secure Data Sharing in Distributed Systems",
         "keywords": [
-          "adaptive",
-          "discrete",
-          "serious",
-          "games",
-          "research",
-          "learning",
-          "student",
-          "mathematics",
-          "concepts",
-          "teaching"
+          "blockchain technology",
+          "data sharing security",
+          "distributed systems",
+          "integrity",
+          "authentication",
+          "confidentiality",
+          "security enhancement",
+          "emerging trends",
+          "research gap"
         ],
         "scope": "Medium",
         "uniqueness": 8,
-        "created_at": "2025-07-30T12:57:40.415880",
-        "mode": "research"
-      },
-      {
-        "id": "topic_1753875914635",
-        "content": "                                Scope Rating EasyUniqueness Score 9Brief Overview This thesis aims to explore the integration of gamification elements into teaching Object-Oriented Programming (OOP) concepts. By leveraging interactive and engaging game-based learning platforms, the study seeks to enhance students' understanding and application of OOP principles.Research Problem The research problem revolves around investigating how gamification can improve student engagement, motivation, and learning outcomes in the context of OOP education. Mini Literature ReviewCurrent State of Research Existing studies have shown the benefits of gamification in education, but limited research focuses specifically on its application to OOP teaching.Key Studies Recent works have highlighted the positive impact of gamified approaches on student learning in various subjects.Limitations in Current Work The lack of tailored gamified solutions for OOP education and the need for more empirical evidence on its effectiveness in this domain.Emerging Trends Growing interest in incorporating game elements to enhance programming education and the potential of gamification to address student engagement challenges.Research Gap This study addresses the gap in the literature by specifically exploring how gamified learning platforms can improve the comprehension and retention of OOP concepts among students.Significance & Impact The research could lead to the development of innovative teaching methods that make OOP education more engaging and effective, potentially benefiting both educators and students.Key Research QuestionsHow do gamified learning platforms impact student engagement and motivation in learning OOP?What are the effects of gamification on students' comprehension and retention of OOP principles?How can gamified approaches be optimized to enhance the effectiveness of OOP education?Methodology The study will involve designing and implementing a gamified OOP learning platform, conducting controlled experiments or surveys to assess student performance and perceptions, and analyzing the results to draw conclusions.Expected Outcomes The research is expected to provide insights into the efficacy of gamification in OOP education, offer recommendations for designing gamified learning experiences, and contribute to the pedagogical literature on programming education.Prerequisites Basic understanding of Object-Oriented Programming concepts, familiarity with gamification principles, and experience in educational research methods.Innovation Factor This topic introduces a novel approach by combining OOP education with gamification strategies, offering a fresh perspective on enhancing programming learning through interactive and game-based techniques.                            ",
-        "title": "Enhancing OOP Concepts Through Gamified Learning Platforms",
-        "keywords": [
-          "learning",
-          "research",
-          "education",
-          "gamification",
-          "gamified",
-          "programming",
-          "student",
-          "students",
-          "teaching",
-          "concepts"
-        ],
-        "scope": "Medium",
-        "uniqueness": 8,
-        "created_at": "2025-07-30T13:45:14.635248",
+        "created_at": "2025-07-31T00:00:19.057202",
         "mode": "research"
       }
     ]
