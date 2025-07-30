@@ -559,20 +559,41 @@ async def parse_uploaded_files(files: List[UploadFile]) -> str:
     
     return "\n".join(parsed_texts)
 
-async def fetch_relevant_papers(topic_title: str, max_papers: int = 5) -> List[Dict]:
-    """Fetch relevant papers from arXiv API based on topic keywords"""
+async def fetch_relevant_papers(topic_title: str, user_context: str = "", user_input: str = "", max_papers: int = 5) -> List[Dict]:
+    """Fetch relevant papers from arXiv API based on topic and user context"""
     try:
-        # Extract key terms from topic title
-        keywords = topic_title.replace(":", " ").replace("-", " ").split()
-        # Filter out common words and keep meaningful terms
-        meaningful_keywords = [kw for kw in keywords if len(kw) > 3 and kw.lower() not in ['the', 'and', 'for', 'with', 'using', 'based', 'analysis', 'study', 'research']]
+        # Combine topic title, user context, and input for better search
+        search_terms = []
         
-        if not meaningful_keywords:
+        # Extract key terms from topic title
+        title_keywords = topic_title.replace(":", " ").replace("-", " ").split()
+        meaningful_title_keywords = [kw for kw in title_keywords if len(kw) > 3 and kw.lower() not in ['the', 'and', 'for', 'with', 'using', 'based', 'analysis', 'study', 'research']]
+        search_terms.extend(meaningful_title_keywords[:3])
+        
+        # Extract keywords from user context and input
+        if user_context or user_input:
+            combined_context = f"{user_context} {user_input}".strip()
+            
+            # Use AI to extract relevant search terms from user context
+            context_keywords = await extract_context_keywords(combined_context)
+            search_terms.extend(context_keywords[:3])
+        
+        # Remove duplicates and filter
+        unique_terms = list(dict.fromkeys(search_terms))  # Preserve order while removing duplicates
+        meaningful_terms = [term for term in unique_terms if len(term) > 2 and term.lower() not in ['the', 'and', 'for', 'with', 'using', 'based', 'analysis', 'study', 'research', 'topic', 'project']]
+        
+        if not meaningful_terms:
+            # Fallback to just topic title keywords
+            meaningful_terms = meaningful_title_keywords[:3]
+        
+        if not meaningful_terms:
             return []
         
-        # Use the most relevant keywords for search
-        search_query = " ".join(meaningful_keywords[:3])
+        # Use the most relevant terms for search
+        search_query = " ".join(meaningful_terms[:4])  # Use up to 4 terms for better coverage
         encoded_query = quote_plus(search_query)
+        
+        print(f"DEBUG: Paper search query: {search_query}")
         
         # arXiv API endpoint
         url = f"http://export.arxiv.org/api/query?search_query=all:{encoded_query}&start=0&max_results={max_papers}&sortBy=relevance&sortOrder=descending"
@@ -624,6 +645,29 @@ def parse_arxiv_response(xml_content: str) -> List[Dict]:
         return papers
     except Exception as e:
         print(f"Error parsing arXiv response: {e}")
+        return []
+
+async def extract_context_keywords(context: str) -> List[str]:
+    """Extract relevant keywords from user context for paper search"""
+    try:
+        prompt = f"""Extract 3-5 most important technical keywords from this user context that would be relevant for finding academic papers. Focus on domain-specific terms, technologies, methodologies, or research areas mentioned. Return only the keywords separated by spaces, no explanations:
+
+User Context:
+{context[:800]}
+
+Keywords:"""
+        
+        response = client.chat.completions.create(
+            model="gpt-3.5-turbo",
+            messages=[{"role": "user", "content": prompt}],
+            max_tokens=50,
+            temperature=0.3,
+        )
+        
+        keywords = response.choices[0].message.content.strip()
+        return [kw.strip() for kw in keywords.split() if len(kw.strip()) > 2]
+    except Exception as e:
+        print(f"Error extracting context keywords: {e}")
         return []
 
 async def extract_paper_keywords(topic_content: str) -> List[str]:
@@ -1510,14 +1554,32 @@ IMPORTANT: You MUST generate exactly 3 course projects. Each project must have a
     relevant_papers = []
     if generated and "OpenAI API error" not in generated and mode == "research":
         try:
+            # Build user context for paper retrieval
+            user_context = ""
+            if mode == "research":
+                # For research mode, include all available context
+                context_parts = []
+                if input_text:
+                    context_parts.append(input_text)
+                if file_content:
+                    context_parts.append(f"Document context: {file_content[:500]}")
+                if extracted_context:
+                    context_parts.append(f"Profile context: {extracted_context[:500]}")
+                user_context = " ".join(context_parts)
+            
             # Extract topic titles from the generated content
             topic_sections = generated.split("## ")
             for section in topic_sections[1:]:  # Skip the first empty section
                 lines = section.strip().split('\n')
                 if lines:
                     topic_title = lines[0].strip()
-                    # Fetch papers for this topic
-                    papers = await fetch_relevant_papers(topic_title, max_papers=3)
+                    # Fetch papers for this topic using user context
+                    papers = await fetch_relevant_papers(
+                        topic_title=topic_title, 
+                        user_context=user_context, 
+                        user_input=input_text, 
+                        max_papers=3
+                    )
                     if papers:
                         relevant_papers.extend(papers)
         except Exception as e:
@@ -1737,6 +1799,33 @@ Format the response with clear headings and bullet points. Focus on expanding th
     except Exception as e:
         enriched_content = f"Error enriching topic: {str(e)}"
 
+    # Fetch relevant papers for enriched research topics
+    relevant_papers = []
+    if enriched_content and "Error enriching topic" not in enriched_content and mode == "research":
+        try:
+            # Build user context for paper retrieval
+            user_context = ""
+            context_parts = []
+            if input_text:
+                context_parts.append(input_text)
+            if course_description:
+                context_parts.append(f"Course context: {course_description}")
+            if course_details:
+                context_parts.append(f"Additional details: {course_details}")
+            user_context = " ".join(context_parts)
+            
+            # Fetch papers for the enriched topic
+            papers = await fetch_relevant_papers(
+                topic_title=topic_title, 
+                user_context=user_context, 
+                user_input=input_text, 
+                max_papers=5
+            )
+            if papers:
+                relevant_papers = papers
+        except Exception as e:
+            print(f"Error fetching papers for enriched topic: {e}")
+
     return templates.TemplateResponse("index.html", {
         "request": request,
         "result": enriched_content,
@@ -1749,7 +1838,8 @@ Format the response with clear headings and bullet points. Focus on expanding th
         "difficulty": difficulty,
         "uploaded_files": [],
         "file_content": "",
-        "enriched_topic": topic_title
+        "enriched_topic": topic_title,
+        "relevant_papers": relevant_papers[:5]  # Limit to 5 papers for enriched topics
     })
 
 @app.get("/debug-profiles")
