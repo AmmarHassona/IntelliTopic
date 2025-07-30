@@ -197,6 +197,43 @@ def format_research_insights(content):
 # Add the filter to templates
 templates.env.filters["format_research_insights"] = format_research_insights
 
+# Custom Jinja2 filter to format Google Scholar analysis
+def format_scholar_analysis(content):
+    """Format Google Scholar analysis content into proper HTML"""
+    if not content:
+        return "No analysis available"
+    
+    # Convert markdown-style formatting to HTML
+    formatted = content
+    
+    # Convert headers
+    formatted = re.sub(r'## (.+)', r'<h2>\1</h2>', formatted)
+    formatted = re.sub(r'### (.+)', r'<h3>\1</h3>', formatted)
+    
+    # Convert bold text
+    formatted = re.sub(r'\*\*(.+?)\*\*', r'<strong>\1</strong>', formatted)
+    
+    # Convert bullet points
+    formatted = re.sub(r'- (.+)', r'<li>\1</li>', formatted)
+    
+    # Wrap lists properly
+    formatted = re.sub(r'(<li>.+</li>)', r'<ul>\1</ul>', formatted, flags=re.DOTALL)
+    
+    # Clean up multiple list wrappers
+    formatted = re.sub(r'</ul>\s*<ul>', '', formatted)
+    
+    # Convert line breaks
+    formatted = formatted.replace('\n', '<br>')
+    
+    # Clean up extra spacing
+    formatted = re.sub(r'<br>\s*<br>', '</p><p>', formatted)
+    formatted = f'<p>{formatted}</p>'
+    
+    return formatted
+
+# Add the filter to templates
+templates.env.filters["format_scholar_analysis"] = format_scholar_analysis
+
 # User profiles storage (in production, use a proper database)
 USER_PROFILES_FILE = "user_profiles.json"
 
@@ -605,7 +642,7 @@ Keywords:"""
         print(f"Error extracting keywords: {e}")
         return []
 
-def save_professor_topic(user_id: str, topic_content: str, mode: str) -> bool:
+def save_professor_topic(user_id: str, topic_content: str, mode: str, topic_title: str) -> bool:
     """Save a topic to professor's profile"""
     try:
         profiles = load_user_profiles()
@@ -615,7 +652,7 @@ def save_professor_topic(user_id: str, topic_content: str, mode: str) -> bool:
             return False
         
         # Extract topic information
-        topic_info = extract_topic_info(topic_content, mode)
+        topic_info = extract_topic_info(topic_content, mode, topic_title)
         
         # Initialize saved_topics if it doesn't exist
         if "saved_topics" not in profile:
@@ -633,7 +670,7 @@ def save_professor_topic(user_id: str, topic_content: str, mode: str) -> bool:
         print(f"Error saving professor topic: {e}")
         return False
 
-def extract_topic_info(topic_content: str, mode: str) -> Dict:
+def extract_topic_info(topic_content: str, mode: str, topic_title: str) -> Dict:
     """Extract structured information from topic content"""
     try:
         # Clean the HTML content to extract plain text
@@ -645,50 +682,8 @@ def extract_topic_info(topic_content: str, mode: str) -> Dict:
         clean_content = re.sub(r'&lt;', '<', clean_content)
         clean_content = re.sub(r'&gt;', '>', clean_content)
         
-        # Extract title from the first line or use a default
-        lines = clean_content.split('\n')
-        title = "Untitled Topic"
-        
-        # Look for title in the content - find the first meaningful line
-        for line in lines:
-            line = line.strip()
-            if line and not line.startswith('**') and not line.startswith('Scope') and not line.startswith('Uniqueness'):
-                # Try to extract title from "Topic X: Title" or "Course Project X: Title" format
-                title_match = re.search(r'(?:Topic|Course Project)\s+\d+:\s*(.+)', line)
-                if title_match:
-                    title = title_match.group(1).strip()
-                    break
-                elif len(line) > 10 and not line.startswith('**'):  # Use first substantial line as title
-                    title = line
-                    break
-        
-        # If we still have "Untitled Topic", try to extract from the brief overview
-        if title == "Untitled Topic":
-            overview_match = re.search(r'Brief Overview.*?\[(.+?)\]', clean_content, re.DOTALL)
-            if overview_match:
-                overview_text = overview_match.group(1).strip()
-                # Take first sentence as title
-                title = overview_text.split('.')[0] + '.'
-        
-        # If still no title, try to find any meaningful first line
-        if title == "Untitled Topic":
-            for line in lines:
-                line = line.strip()
-                if line and len(line) > 20 and not line.startswith('**') and not line.startswith('Scope') and not line.startswith('Uniqueness'):
-                    title = line[:100] + '...' if len(line) > 100 else line
-                    break
-        
-        # If still no title, try to extract from the content more aggressively
-        if title == "Untitled Topic":
-            # Look for any sentence that might be a title
-            sentences = re.split(r'[.!?]', clean_content)
-            for sentence in sentences:
-                sentence = sentence.strip()
-                if sentence and len(sentence) > 30 and len(sentence) < 200:
-                    # Check if it looks like a title (not metadata)
-                    if not any(keyword in sentence.lower() for keyword in ['scope rating', 'uniqueness score', 'research problem', 'methodology']):
-                        title = sentence + '.'
-                        break
+        # Use the provided title directly
+        title = topic_title if topic_title and topic_title.strip() else "Untitled Topic"
         
         # Extract keywords using OpenAI
         keywords = extract_keywords_from_content(clean_content)
@@ -697,13 +692,26 @@ def extract_topic_info(topic_content: str, mode: str) -> Dict:
         scope = "Medium"
         uniqueness = 8
         
-        scope_match = re.search(r'Scope Rating.*?\[(Easy|Medium|Hard)\]', clean_content)
+        # Look for scope rating in the content
+        scope_match = re.search(r'Scope Rating.*?\[(Easy|Medium|Hard)\]', clean_content, re.IGNORECASE)
         if scope_match:
             scope = scope_match.group(1)
         
-        uniqueness_match = re.search(r'Uniqueness Score.*?\[(\d+)\]', clean_content)
+        # Look for uniqueness score in the content
+        uniqueness_match = re.search(r'Uniqueness Score.*?\[(\d+)\]', clean_content, re.IGNORECASE)
         if uniqueness_match:
             uniqueness = int(uniqueness_match.group(1))
+        
+        # If not found in brackets, look for other patterns
+        if scope == "Medium":
+            scope_match = re.search(r'Scope Rating.*?:\s*(Easy|Medium|Hard)', clean_content, re.IGNORECASE)
+            if scope_match:
+                scope = scope_match.group(1)
+        
+        if uniqueness == 8:
+            uniqueness_match = re.search(r'Uniqueness Score.*?:\s*(\d+)', clean_content, re.IGNORECASE)
+            if uniqueness_match:
+                uniqueness = int(uniqueness_match.group(1))
         
         # Generate a unique ID using timestamp
         import time
@@ -993,6 +1001,7 @@ async def save_topic(
     request: Request,
     user_id: str = Form(...),
     topic_content: str = Form(...),
+    topic_title: str = Form(...),
     mode: str = Form(...)
 ):
     """Save a generated topic to professor's profile"""
@@ -1002,7 +1011,7 @@ async def save_topic(
     if profile.get("role") != "professor":
         raise HTTPException(status_code=403, detail="Only professors can save topics")
     
-    success = save_professor_topic(user_id, topic_content, mode)
+    success = save_professor_topic(user_id, topic_content, mode, topic_title)
     
     if success:
         return {"success": True, "message": "Topic saved successfully"}
@@ -1412,49 +1421,152 @@ async def enrich_topic(
     """Enrich a specific topic with additional details"""
     
     if mode == "research":
-        enrichment_prompt = f"""Enrich and expand the following thesis topic with additional details:
+        enrichment_prompt = f"""Enrich and expand the following thesis topic with additional details in a clean, structured format:
 
 Topic: {topic_title}
 
 Current Content:
 {topic_content}
 
-Please provide additional details for:
+Please provide additional details in the following structured format:
 
-1. **Literature Review Strategy**: How to approach the literature review for this NEW topic
-2. **Methodology Deep Dive**: Detailed research methods and data collection strategies
-3. **Timeline & Milestones**: Suggested project timeline with key milestones
-4. **Resource Requirements**: Equipment, software, funding, and other resources needed
-5. **Potential Challenges**: Anticipated difficulties and mitigation strategies
-6. **Collaboration Opportunities**: Potential collaborators or institutions for this innovative work
-7. **Publication Strategy**: Target journals/conferences for this novel research
-8. **Impact Assessment**: Broader implications and potential applications
-9. **Innovation Validation**: How to validate the novelty and significance of this research
-10. **Future Directions**: Potential extensions and follow-up research opportunities
+## Enhanced Thesis Topic: {topic_title}
+
+### 1. Literature Review Strategy
+- **Approach**: [How to approach the literature review for this NEW topic]
+- **Key Sources**: [Primary databases and journals to search]
+- **Search Strategy**: [Specific keywords and search terms]
+
+### 2. Methodology Deep Dive
+- **Research Design**: [Detailed research approach and design]
+- **Data Collection Methods**: [Specific methods for gathering data]
+- **Analysis Techniques**: [Statistical or analytical methods to use]
+
+### 3. Timeline & Milestones
+- **Phase 1**: [Initial research and planning - duration and tasks]
+- **Phase 2**: [Data collection and analysis - duration and tasks]
+- **Phase 3**: [Writing and refinement - duration and tasks]
+- **Key Milestones**: [Important checkpoints and deliverables]
+
+### 4. Resource Requirements
+- **Equipment**: [Hardware, software, or tools needed]
+- **Software**: [Specific applications or platforms required]
+- **Funding**: [Estimated budget and funding sources]
+- **Other Resources**: [Additional requirements]
+
+### 5. Potential Challenges
+- **Technical Challenges**: [Anticipated technical difficulties]
+- **Methodological Challenges**: [Research method obstacles]
+- **Mitigation Strategies**: [How to address these challenges]
+
+### 6. Collaboration Opportunities
+- **Potential Collaborators**: [Researchers or institutions to work with]
+- **Industry Partnerships**: [Industry connections for this research]
+- **International Collaborations**: [Global research opportunities]
+
+### 7. Publication Strategy
+- **Target Journals**: [Specific journals for this novel research]
+- **Conferences**: [Relevant conferences to present findings]
+- **Timeline**: [Publication schedule and milestones]
+
+### 8. Impact Assessment
+- **Academic Impact**: [Contributions to the field]
+- **Practical Applications**: [Real-world applications]
+- **Broader Implications**: [Societal or industry impact]
+
+### 9. Innovation Validation
+- **Novelty Factors**: [What makes this research truly innovative]
+- **Significance**: [Why this research matters]
+- **Future Potential**: [Long-term research directions]
+
+### 10. Future Directions
+- **Follow-up Research**: [Potential extensions of this work]
+- **Long-term Vision**: [Future research opportunities]
+- **Evolution Path**: [How this research can evolve]
 
 Format the response with clear headings and bullet points. Focus on expanding the existing topic rather than suggesting similar research."""
     else:
-        enrichment_prompt = f"""Enrich and expand the following course project idea with additional details:
+        enrichment_prompt = f"""Enrich and expand the following course project idea with additional details in a clean, structured format:
 
 Course Project: {topic_title}
 
 Current Content:
 {topic_content}
 
-Please provide additional details for:
+Please provide additional details in the following structured format:
 
-1. **Detailed Project Plan**: Step-by-step breakdown of project phases and activities
-2. **Learning Resources**: Materials, tools, and references needed for the project
-3. **Assessment Rubrics**: Detailed grading criteria and evaluation methods
-4. **Technology Integration**: Digital tools and platforms to enhance project work
-5. **Student Engagement Strategies**: Interactive project approaches and participation methods
-6. **Differentiation Strategies**: Adaptations for diverse learning styles and skill levels
-7. **Industry Connections**: Real-world applications, guest speakers, or industry partnerships
-8. **Project Deliverables**: Specific outputs and presentations students will create
-9. **Innovation Validation**: How to demonstrate the novelty and value of this project
-10. **Future Adaptations**: How to evolve and improve this project over time
-11. **Risk Management**: Potential challenges and mitigation strategies
-12. **Success Metrics**: How to measure the effectiveness and impact of this project
+## Enhanced Course Project: {topic_title}
+
+### 1. Detailed Project Plan
+- **Phase 1**: [Initial planning and setup - duration and tasks]
+- **Phase 2**: [Core project work - duration and tasks]
+- **Phase 3**: [Finalization and presentation - duration and tasks]
+- **Weekly Breakdown**: [Detailed weekly schedule]
+
+### 2. Learning Resources
+- **Required Materials**: [Textbooks, papers, or online resources]
+- **Tools and Software**: [Applications and platforms needed]
+- **Supplementary Resources**: [Additional learning materials]
+- **Reference Materials**: [Background reading and references]
+
+### 3. Assessment Rubrics
+- **Technical Skills**: [Criteria for evaluating technical competence]
+- **Creativity and Innovation**: [How to assess novel approaches]
+- **Documentation**: [Standards for project documentation]
+- **Presentation**: [Criteria for final presentation quality]
+
+### 4. Technology Integration
+- **Digital Tools**: [Software and platforms to enhance learning]
+- **Online Resources**: [Web-based learning materials]
+- **Collaboration Platforms**: [Tools for team collaboration]
+- **Assessment Tools**: [Digital assessment methods]
+
+### 5. Student Engagement Strategies
+- **Interactive Elements**: [Hands-on activities and exercises]
+- **Group Activities**: [Collaborative learning opportunities]
+- **Individual Work**: [Personal learning components]
+- **Feedback Mechanisms**: [Regular progress feedback]
+
+### 6. Differentiation Strategies
+- **Beginner Level**: [Adaptations for less experienced students]
+- **Intermediate Level**: [Standard project requirements]
+- **Advanced Level**: [Extensions for more capable students]
+- **Individual Support**: [Personalized assistance approaches]
+
+### 7. Industry Connections
+- **Guest Speakers**: [Industry professionals to invite]
+- **Real-world Applications**: [Practical industry examples]
+- **Field Trips**: [Relevant site visits or tours]
+- **Industry Projects**: [Collaboration with local businesses]
+
+### 8. Project Deliverables
+- **Final Product**: [Main project output]
+- **Documentation**: [Required written materials]
+- **Presentation**: [Final presentation requirements]
+- **Portfolio Piece**: [How this fits into student portfolios]
+
+### 9. Innovation Validation
+- **Novelty Factors**: [What makes this project innovative]
+- **Learning Value**: [Educational benefits and outcomes]
+- **Market Relevance**: [Connection to current industry needs]
+
+### 10. Future Adaptations
+- **Scalability**: [How to adapt for different class sizes]
+- **Technology Updates**: [How to keep current with new tools]
+- **Curriculum Integration**: [How this fits into broader curriculum]
+- **Continuous Improvement**: [Ways to enhance the project over time]
+
+### 11. Risk Management
+- **Technical Risks**: [Potential technical challenges]
+- **Timeline Risks**: [Schedule-related challenges]
+- **Resource Risks**: [Equipment or material issues]
+- **Mitigation Plans**: [How to address these risks]
+
+### 12. Success Metrics
+- **Learning Outcomes**: [How to measure student learning]
+- **Engagement Levels**: [Ways to assess student participation]
+- **Project Quality**: [Standards for evaluating final products]
+- **Student Satisfaction**: [Feedback and evaluation methods]
 
 Format the response with clear headings and bullet points. Focus on expanding the existing project rather than suggesting similar projects."""
 

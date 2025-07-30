@@ -1,24 +1,19 @@
 {
   "1": {
     "role": "professor",
-    "created_at": "2025-07-30T12:00:58.777199",
+    "created_at": "2025-07-30T12:56:25.001489",
     "extracted_info": {
       "documents": [
         {
           "filename": "P3_Course.pdf",
-          "uploaded_at": "2025-07-30T12:00:59.492202",
-          "size": 0
-        },
-        {
-          "filename": "P3_Course.pdf",
-          "uploaded_at": "2025-07-30T12:31:36.268429",
+          "uploaded_at": "2025-07-30T12:57:12.204868",
           "size": 0
         }
       ],
       "google_scholar": [
         {
           "url": "https://scholar.google.com/citations?user=fcbh--sAAAAJ&hl=en",
-          "scraped_at": "2025-07-30T12:02:55.179348",
+          "scraped_at": "2025-07-30T12:56:29.256018",
           "profile_data": {
             "name": "Nada Sharaf",
             "affiliation": "Lecturer at the German International University, German University in Cairo",
@@ -75,87 +70,97 @@
             "h_index": 268,
             "i10_index": 11
           },
-          "research_insights": "## Research Profile Summary\n\n### Core Expertise\n- Visualization\n- Gamification\n- Smart Adaptive Education\n- Arabic Language Processing\n\n### Academic Impact\n- **Citation Metrics**: High H-index and total citations indicate significant impact in the field.\n- **Research Recognition**: Well-regarded in the areas of visualization, gamification, and education.\n- **Publication Focus**: Recent work focuses on serious games for teaching computational thinking and programming concepts.\n\n### Teaching & Mentoring Background\n- **Institutional Role**: Lecturer at the German International University, German University in Cairo.\n- **Research Supervision**: Experience in developing educational tools for children with autism.\n- **Interdisciplinary Connections**: Expertise in both technical (visualization, processing) and educational (adaptive learning) domains.\n\n### Innovation Capacity\n- **Emerging Areas**: Exploration of Arabic language processing and Industry 5.0.\n- **Collaboration Patterns**: Collaborates on interdisciplinary projects, evident in publications.\n- **Adaptability**: Demonstrated ability to work on diverse topics within education and technology.\n\n### Research Context\n- **Current Position**: Established researcher with a strong publication record.\n- **Network Potential**: Opportunities for collaboration in visualization, gamification, and education.\n- **Future Directions**: Potential for further advancements in smart adaptive education and Arabic language processing."
+          "research_insights": "## Research Profile Summary\n\n### Core Expertise\n- Visualization\n- Gamification\n- Smart Adaptive Education\n- Arabic Language Processing\n\n### Academic Impact\n- **Citation Metrics**: Impressive total citations and high H-index indicate significant impact.\n- **Research Recognition**: Well-recognized in the fields of visualization, gamification, and education.\n- **Publication Focus**: Recent work focuses on serious games for teaching computational thinking and programming concepts.\n\n### Teaching & Mentoring Background\n- **Institutional Role**: Lecturer at the German International University, German University in Cairo.\n- **Research Supervision**: Likely involved in mentoring students based on research topics.\n- **Interdisciplinary Connections**: Expertise in diverse areas like education, language processing, and technology.\n\n### Innovation Capacity\n- **Emerging Areas**: Exploring applications of deep learning for Arabic short answer scoring.\n- **Collaboration Patterns**: Engages in collaborative research projects based on co-authored publications.\n- **Adaptability**: Demonstrated ability to work on different topics within the realm of technology and education.\n\n### Research Context\n- **Current Position**: Holds a strong position as a lecturer and researcher in visualization and gamification.\n- **Network Potential**: Opportunities for collaboration with researchers in the fields of education, language processing, and technology.\n- **Future Directions**: Likely to continue exploring innovative approaches in smart adaptive education and industry 5.0."
         }
       ],
       "user_inputs": [
         {
           "input": "i am a computer science lecturer teaching computer architecture, programming and oop (c++), discrete math, research methodology",
-          "mode": "non-research",
-          "timestamp": "2025-07-30T12:01:12.054699"
-        },
-        {
-          "input": "i am a computer science lecturer teaching computer architecture, programming and oop (c++), discrete math, research methodology",
           "mode": "research",
-          "timestamp": "2025-07-30T12:04:19.662852"
+          "timestamp": "2025-07-30T12:57:26.565999"
         },
         {
-          "input": "i am a computer science lecturer teaching computer architecture, programming and oop (c++), discrete math, research methodology",
+          "input": "expert in oop and c++",
           "mode": "research",
-          "timestamp": "2025-07-30T12:05:13.147697"
+          "timestamp": "2025-07-30T13:44:36.393608"
         },
         {
-          "input": "i am a computer science lecturer teaching computer architecture, programming and oop (c++), discrete math, research methodology",
+          "input": "expert in oop and c++",
           "mode": "research",
-          "timestamp": "2025-07-30T12:19:28.850994"
-        },
-        {
-          "input": "i am a computer science lecturer teaching computer architecture, programming and oop (c++), discrete math, research methodology",
-          "mode": "research",
-          "timestamp": "2025-07-30T12:20:52.025082"
-        },
-        {
-          "input": "i am a computer science lecturer teaching computer architecture, programming and oop (c++), discrete math, research methodology",
-          "mode": "research",
-          "timestamp": "2025-07-30T12:22:07.031783"
-        },
-        {
-          "input": "i am a computer science lecturer teaching computer architecture, programming and oop (c++), discrete math, research methodology",
-          "mode": "research",
-          "timestamp": "2025-07-30T12:25:14.026512"
-        },
-        {
-          "input": "i am a computer science lecturer teaching computer architecture, programming and oop (c++), discrete math, research methodology",
-          "mode": "research",
-          "timestamp": "2025-07-30T12:25:47.583393"
-        },
-        {
-          "input": "i am a computer science lecturer teaching computer architecture, programming and oop (c++), discrete math, research methodology",
-          "mode": "research",
-          "timestamp": "2025-07-30T12:26:11.801827"
-        },
-        {
-          "input": "i am a computer science lecturer teaching computer architecture, programming and oop (c++), discrete math, research methodology",
-          "mode": "non-research",
-          "timestamp": "2025-07-30T12:27:08.082545"
-        },
-        {
-          "input": "i am a computer science lecturer teaching computer architecture, programming and oop (c++), discrete math, research methodology",
-          "mode": "non-research",
-          "timestamp": "2025-07-30T12:29:32.742144"
-        },
-        {
-          "input": "i am a computer science lecturer teaching computer architecture, programming and oop (c++), discrete math, research methodology",
-          "mode": "non-research",
-          "timestamp": "2025-07-30T12:30:03.112569"
-        },
-        {
-          "input": "i am a computer science lecturer teaching computer architecture, programming and oop (c++), discrete math, research methodology",
-          "mode": "research",
-          "timestamp": "2025-07-30T12:30:46.767355"
-        },
-        {
-          "input": "i am a computer science lecturer teaching computer architecture, programming and oop (c++), discrete math, research methodology\r\n",
-          "mode": "research",
-          "timestamp": "2025-07-30T12:31:57.357965"
+          "timestamp": "2025-07-30T13:45:55.777194"
         }
       ]
     },
     "preferences": {},
     "statistics": {
-      "topics_generated": 14,
-      "documents_processed": 2,
+      "topics_generated": 3,
+      "documents_processed": 1,
       "scholar_profiles_analyzed": 1
-    }
+    },
+    "saved_topics": [
+      {
+        "id": "topic_1753873054729",
+        "content": "                                Scope Rating EASYUniqueness Score 9Brief Overview This thesis explores the development of smart learning environments that utilize gamification and visualization techniques to teach Object-Oriented Programming (OOP) concepts, specifically focusing on C++.Research Problem The research aims to investigate how interactive and engaging smart learning environments can enhance the understanding and retention of OOP principles in C++ programming.Mini Literature ReviewCurrent State of Research Existing studies have shown the effectiveness of gamification in educational settings and the benefits of visualization in programming education.Key Studies Recent research has highlighted the importance of adaptive learning systems and personalized feedback in improving student performance in programming courses.Limitations in Current Work Current research lacks a comprehensive exploration of integrating gamification and visualization specifically for teaching OOP concepts in C++.Emerging Trends The rise of smart technologies and the increasing interest in personalized education present opportunities for innovative approaches in programming education.Research Gap This research addresses the gap in the current literature by focusing on the design and evaluation of smart learning environments tailored for teaching OOP concepts in C++ using gamification and visualization techniques.Significance & Impact The study has the potential to enhance student engagement, learning outcomes, and overall experience in OOP programming courses, ultimately contributing to more effective programming education.Key Research QuestionsHow can gamification elements be effectively integrated into the teaching of OOP in C++?What visualization techniques are most beneficial for enhancing student understanding of OOP concepts?How do smart learning environments impact student engagement and performance in programming courses?Methodology The research will involve designing and implementing a prototype smart learning environment, conducting user studies with students, collecting feedback, and analyzing the effectiveness of the approach through quantitative and qualitative methods.Expected Outcomes The research is expected to provide insights into the design of interactive and engaging learning tools for OOP education, potentially leading to improved student learning outcomes and increased interest in programming concepts.Prerequisites Basic knowledge of Object-Oriented Programming, familiarity with gamification principles, and an understanding of visualization techniques.Innovation Factor This topic innovatively combines smart technologies, gamification, and visualization to create a novel approach for teaching OOP concepts in C++, addressing a critical need in programming education.                            ",
+        "title": "Mini Literature ReviewCurrent State of Research Existing studies have shown the effectiveness of gamification in educational settings and the benefits of visualization in programming education.",
+        "keywords": [
+          "programming",
+          "research",
+          "learning",
+          "smart",
+          "gamification",
+          "visualization",
+          "concepts",
+          "education",
+          "student",
+          "environments"
+        ],
+        "scope": "Medium",
+        "uniqueness": 8,
+        "created_at": "2025-07-30T12:57:34.729773",
+        "mode": "research"
+      },
+      {
+        "id": "topic_1753873060415",
+        "content": "                                Scope Rating EASYUniqueness Score 10Brief Overview This thesis explores the design and implementation of adaptive serious games for teaching Discrete Mathematics concepts, aiming to enhance student engagement and understanding in this foundational area of computer science.Research Problem The research seeks to investigate how adaptive serious games can be developed to effectively teach Discrete Math topics, providing personalized learning experiences and promoting active student participation.Mini Literature ReviewCurrent State of Research Existing studies have highlighted the benefits of serious games in educational contexts and the potential of adaptive learning systems in personalized education.Key Studies Recent research has shown the effectiveness of gamification in enhancing student motivation and learning outcomes in various academic subjects.Limitations in Current Work Current research lacks a comprehensive exploration of adaptive serious games specifically tailored for teaching Discrete Mathematics concepts.Emerging Trends The growing interest in educational technology and personalized learning tools creates opportunities for innovative approaches in teaching mathematical concepts.Research Gap This research addresses the gap in the literature by focusing on the development of adaptive serious games that target Discrete Math topics, offering engaging and individualized learning experiences for students.Significance & Impact The study has the potential to revolutionize the teaching of Discrete Mathematics by introducing interactive and adaptive game-based learning environments, fostering student interest, and improving learning outcomes in this critical subject area.Key Research QuestionsHow can adaptive serious games be designed to effectively teach Discrete Math concepts and engage students?What factors contribute to the effectiveness of serious games in promoting student understanding of mathematical principles?How do adaptive game elements impact student motivation and learning outcomes in Discrete Mathematics education?Methodology The research will involve designing and implementing a series of adaptive serious games for Discrete Math, conducting user studies with student participants, collecting feedback on the gaming experience, and analyzing the impact of adaptive elements on learning outcomes.Expected Outcomes The research is expected to produce insights into the development of adaptive serious games for Discrete Math education, potentially leading to the creation of innovative educational tools that enhance student engagement and comprehension of mathematical concepts.Prerequisites Basic knowledge of Discrete Mathematics concepts, familiarity with game design principles, and an interest in educational technology.Innovation Factor This topic introduces a groundbreaking approach by combining adaptive learning techniques with serious games to create a unique educational experience for teaching Discrete Mathematics, offering a novel and engaging way to learn fundamental mathematical principles.                                        ",
+        "title": "Key Studies Recent research has shown the effectiveness of gamification in enhancing student motivation and learning outcomes in various academic subjects.",
+        "keywords": [
+          "adaptive",
+          "discrete",
+          "serious",
+          "games",
+          "research",
+          "learning",
+          "student",
+          "mathematics",
+          "concepts",
+          "teaching"
+        ],
+        "scope": "Medium",
+        "uniqueness": 8,
+        "created_at": "2025-07-30T12:57:40.415880",
+        "mode": "research"
+      },
+      {
+        "id": "topic_1753875914635",
+        "content": "                                Scope Rating EasyUniqueness Score 9Brief Overview This thesis aims to explore the integration of gamification elements into teaching Object-Oriented Programming (OOP) concepts. By leveraging interactive and engaging game-based learning platforms, the study seeks to enhance students' understanding and application of OOP principles.Research Problem The research problem revolves around investigating how gamification can improve student engagement, motivation, and learning outcomes in the context of OOP education. Mini Literature ReviewCurrent State of Research Existing studies have shown the benefits of gamification in education, but limited research focuses specifically on its application to OOP teaching.Key Studies Recent works have highlighted the positive impact of gamified approaches on student learning in various subjects.Limitations in Current Work The lack of tailored gamified solutions for OOP education and the need for more empirical evidence on its effectiveness in this domain.Emerging Trends Growing interest in incorporating game elements to enhance programming education and the potential of gamification to address student engagement challenges.Research Gap This study addresses the gap in the literature by specifically exploring how gamified learning platforms can improve the comprehension and retention of OOP concepts among students.Significance & Impact The research could lead to the development of innovative teaching methods that make OOP education more engaging and effective, potentially benefiting both educators and students.Key Research QuestionsHow do gamified learning platforms impact student engagement and motivation in learning OOP?What are the effects of gamification on students' comprehension and retention of OOP principles?How can gamified approaches be optimized to enhance the effectiveness of OOP education?Methodology The study will involve designing and implementing a gamified OOP learning platform, conducting controlled experiments or surveys to assess student performance and perceptions, and analyzing the results to draw conclusions.Expected Outcomes The research is expected to provide insights into the efficacy of gamification in OOP education, offer recommendations for designing gamified learning experiences, and contribute to the pedagogical literature on programming education.Prerequisites Basic understanding of Object-Oriented Programming concepts, familiarity with gamification principles, and experience in educational research methods.Innovation Factor This topic introduces a novel approach by combining OOP education with gamification strategies, offering a fresh perspective on enhancing programming learning through interactive and game-based techniques.                            ",
+        "title": "Enhancing OOP Concepts Through Gamified Learning Platforms",
+        "keywords": [
+          "learning",
+          "research",
+          "education",
+          "gamification",
+          "gamified",
+          "programming",
+          "student",
+          "students",
+          "teaching",
+          "concepts"
+        ],
+        "scope": "Medium",
+        "uniqueness": 8,
+        "created_at": "2025-07-30T13:45:14.635248",
+        "mode": "research"
+      }
+    ]
   }
 }

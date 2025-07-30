@@ -426,9 +426,7 @@
                 <div class="suggestions-grid">
                     {% for suggestion in suggestions %}
                     <div class="suggestion-card">
-                        <div class="similarity-badge">
-                            {{ suggestion.similarity_score }}% Match
-                        </div>
+
                         
                         <div class="topic-header">
                             <h3 class="topic-title">{{ suggestion.topic.title }}</h3>
@@ -444,24 +442,7 @@
                             </div>
                         </div>
                         
-                        <div class="topic-meta">
-                            <div class="meta-item">
-                                <i class="fas fa-layer-group"></i>
-                                <span class="scope-{{ suggestion.topic.scope.lower() }}">{{ suggestion.topic.scope }}</span>
-                            </div>
-                            <div class="meta-item">
-                                <i class="fas fa-star"></i>
-                                <span>{{ suggestion.topic.uniqueness }}/10</span>
-                            </div>
-                            <div class="meta-item">
-                                <i class="fas fa-calendar"></i>
-                                <span>{{ suggestion.topic.created_at[:10] }}</span>
-                            </div>
-                            <div class="meta-item">
-                                <i class="fas fa-graduation-cap"></i>
-                                <span class="topic-type-{{ suggestion.topic_type.lower() }}">{{ suggestion.topic_type.title() }}</span>
-                            </div>
-                        </div>
+
                         
                         {% if suggestion.topic.keywords %}
                         <div class="keywords">

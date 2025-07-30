@@ -1122,6 +1122,54 @@
         .file-preview::-webkit-scrollbar-thumb:hover {
             background: rgba(59, 130, 246, 0.7);
         }
+        .scholar-result {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 12px;
+            padding: 25px;
+            margin: 20px 0;
+            border-left: 4px solid #6366f1;
+        }
+
+        .scholar-result h3 {
+            color: #6366f1;
+            margin-bottom: 20px;
+            font-size: 1.3em;
+            font-weight: 600;
+        }
+
+        .analysis-content h2 {
+            color: #6366f1;
+            font-size: 1.4em;
+            margin: 25px 0 15px 0;
+            font-weight: 600;
+        }
+
+        .analysis-content h3 {
+            color: #e5e7eb;
+            font-size: 1.1em;
+            margin: 20px 0 10px 0;
+            font-weight: 500;
+        }
+
+        .analysis-content ul {
+            margin: 10px 0;
+            padding-left: 20px;
+        }
+
+        .analysis-content li {
+            margin: 8px 0;
+            line-height: 1.6;
+        }
+
+        .analysis-content strong {
+            color: #f3f4f6;
+            font-weight: 600;
+        }
+
+        .analysis-content p {
+            margin: 10px 0;
+            line-height: 1.6;
+        }
     </style>
 </head>
 <body>
@@ -1278,41 +1326,14 @@
                     </div>
                 </div>
 
-  {% if scholar_result %}
-        <div class="card result-section">
-            <div class="result-header">
-                <i class="fas fa-graduation-cap"></i>
-                <h2>Google Scholar Profile Analysis</h2>
-            </div>
-            
-            {% if scholar_profile %}
-            <div class="scholar-profile-info">
-                <h4><i class="fas fa-user"></i> Profile Information</h4>
-                <div class="profile-details">
-                    {% if scholar_profile.name %}
-                        <p><strong>Name:</strong> {{ scholar_profile.name }}</p>
-                    {% endif %}
-                    {% if scholar_profile.affiliation %}
-                        <p><strong>Affiliation:</strong> {{ scholar_profile.affiliation }}</p>
-                    {% endif %}
-                    {% if scholar_profile.research_interests %}
-                        <p><strong>Research Interests:</strong> {{ ', '.join(scholar_profile.research_interests) }}</p>
-                    {% endif %}
-                    {% if scholar_profile.citations %}
-                        <p><strong>Total Citations:</strong> {{ scholar_profile.citations }}</p>
-                    {% endif %}
-                    {% if scholar_profile.h_index %}
-                        <p><strong>H-index:</strong> {{ scholar_profile.h_index }}</p>
-                    {% endif %}
+                {% if scholar_result %}
+                <div class="scholar-result">
+                    <h3><i class="fas fa-graduation-cap"></i> Google Scholar Analysis</h3>
+                    <div class="analysis-content">
+                        {{ scholar_result | format_scholar_analysis | safe }}
+                    </div>
                 </div>
-            </div>
-            {% endif %}
-            
-            <div class="result-content">
-                {{ scholar_result | safe }}
-            </div>
-        </div>
-  {% endif %}
+                {% endif %}
 
   {% if result %}
         <div class="card result-section">
@@ -1908,6 +1929,7 @@
                 const formData = new FormData();
                 formData.append('user_id', userId);
                 formData.append('topic_content', topicContent);
+                formData.append('topic_title', title);
                 formData.append('mode', mode);
 
                 const response = await fetch('/save-topic', {

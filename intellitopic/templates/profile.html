@@ -841,24 +841,7 @@
                                     </div>
                                 </div>
                                 
-                                <div class="topic-meta">
-                                    <div class="meta-item">
-                                        <i class="fas fa-layer-group"></i>
-                                        <span class="scope-{{ topic.scope.lower() }}">{{ topic.scope }}</span>
-                                    </div>
-                                    <div class="meta-item">
-                                        <i class="fas fa-star"></i>
-                                        <span>{{ topic.uniqueness }}/10</span>
-                                    </div>
-                                    <div class="meta-item">
-                                        <i class="fas fa-calendar"></i>
-                                        <span>{{ topic.created_at[:10] if topic.created_at else 'N/A' }}</span>
-                                    </div>
-                                    <div class="meta-item">
-                                        <i class="fas fa-graduation-cap"></i>
-                                        <span class="topic-type-{{ topic.mode.lower() }}">{{ topic.mode.title() }}</span>
-                                    </div>
-                                </div>
+
                                 
                                 {% if topic.keywords %}
                                 <div class="keywords">
