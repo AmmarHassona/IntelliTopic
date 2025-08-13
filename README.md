@@ -8,7 +8,7 @@ IntelliTopic is a sophisticated web application that generates personalized acad
 - **Dual User Types**: Support for both students and professors
 - **Two Generation Modes**:
   - **Research Mode**: Generate comprehensive thesis topics
-  - **Non-Research Mode**: Generate creative course/module ideas
+  - **Non-Research Mode**: Generate creative course projects
 - **AI-Powered Suggestions**: Uses OpenAI GPT-3.5-turbo for intelligent idea generation
 
 ### Multi-Modality Support
@@ -25,6 +25,16 @@ IntelliTopic is a sophisticated web application that generates personalized acad
 - **OCR Capabilities**: Optical Character Recognition for image files
 - **Content Analysis**: Parsed content is integrated into AI prompts for personalized suggestions
 - **Multi-file Support**: Process multiple documents simultaneously
+
+### Additional AI-Powered Features
+- **Google Scholar Profile Analysis**: Scrapes and analyzes publications, citations, research areas, and trends to tailor topic suggestions
+- **Topic Similarity Search**: Matches student interests with instructor topics using TF-IDF vectorization and cosine similarity
+- **Research Paper Retrieval**: Fetches relevant papers from arXiv based on generated topics and keywords
+- **Keyword Extraction**: Uses AI and traditional NLP to extract domain-specific terms for improved recommendations
+- **Context Management**: Separates and prioritizes relevant user data for research vs. course project generation to improve accuracy
+- **Error Handling & Fallbacks**: Automatic retries, fallback methods, and graceful degradation when APIs or parsing fail
+
+---
 
 ## 🚀 Installation
 
@@ -102,8 +112,10 @@ IntelliTopic is a sophisticated web application that generates personalized acad
 
 ### Backend (FastAPI)
 - **Framework**: FastAPI for high-performance API development
+- **AI Integration**: OpenAI GPT-3.5-turbo for content generation
 - **File Processing**: Multi-format document parsing and text extraction
-- **AI Integration**: OpenAI API for intelligent content generation
+- **External Data Sources**: Google Scholar scraping, arXiv API integration
+- **Context Management**: Mode-based context separation for accuracy
 - **Template Engine**: Jinja2 for dynamic HTML generation
 
 ### Frontend
@@ -141,41 +153,6 @@ IntelliTopic/
 - **API Security**: OpenAI API key is securely managed through environment variables
 - **Data Privacy**: No user data is stored or logged
 
-## 🛠️ Customization
-
-### Adding New File Formats
-To support additional file formats, add new parsing functions in `main.py`:
-
-```python
-async def parse_new_format(file_content: bytes) -> str:
-    # Add your parsing logic here
-    return extracted_text
-```
-
-### Modifying AI Prompts
-Customize the generation prompts in the `generate` function to match your specific needs.
-
-### UI Customization
-Modify the CSS styles in `templates/index.html` to change the appearance and branding.
-
-## 🤝 Contributing
-
-1. Fork the repository
-2. Create a feature branch (`git checkout -b feature/amazing-feature`)
-3. Commit your changes (`git commit -m 'Add amazing feature'`)
-4. Push to the branch (`git push origin feature/amazing-feature`)
-5. Open a Pull Request
-
 ## 📄 License
 
 This project is licensed under the MIT License - see the LICENSE file for details.
-
-## 🙏 Acknowledgments
-
-- OpenAI for providing the GPT API
-- FastAPI for the excellent web framework
-- The open-source community for the various parsing libraries used
-
-## 📞 Support
-
-For questions, issues, or feature requests, please open an issue on the GitHub repository.
