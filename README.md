@@ -2,6 +2,12 @@
 
 IntelliTopic is a sophisticated web application that generates personalized academic ideas for students and professors using AI. The application supports multi-modality input, allowing users to upload documents that are parsed and analyzed to create more relevant and personalized suggestions.
 
+## 📸 Demo
+
+[![Watch the Demo](https://img.icons8.com/ios-filled/100/000000/video.png)](https://drive.google.com/file/d/1w8T0Kvf028E3JHLRNxeXj4vdoXnAm3zy/view?usp=drive_link)
+
+---
+
 ## 🌟 Features
 
 ### Core Functionality
