@@ -6,6 +6,9 @@
 .env.production
 *.env
 
+# Ignore user_profiles.json
+intellitopic/user_profiles.json
+
 # Python virtual environments
 venv/
 env/
