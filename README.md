@@ -4,7 +4,7 @@ IntelliTopic is a sophisticated web application that generates personalized acad
 
 ## 📸 Demo
 
-[![Watch the Demo](https://img.icons8.com/ios-filled/100/000000/video.png)](https://drive.google.com/file/d/1w8T0Kvf028E3JHLRNxeXj4vdoXnAm3zy/view?usp=drive_link)
+[![Watch the Demo](<img width="1915" height="897" alt="Screenshot 2025-08-13 163926" src="https://github.com/user-attachments/assets/d8b5939d-0cc4-4c7f-971e-e663fb00a67f" />)](https://drive.google.com/file/d/1w8T0Kvf028E3JHLRNxeXj4vdoXnAm3zy/view?usp=drive_link)
 
 ---
 
@@ -27,7 +27,8 @@ IntelliTopic is a sophisticated web application that generates personalized acad
   - **Text Files**: Notes, outlines, plain text documents
 
 ### Advanced Document Processing
-- **Text Extraction**: Automatic extraction of text content from various file formats
+- **T<img width="1915" height="897" alt="Screenshot 2025-08-13 163926" src="https://github.com/user-attachments/assets/c4c32205-e514-406a-9f02-734588d83e47" />
+ext Extraction**: Automatic extraction of text content from various file formats
 - **OCR Capabilities**: Optical Character Recognition for image files
 - **Content Analysis**: Parsed content is integrated into AI prompts for personalized suggestions
 - **Multi-file Support**: Process multiple documents simultaneously
