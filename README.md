@@ -4,7 +4,7 @@ IntelliTopic is a sophisticated web application that generates personalized acad
 
 ## 📸 Demo
 
-[![Watch the Demo](<img width="1915" height="897" alt="Screenshot 2025-08-13 163926" src="https://github.com/user-attachments/assets/d8b5939d-0cc4-4c7f-971e-e663fb00a67f" />)](https://drive.google.com/file/d/1w8T0Kvf028E3JHLRNxeXj4vdoXnAm3zy/view?usp=drive_link)
+[![Watch the Demo](https://github.com/user-attachments/assets/d8b5939d-0cc4-4c7f-971e-e663fb00a67f)](https://drive.google.com/file/d/1w8T0Kvf028E3JHLRNxeXj4vdoXnAm3zy/view?usp=drive_link)
 
 ---
 
